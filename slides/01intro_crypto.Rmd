@@ -81,15 +81,16 @@ oaupcrejcvwugtpcogkutcodnkpiuetcodngt
 
 > **Assumption:** Eve always knows the method Alice and Bob are using.
 
+- So we can have universal, open standards.
+- *Not* security through obscurity.
+
 ## Terminology 
 
 >- **Plaintext:** The message that Alice would like to send to Bob. (`roflol`)
-
 >- **Ciphertext:** The encrypted message that Alice sends (`tqhnqn`)
-
 >- **Key:** A piece of information, which, combined with the method, allows a ciphertext to be decrypted.
 
----
+## Example: A shift cipher
 
 > *Example.* The method described above is called a **shift cipher**
 > (or Caesar cipher). 
@@ -118,10 +119,10 @@ $$2 \equiv 38 \pmod 6$$
 
 ## Modular arithmetic
 
-> **Theorem.** If $a \equiv b \pmod n$ and $c \equiv d \pmod n$, then 
-> 
-> - $a+c \equiv b+d \pmod n$
-> - $ac \equiv bd \pmod n$
+**Theorem.** If $a \equiv b \pmod n$ and $c \equiv d \pmod n$, then:
+
+- $a+c \equiv b+d \pmod n$
+- $ac \equiv bd \pmod n$
 
 In other words, when you do arithmetic modulo $n$, it doesn't matter which equivalence class representatives you use. In terms of operators, you can apply the $\bmod$ operator before or after adding and multiplying, and you will obtain the same result. (Example.)
 
@@ -148,19 +149,37 @@ library(gmp) # load library for multiple precision arithmetic
 ```
 
 ```{r, echo=TRUE}
-a <- as.bigz(2)^100
+a <- as.bigz(23)^100
 a
 a %% 7
 ```
 
-----
+## Or better yet...
 
-Or better yet:
+Instead of exponentiating and then modding, we can use the `gmp::powm` function, which is more efficient.
 
 ```{r, echo=TRUE}
 powm(23, 100, 7)
 ```
 
+## Vectorization in R
+
+- Variables in R can hold a single value or a *vector* of values.
+- Most functions and operators are *vectorized*.
+
+```{r}
+x <- c(23,45,67) # c() combines elements into a vector
+x * 2
+x - c(3, 5, 7)
+```
+
+## Example: `utf8ToInt`
+
+```{r}
+utf8ToInt("A")
+utf8ToInt("APPLE")
+intToUtf8(utf8ToInt("APPLE"))
+```
 
 
 ## Shift cipher implemented in R
@@ -193,11 +212,22 @@ shiftCipher("melcgsx", -10)
 shiftCipher("melcgsx", 16)
 ```
 
+# Attacks
+
+## Types of cryptographic attacks
+
+- ciphertext only
+- known plaintext
+- known ciphertext
+- chosen plaintext
+- chosen ciphertext
+
 ## Shift cipher: ciphertext only attack
 
 > In a **ciphertext only attack**, Eve has only the ciphertext and wishes to decrypt it and obtain the key.
 
-How could she decrypt it?
+- Ciphertext only attacks are typically brute force.
+- For the shift cipher, just try all the shifts.
 
 ## Loops in R
 
@@ -216,7 +246,7 @@ sapply(1:26, function(x) {shiftCipher(ciphertext, x)})
 
 > In a **known plaintext attack**, Eve has a plaintext string along with the corresponding ciphertext, and wishes to recover the key.
 
-Ideas?
+- Quite common to have both. e.g., messages begin with "Hello".
 
 ```{r, echo=TRUE}
 plaintext <- "usecanvas"
@@ -244,22 +274,6 @@ key <- 7
 
 ## Assignment: due Wednesday, 11:59 pm.
 
- 0. Install RStudio on your favorite computer. Install the library `gmp` and test some of the examples from these notes.
-
- 1. Find the last digit of $2^{10000}$ (i.e., the one's digit). Use any method. Explain how you found your answer.
-
-
- 
- #. Which of the following equations have *integer* solutions? For each equation, find an integer solution or explain why no such solution exists.
-    a. $2x + 3 \equiv 1 \pmod 9$
-    
-    b. $2x + 3 \equiv 1 \pmod 8$
-    
-    c. $2x + 3 \equiv 2 \pmod 8$
-    
-    
- <!-- #. Suppose that an [official English Scrabble word](http://scrabble.hasbro.com/en-us/tools#dictionary) was encrypted using a shift cipher resulting in the ciphertext `vaxxk`. What are the possible keys? (Include R code and output that you use to answer this question.) -->
-
-<br><br><br><br><br><br>
-
+- Install RStudio on your favorite computer. Install the library `gmp` and test some of the examples from these notes.
+- Complete the [first written assignment](../assignments/01modding.html). Upload a PDF scan of your work to Canvas.
 

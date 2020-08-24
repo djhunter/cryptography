@@ -19,9 +19,11 @@ This site provides slides, assignments, and other resources that I use in my Cod
 
 # Slides 
 
-- [Introduction: Cryptography and Coding Theory](slides/01intro_crypto.html) 
+1. [Introduction: Cryptography and Coding Theory](slides/01intro_crypto.html) 
 
 # Written Assignments
+
+1. [Modular arithmetic](assignments/01modding.html)
 
 # Programming Assignments
 

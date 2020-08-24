@@ -1,0 +1,17 @@
+---
+title: "Modular Arithmetic"
+output:
+  html_document:
+    toc: false
+    df_print: paged
+    theme: spacelab
+---
+
+Upload to Canvas a PDF scan of your written work to problems 1 and 2.
+
+0. [Install R](https://cloud.r-project.org/) and then [install RStudio](https://rstudio.com/products/rstudio/download/) on your favorite computer. Inside RStudio, install the library `gmp` and test some of the examples from these notes.
+1. Find the last digit of $2^{10000}$ (i.e., the one's digit). Use any method. Explain how you found your answer.
+2.  Which of the following equations have *integer* solutions? For each equation, find an integer solution or explain why no such solution exists.
+    a. $2x + 3 \equiv 1 \pmod 9$
+    b. $2x + 3 \equiv 1 \pmod 8$
+    c. $2x + 3 \equiv 2 \pmod 8$

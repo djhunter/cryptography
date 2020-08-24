@@ -1,12 +1,16 @@
 .reveal strong,
 .reveal b {
   font-weight: bold;
-  color: Yellow; 
+  color: Orange; 
+}
+
+.reveal a {
+  color: deepskyblue;
 }
 
 .reveal em {
   font-style: italic; 
-  color: Orange;
+  color: Violet;
 }
   
 .reveal p {
