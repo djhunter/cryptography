@@ -1,0 +1,265 @@
+---
+title: "Introduction to Cryptography"
+date: "August 31, 2020"
+output: 
+  revealjs::revealjs_presentation:
+    fig_width: 14
+    fig_height: 7
+    self_contained: true
+    theme: night
+    highlight: zenburn
+    css: slidesdjh.css
+    center: false
+    transition: slide
+    reveal_options:
+      controls: true
+      progress: false
+      width: 1080
+      height: 540
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_chunk$set(comment = NA)
+```
+
+# Introduction to Cryptography
+
+## What is Cryptography?
+
+A sender (traditionally called Alice) would like to send a message to a receiver (traditionally, Bob). 
+
+However, while the message is being sent, it can be observed by an eavesdropper (Eve), and Bob and Alice would like to hide it's meaning from Eve.
+
+## Alice, Bob, Eve {.build}
+
+For example, Alice wants to send the following message:
+
+```
+mysnapchatusernameisramblingscrambler
+```
+
+Instead, she sends the message:
+```
+oaupcrejcvwugtpcogkutcodnkpiuetcodngt
+```
+
+>  **Discuss.** Eve observes this communication, and figures out their encryption scheme. The next message sent is `tqhnqn`. What is the decrypted message? What is Alice and Bob's scheme?
+
+## ~~What you need~~ What you will learn
+
+- cleverness
+- algorithms
+- mathematics
+- R
+
+## What is it good for?
+
+- Privacy
+- E-Commerce
+- Digital rights management
+- Military/Espionage
+- Crypto-currencies
+- Authentication
+- Certification
+- Data integrity
+
+## Is cryptography different from coding theory?
+
+> **Coding Theory** deals with how we represent information digitally. 
+
+- Error-correcting codes
+- Compression
+- Data transmission
+- Cryptographic coding (i.e., cryptography)
+
+[Syllabus](../tex/macs124f20.pdf) (PDF)
+
+# Assumptions and Terminology 
+
+## Kerckhoff's Principle 
+
+> **Assumption:** Eve always knows the method Alice and Bob are using.
+
+## Terminology 
+
+>- **Plaintext:** The message that Alice would like to send to Bob. (`roflol`)
+
+>- **Ciphertext:** The encrypted message that Alice sends (`tqhnqn`)
+
+>- **Key:** A piece of information, which, combined with the method, allows a ciphertext to be decrypted.
+
+---
+
+> *Example.* The method described above is called a **shift cipher**
+> (or Caesar cipher). 
+
+- Plaintext: `roflol`
+- Ciphertext: `tqhnqn`
+- Key: `2` (how much to shift)
+
+## The modulo equivalence relation 
+
+We write 
+$$a \equiv b \pmod n$$ to denote that $a$ and $b$ belong to the same equivalence class modulo $n$; that is, $(a-b)$ is a multiple of $n$. 
+
+## The modulo operator 
+
+We write $n \bmod m$ to represent the remainder when $n$ is divided by $m$. For example, in R, we compute $38 \bmod 6$ as follows.
+
+```{r modop, echo=TRUE}
+38 %% 6
+```
+
+Since $38 \bmod 6 = 2$, $38$ and $2$ are in the same equivalence class modulo $6$, which we denote as 
+$$38 \equiv 2 \pmod 6$$
+or equivalently, as
+$$2 \equiv 38 \pmod 6$$
+
+## Modular arithmetic
+
+> **Theorem.** If $a \equiv b \pmod n$ and $c \equiv d \pmod n$, then 
+> 
+> - $a+c \equiv b+d \pmod n$
+> - $ac \equiv bd \pmod n$
+
+In other words, when you do arithmetic modulo $n$, it doesn't matter which equivalence class representatives you use. In terms of operators, you can apply the $\bmod$ operator before or after adding and multiplying, and you will obtain the same result. (Example.)
+
+## Group Exercise: Modular arithmetic
+
+> Compute each expression modulo 7, without using technology.
+>
+> 1. $(32 + 76)(144 - 7000) \bmod 7$
+>
+> #. $23^{100} \bmod 7$
+
+## Modular arithmetic in R
+
+What goes wrong here? 
+
+```{r, echo=TRUE}
+23^100 %% 7 # wrong!
+```
+
+## Big integer modular arthmetic in R
+
+```{r, results='hide', message=FALSE, warning=FALSE, echo=TRUE}
+library(gmp) # load library for multiple precision arithmetic
+```
+
+```{r, echo=TRUE}
+a <- as.bigz(2)^100
+a
+a %% 7
+```
+
+----
+
+Or better yet:
+
+```{r, echo=TRUE}
+powm(23, 100, 7)
+```
+
+
+
+## Shift cipher implemented in R
+
+```{r shift, echo=TRUE}
+stringToMod26 <- function(x) {utf8ToInt(x)-utf8ToInt("a")}
+mod26ToString <- function(x) {intToUtf8(x+utf8ToInt("a"))}
+
+shiftCipher <- function(p,b)
+{
+  pt <- stringToMod26(p)
+  ct <- (pt + b) %% 26      # add b to each letter
+  return(mod26ToString(ct))
+}
+
+shiftCipher("thisisasecretmessage", 2)
+```
+
+## Decrypting a shift cipher {.build}
+
+```{r, echo=TRUE}
+shiftCipher("cubswin", 10)
+```
+
+```{r, echo=TRUE}
+shiftCipher("melcgsx", -10)
+```
+
+```{r, echo=TRUE}
+shiftCipher("melcgsx", 16)
+```
+
+## Shift cipher: ciphertext only attack
+
+> In a **ciphertext only attack**, Eve has only the ciphertext and wishes to decrypt it and obtain the key.
+
+How could she decrypt it?
+
+## Loops in R
+
+```{r, echo=TRUE}
+ciphertext <- "ufekwfixvkkfufkyvrjjzxedvekj"
+for(i in 1:26) {
+  print(shiftCipher(ciphertext, i))}
+```
+
+## The R way: use `sapply`
+```{r, echo=TRUE}
+sapply(1:26, function(x) {shiftCipher(ciphertext, x)})
+```
+
+## Shift cipher: known plaintext attack {.build}
+
+> In a **known plaintext attack**, Eve has a plaintext string along with the corresponding ciphertext, and wishes to recover the key.
+
+Ideas?
+
+```{r, echo=TRUE}
+plaintext <- "usecanvas"
+ciphertext <- "camkivdia"
+(stringToMod26(ciphertext)-stringToMod26(plaintext)) %% 26
+```
+
+## Shift cipher: chosen plaintext attack {.build}
+
+> In a **chosen plaintext attack**, Eve temporarily gets access to the "encryption machine", and encrypts a plaintext message of her choosing, observing the ciphertext.
+
+```{r, echo=TRUE}
+key <- 7
+stringToMod26(shiftCipher("a", key)) %% 26
+```
+
+## Shift cipher: chosen ciphertext attack {.build}
+
+> In a **chosen ciphertext attack**, Eve temporarily gets access to the "decryption machine", and decrypts a ciphertext message of her choosing, observing the plaintext.
+
+```{r, echo=TRUE}
+key <- 7
+-stringToMod26(shiftCipher("a", -key)) %% 26
+```
+
+## Assignment: due Wednesday, 11:59 pm.
+
+ 0. Install RStudio on your favorite computer. Install the library `gmp` and test some of the examples from these notes.
+
+ 1. Find the last digit of $2^{10000}$ (i.e., the one's digit). Use any method. Explain how you found your answer.
+
+
+ 
+ #. Which of the following equations have *integer* solutions? For each equation, find an integer solution or explain why no such solution exists.
+    a. $2x + 3 \equiv 1 \pmod 9$
+    
+    b. $2x + 3 \equiv 1 \pmod 8$
+    
+    c. $2x + 3 \equiv 2 \pmod 8$
+    
+    
+ <!-- #. Suppose that an [official English Scrabble word](http://scrabble.hasbro.com/en-us/tools#dictionary) was encrypted using a shift cipher resulting in the ciphertext `vaxxk`. What are the possible keys? (Include R code and output that you use to answer this question.) -->
+
+<br><br><br><br><br><br>
+
+

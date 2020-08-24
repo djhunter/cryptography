@@ -37,3 +37,9 @@ vignettes/*.pdf
 
 # R Environment Variables
 .Renviron
+
+# Intermediate LaTeX files
+*.log
+*.dvi
+*.synctex.gz
+

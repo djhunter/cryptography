@@ -1,0 +1,33 @@
+---
+title: "Cryptography and Coding Theory"
+author: "David J. Hunter"
+output:
+  html_document:
+    toc: true
+    toc_float:
+      collapsed: false
+      smooth_scroll: true
+    df_print: paged
+    theme: spacelab
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+This site provides slides, assignments, and other resources that I use in my Codes and Encryption class (MA/CS-124, Westmont College, 2016-2020).
+
+# Slides 
+
+- [Introduction: Cryptography and Coding Theory](slides/01intro_crypto.html) 
+
+# Written Assignments
+
+# Programming Assignments
+
+# Other Resources
+
+- [Syllabus](tex/macs124f20.pdf) (PDF)
+
+All of the pages and slides on this site were authored in RMarkdown. The source code is available on GitHub: https://github.com/djhunter/cryptography
+

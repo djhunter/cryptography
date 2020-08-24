@@ -1,0 +1,132 @@
+\documentclass[10pt]{article}
+
+\pagestyle{myheadings}
+%\usepackage[dvips, letterpaper, total={6.5in,9.2in}]{geometry}
+\usepackage[dvips, letterpaper, margin=1.0in]{geometry}
+\parindent 0 in
+\usepackage[charter]{mathdesign}
+\usepackage{hyperref}
+
+\markright{MA/CS-124, Hunter, Fall 2020}
+
+\let\origdescription\description
+\renewenvironment{description}{
+  \setlength{\leftmargini}{0em}
+  \origdescription
+  \setlength{\itemindent}{0em}
+}
+
+\begin{document}
+\begin{center} {\large Math/CS 124 --- Codes and Encryption}
+\end{center}
+
+\begin{description}
+\item[Time and place:] 10:05--11:55am, TTh, Adams 217
+\item[Professor:] David J. Hunter, Ph.D.
+
+\hspace*{20pt}
+\begin{tabular}{ll}
+  e-mail: & \href{mailto:dhunter@westmont.edu}{\tt dhunter@westmont.edu} \\
+  Office Phone: & x6075 \\
+  Office: & Winter Hall 303 \\
+  Student Hours: & M--Th 3:30--5:00pm, or by appointment.
+\end{tabular}
+
+\item[Catalog Description:] (Four credit hours) Prerequisites: MA/CS-015 or MA-020. Modern applications of computing demand that the storage and transmission of data be secure and reliable. Cryptography is the study of techniques for protecting data from adversaries, while coding theory deals with representing data robustly in digital form. This course provides an introduction to these related fields. Topics include basic number theory and modern algebra, classical and modern cryptosystems, discrete logarithms, hash functions, digital signatures, elliptic curves, and error-correcting codes.
+
+\item[Prerequisites:] MA-015 and/or MA-020. Programming experience is desirable but not essential.
+
+\item[Overview:] This course will give a general introduction to cryptography and coding theory.  The point of view will be mathematical, yet applied. We will focus on the general mathematical principles that govern the ways that information is stored and transmitted securely. We will not dwell too heavily on the technicalities of specific protocols and implementations. Rather, we strive to understand the concepts that underlie the technology, so that you will be prepared to view current and future implementations as scientists and engineers, not as technicians.
+
+\item[Textbook:] \textit{Introduction to Cryptography with Coding Theory}, by Trappe and Washington, 2nd Edition.  If you have your own computer, install R and RStudio on it (\url{https://www.rstudio.com}).
+
+\item[Grading:] Grades are weighted as follows.
+
+\begin{tabular}{ll}
+  Written Assignments: & 25\% \\
+  R Course Package: & 25\% \\
+  Midterms: & 2 @ 15\% each \\
+  Final Exam: & 20\%
+\end{tabular}
+
+The final exam will be on Wednesday, December 16, from 8:00--10:00am. Finals will not be rescheduled to accommodate travel arrangements.
+
+You should expect a written assignment due the night before every class meeting. You will submit them on Canvas (\url{https://westmont.instructure.com}) as PDFs on Canvas, which you can create by scanning your written work using a scanning app. If you prefer, you can typeset these assignments using LaTeX or a word processor.
+
+Over the course of the semester, you will develop an R package containing a library of functions for solving problems in cryptography and coding theory. Typically, I will give you a template including function prototypes, ROxygen comments, and test cases that your functions should satisfy. You will submit successive versions of this package as \texttt{tar.gz} files on Canvas.
+
+\item[Attendance:]  Please show up to class on time; it is rude and distracting to your classmates if you come to class late.  Significant tardies count as absences.  If you miss an excessive number of classes, you will almost definitely do poorly in this class.  I consider it excessive to miss more than two classes during the course of the semester.  If you miss more than four classes without a valid excuse, I reserve the right to terminate you from the course with a grade of~F.\hspace{4pt}  Work missed (including tests) without a valid excuse will receive a zero.
+
+\item[Other Policies: ]
+  Learning communities function best when students have academic integrity.  Cheating is primarily an offense against your classmates because it undermines our learning community.  Therefore, dishonesty of any kind may result in loss of credit for the work involved and the filing of a report with the Provost's Office. Major or repeated infractions may result in dismissal from the course with a grade of~F.~ Be familiar with the College's plagiarism policy, found at: \url{https://www.westmont.edu/office-provost/academic-program/academic-integrity-policy}.
+
+  In particular, providing someone, actively or passively, with an electronic copy of your work is a breach of the academic integrity policy. Do not email, post online, or otherwise disseminate any of the work that you do in this class. If you keep your work on a repository, make sure it is private. You may work with others on the assignments, but make sure that you type up your own answers yourself. You are on your honor that the work you hand in represents your own understanding.
+
+ \item[Tentative Schedule:] The following schedule is a rough first approximation of the topics in \textit{Trappe} that we plan to cover; it is subject to revision at the instructor's discretion. Chapter 3 (Basic Number Theory) will be covered throughout the course when the relevant topics arise.
+  \begin{itemize}
+      \item Chapter 2: Classical Cryptosystems
+      \item Chapters 4--5: DES and AES
+      \item Chapter 6: The RSA Algorithm
+   \begin{quote}
+    \textit{Midterm \#1}     (through Chapter 6)
+   \end{quote}
+      \item Chapter 7: Discrete Logarithms
+      \item Chapter 8: Hash Functions
+      \item Chapter 9: Digital Signatures
+      \item Chapter 16: Elliptic Curves
+   \begin{quote}
+    \textit{Midterm \#2}     (through Chapter 15)
+   \end{quote}
+      \item Chapter 18: Error Correcting Codes
+   \begin{quote}
+    \textit{Final Exam}     (cumulative, with an emphasis on Chapter 18)
+   \end{quote}
+  \end{itemize}
+
+    \item[Program and Institutional Learning Outcomes:] The
+         mathematics and computer science department at Westmont College has formulated the
+         following learning outcomes for all of its classes. (PLO's)
+         \begin{enumerate}
+             \item Core Knowledge: Students will demonstrate knowledge of the
+                  main concepts, skills, and facts of the discipline of
+                  mathematics.
+\item Communication: Students will be able to communicate mathematical ideas
+     following the standard conventions of writing or speaking in the
+     discipline.
+\item Creativity: Students will demonstrate the ability to formulate and make
+     progress toward solving non-routine problems.
+\item Christian Connection: Students will incorporate their mathematical skills
+     and knowledge into their thinking about their vocations as followers of
+     Christ.
+         \end{enumerate}
+         In addition, the faculty of Westmont College have established common
+         learning outcomes for all courses at the institution
+         (ILO's). These outcomes are summarized as follows:
+(1) Christian Understanding, Practices, and Affections,
+(2) Global Awareness and Diversity,
+(3) Critical Thinking,
+(4) Quantitative Literacy,
+(5) Written Communication,
+(6) Oral Communication, and
+(7) Information Literacy.
+
+\item[Course Learning Outcomes:] The above outcomes are reflected in the
+     particular learning outcomes for this course.
+     After taking this course, you should be able
+     to:
+    \begin{itemize}
+        \item Demonstrate understanding of the theoretical basis for cryptography and coding theory.
+             (PLO 1, ILOs 3,4)
+        \item Write and evaluate mathematical arguments according to the
+             standards of the discipline. (PLO 2,
+              ILOs 3,5)
+        \item Construct solutions to novel problems,
+               demonstrating perseverance in the face of open-ended or
+               partially-defined contexts. (PLO 3, ILO 3)
+        \item Consider the ethical implications of the subject matter. (PLO 4, ILO 1)
+    \end{itemize}
+These outcomes will be assessed by written assignments, programming assignments, and written exams, as described above.
+
+\item[Accommodations for Students with Disabilities:] Students who have been diagnosed with a disability (learning, physical or psychological) are strongly encouraged to contact the Disability Services office as early as possible to discuss appropriate accommodations for this course. Formal accommodations will only be granted for students whose disabilities have been verified by the Disability Services office.  These accommodations may be necessary to ensure your equal access to this course.  Please contact Sheri Noble, Director of Disability Services (310A Voskuyl Library, 565-6186, \href{mailto:snoble@westmont.edu}{\tt snoble@westmont.edu}) or visit \url{https://www.westmont.edu/disability-services} for more information.
+\end{description}
+\end{document}
