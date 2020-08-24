@@ -128,11 +128,30 @@ In other words, when you do arithmetic modulo $n$, it doesn't matter which equiv
 
 ## Group Exercise: Modular arithmetic
 
-> Compute each expression modulo 7, without using technology.
->
-> 1. $(32 + 76)(144 - 7000) \bmod 7$
->
-> #. $23^{100} \bmod 7$
+Join the *voice channel* for your group. Use the *Jamboard* (link on `#macs-124`).
+
+```{r, echo=FALSE}
+library(knitr)
+roster <- c("Sam", "Drake", "Wesley", "Drew", "Winston", "Michael", "Logan", "Christian", "Caleb", "James", "Joe", "Emily", "Giselle", "Nathan")
+set.seed(8312020) 
+n <- length(roster)
+ngps <- 3
+maxingp <- ceiling(n/ngps)
+# just make random groups
+groups <- matrix(c(roster[sample(n)], 
+                   rep("",(maxingp - (n %% maxingp)) %% maxingp)), 
+                 ncol=maxingp, byrow=FALSE)
+rownames(groups) <- paste0("Group #", 1:nrow(groups))
+kable(t(groups))
+```
+
+Compute each expression modulo 7, without using technology.
+
+1. $(32 + 76)(144 - 7000) \bmod 7$
+
+2. $23^{100} \bmod 7$
+
+Return to the *Seminar Room* when you finish.
 
 ## Modular arithmetic in R
 
