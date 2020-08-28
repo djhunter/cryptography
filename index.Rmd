@@ -15,6 +15,23 @@ output:
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
+```{r, echo=FALSE}
+library(metathis)
+meta() %>%
+  meta_description(
+    "Slides, assignments, and code for my cryptography and coding theory class."
+  ) %>%
+  meta_name("github-repo" = "djhunter/cryptography") %>%
+  meta_viewport() %>%
+  meta_social(
+    title = "Cryptography and Coding Theory",
+    url = "https://djhunter.github.io/cryptography/index.html",
+    image = "https://upload.wikimedia.org/wikipedia/en/5/5b/Codes_And_Keys_Death_Cab_For_Cutie.jpg",
+    image_alt = "Codes and Keys album art",
+    og_author = c("David J. Hunter")
+  )
+```
+
 This site provides slides, assignments, and other resources that I use in my Codes and Encryption class (MA/CS-124, Westmont College, 2016-2020).
 
 # Slides 
