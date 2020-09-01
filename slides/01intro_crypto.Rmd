@@ -99,6 +99,8 @@ oaupcrejcvwugtpcogkutcodnkpiuetcodngt
 - Ciphertext: `tqhnqn`
 - Key: `2` (how much to shift)
 
+**Question:** How do you encrypt the plaintext `fuzzy`?
+
 ## The modulo equivalence relation 
 
 We write 
