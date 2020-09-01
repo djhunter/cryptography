@@ -132,7 +132,7 @@ Join the *voice channel* for your group. Use the *Jamboard* (link on `#macs-124`
 
 ```{r, echo=FALSE}
 library(knitr)
-roster <- c("Sam", "Drake", "Wesley", "Drew", "Winston", "Michael", "Logan", "Christian", "Caleb", "James", "Joe", "Emily", "Giselle", "Nathan")
+roster <- c("Sam", "Wesley", "Andrew", "Winston", "Michael", "Logan", "Christian", "Caleb", "James", "Joe", "Emily", "Giselle", "Nathan")
 set.seed(8312020) 
 n <- length(roster)
 ngps <- 3
