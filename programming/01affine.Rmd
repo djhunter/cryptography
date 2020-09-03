@@ -1,0 +1,18 @@
+---
+title: "Getting Started with R Packages"
+output:
+  html_document:
+    toc: false
+    df_print: paged
+    theme: spacelab
+---
+
+ 1. Make a new R Package project in RStudio: `File > New Project > New Directory > R Package`. Name your package `cryptoXYZ`, where `XYZ` are your initials. Choose a directory where your package will reside (as a subdirectory). Open the package in a new session. 
+
+ 2. Add the file [`shiftcipher.R`](https://djhunter.github.io/cryptography/R/shiftcipher.R) to your project by putting it in the `R` subdirectory. Install the `roxygen2` package. (Windows users may also have to install [RTools](https://cran.r-project.org/bin/windows/Rtools/) and the `magrittr` package to get `roxygen2` to work.) Get rid of the stubs `hello.R` in the `R` directory and `hello.Rd` in the `man` directory. In the `Build` tab, click on `More` and `Configure Build Tools...`, and check the box that says "Generate documentation with Roxygen". In `Roxygen Options`, check the box that says to automatically reoxygenize when running Install and Restart. Click OK (twice). Now `Install and Restart` your project and see what happens. When you view your list of packages, you should see your new package, and you should be able to browse the documentation and use the functions.
+
+ 3.  Add the file [`affinecipher.R`](https://djhunter.github.io/cryptography/R/affinecipher.R) to the `R` subdirectory of your project. This file contains ROxygen comments and a template for an `affineCipher` function, which should consume a string `plainText` and integers `alpha` and `beta`, and it should return the ciphertext corresponding to the plaintext under the affine cipher represented by the function $x \stackrel{s}{\longmapsto} \alpha x + \beta$ (that is, the function given by the formula $s(x)=\alpha x + \beta$).  Model your function on the `shiftCipher` function of the previous question. Add two examples to the documentation illustrating the cat/dog example that we did in class.
+ 
+ 4. Edit the `DESCRIPTION` file appropriately. Leave the version number as `0.1.0`.
+ 
+ 5. Click on `More` in the build menu, and this time build a source package. A new file called `cryptoXYZ_0.1.0.tar.gz` should appear in the parent directory. Upload this file to Canvas.

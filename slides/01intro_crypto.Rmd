@@ -1,6 +1,6 @@
 ---
 title: "Introduction to Cryptography"
-date: "August 31, 2020"
+date: "September 1, 2020"
 output: 
   revealjs::revealjs_presentation:
     fig_width: 14

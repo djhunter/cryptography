@@ -10,7 +10,7 @@
 #' @export
 #'
 #' @examples
-#' affineCrypt("thisisasecretmessage", 9, 2)
-affineCrypt <- function(plainText, alpha, beta) {
+#' affineCipher("thisisasecretmessage", 9, 2)
+affineCipher <- function(plainText, alpha, beta) {
   # TODO: complete this function
 }

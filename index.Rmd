@@ -41,8 +41,11 @@ This site provides slides, assignments, and other resources that I use in my Cod
 # Written Assignments
 
 1. [Modular arithmetic](assignments/01modding.html)
+2. [Shift ciphers and affine ciphers](assignments/02shiftaffine.html)
 
 # Programming Assignments
+
+1. [Getting started with R packages](programming/01affine.html)
 
 # Other Resources
 
