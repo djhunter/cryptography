@@ -37,6 +37,7 @@ This site provides slides, assignments, and other resources that I use in my Cod
 # Slides 
 
 1. [Introduction: Cryptography and Coding Theory](slides/01intro_crypto.html) 
+2. [Affine Ciphers and the GCD](slides/02affine_ciphers.html) 
 
 # Written Assignments
 
