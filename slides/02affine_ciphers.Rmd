@@ -1,0 +1,315 @@
+---
+title: "Affine Ciphers"
+date: "September 3, 2020"
+output: 
+  revealjs::revealjs_presentation:
+    fig_width: 14
+    fig_height: 7
+    self_contained: true
+    theme: night
+    highlight: zenburn
+    css: slidesdjh.css
+    center: false
+    transition: slide
+    reveal_options:
+      controls: true
+      progress: false
+      width: 1080
+      height: 540
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_chunk$set(comment = NA)
+library(gmp)
+```
+
+# Last time: the Shift Cipher
+
+## Ciphers
+
+> A **cipher** is an algorithm that inputs a plaintext string and outputs a ciphertext string, according to some given key.
+
+Example: The shift cipher.
+
+Ciphers, as opposed to **codes**, operate on strings without regard to their meaning (semantics). 
+
+## Recall the Shift Cipher
+
+```{r shift, echo=TRUE}
+stringToMod26 <- function(x) {utf8ToInt(x)-utf8ToInt("a")}
+mod26ToString <- function(x) {intToUtf8(x+utf8ToInt("a"))}
+
+shiftCipher <- function(p,b)
+{
+  pt <- stringToMod26(p)
+  ct <- (pt + b) %% 26      # add b to each letter
+  return(mod26ToString(ct))
+}
+
+shiftCipher("thisisasecretmessage", 2)
+```
+
+## Notation/Terminology
+
+When we want to consider just the numbers $0, 1, 2, \ldots, n-1$, and we are doing addition and multiplication modulo $n$, we say that we are "working in $\mathbb{Z}_n$," pronounced "zee mod en". 
+
+More formally, $\mathbb{Z}_n$ is the set $\{0, 1, 2, \ldots, n-1\}$ along with multiplication and addition modulo $n$. Such a set is called a **ring**. 
+
+- In a ring, you can add and subtract and there's a zero.
+- In a ring, you can multiply, but maybe not always divide.
+- Examples: real numbers, square matrices, $\mathbb{Z}_n$.
+
+## The Shift Cipher as a function
+
+The shift cipher can be represented by a function $$s: \mathbb{Z}_{26} \longrightarrow \mathbb{Z}_{26}$$ given by 
+$$x \stackrel{s}{\longmapsto} x+k$$
+where $k \in \mathbb{Z}_{26}$ is the key. To implement the shift cipher, we had to translate strings to $\mathbb{Z}_{26}$ and back, but the processes of encryption and decryption are performed by the function $s$ and its inverse $s^{-1}$, respectively.
+
+# The Affine Cipher
+
+## Affine
+
+In mathematics, an **affine** function/transformation performs both a shift and a scale. In $\mathbb{Z}_n$, shifting is done by adding (like the shift cipher), and scaling is done by multiplying. So an **affine cipher** corresponds to a function 
+$$s: \mathbb{Z}_{26} \longrightarrow \mathbb{Z}_{26}$$ given by 
+$$x \stackrel{s}{\longmapsto} \alpha x + \beta$$
+where the key consist of two elements $\alpha, \beta \in \mathbb{Z}_{26}$.
+
+## Groups for today
+
+Join the *voice channel* for your group. Use the *Jamboard* (link on `#macs-124`).
+
+```{r, echo=FALSE}
+library(knitr)
+roster <- c("Sam", "Wesley", "Andrew", "Winston", "Michael", "Logan", "Christian", "Caleb", "James", "Joe", "Emily", "Giselle", "Nathan")
+set.seed(932020) 
+n <- length(roster)
+ngps <- 3
+maxingp <- ceiling(n/ngps)
+# just make random groups
+groups <- matrix(c(roster[sample(n)], 
+                   rep("",(maxingp - (n %% maxingp)) %% maxingp)), 
+                 ncol=maxingp, byrow=FALSE)
+rownames(groups) <- paste0("Group #", 1:nrow(groups))
+kable(t(groups))
+```
+
+## Group Activity (without computers)
+
+Consider the affine cipher given by $x \longmapsto 3x + 7$ in $\mathbb{Z}_{26}$. If `cat` is the plaintext, what is the ciphertext? If `dog` is the ciphertext, what is the plaintext?
+
+```{r, echo=FALSE}
+library(knitr)
+ln <- t(as.matrix(0:25))
+colnames(ln) <- letters
+kable(ln)
+```
+
+
+```{r}
+stringToMod26("cat")
+stringToMod26("dog")
+```
+
+## Inverses
+
+In $\mathbb{Z}_{n}$, we say that $b$ is a **multiplicative inverse** of $a$ if $ab = 1$. 
+
+What is the multiplicative inverse of $3$ in $\mathbb{Z}_{26}$? Can we use this to calculate $s^{-1}$ in the above example?
+Consider:
+
+```{r}
+0:25 
+(3 * (0:25)) %% 26
+```
+
+## Inverses?
+
+What is the multiplicative inverse of $4$ in $\mathbb{Z}_{26}$? 
+
+```{r}
+0:25 
+(4 * (0:25)) %% 26
+```
+
+## Zero divisors are not invertible
+
+- We call $4$ a *zero divisor* in the ring $\mathbb{Z}_n$ because $4 \cdot 13 = 0$ in this ring.
+- A zero divisor $a$ is an element such that $ab = 0$ for some nonzero $b$.
+- If $a$ is a zero divisor, then it can't be invertible:
+    - **Proof:** Suppose to the contrary that $a$ is a zero divisor and $a^{-1}$ exists. Then $ab = 0$ for some nonzero $b$. Multiplying both sides of this equation by $a^{-1}$ gives $a^{-1}ab = a^{-1}0$, which simplifies to $b = 0$, contradicting that $b$ is nonzero.
+
+# The GCD
+
+## Greatest Common Divisor 
+
+- **Definition.** The *greatest common divisor* $\gcd(m,n)$ of two integers $m$ and $n$ is the largest positive integer $g$ such that $g \mid m$ and $g \mid n$. The greatest common divisor $\gcd(m,n)$ has the property that, if $r$ is a common divisor of both $m$ and $n$, then $r \mid \gcd(m,n)$.
+- **Theorem.** The element $a$ has a multiplicative inverse in $\mathbb{Z}_{n}$ if and only if $\gcd(a,n) = 1$.
+
+We say that $a$ and $n$ are "relatively prime" if $\gcd(a,n)=1$.
+
+## Euclidean Algorithm
+
+> **Theorem.** For any natural numbers $a$ and $b$, there exist natural numbers $c$ and $d$ such that $\gcd(a,b)=ca + db$. 
+
+This theorem is proved by defining an algorithm to find the GCD. This algorithm is called the *Euclidean algorithm*, and when it is modified to also give the numbers $c$ and $d$, it is called the *extended Euclidean algorithm.*
+
+## Euclidean Algorithm: Example
+
+$$
+\begin{aligned}
+1180 &= 2 \cdot 482 + 216 \\
+482 &= 2\cdot 216 + 50 \\
+216 &= 4\cdot 50 +16 \\
+50 &= 3\cdot 16 + 2 \\
+16 &= 8\cdot 2 + 0
+\end{aligned}
+$$
+
+Therefore, $\gcd(1180,482)=2$, the last nonzero remainder. (why?)
+
+## Extended Euclidean Algorithm  
+
+We can find numbers $c$ and $d$ such that $1180c + 482d = 2$ by manipulating these equations. Starting with the second-to-last equation,
+
+$$
+{\small 
+\begin{aligned}
+2 &= 50-3\cdot 16 \\
+&= 50-3(216-4\cdot 50) \\
+&= 482-2\cdot 216 -3(216 - 4(482-2\cdot 216)) \\
+&= 482-2(1180-2\cdot 482)-3((1180-2\cdot 482)-4(482-2(1180-2\cdot 482))) \\
+&= (-2-3-24)1180 + (1+4+6+12+48)482 \\
+&= - 29\cdot 1180 + 71 \cdot 482 
+\end{aligned} }
+$$
+
+
+## Implementation of the extended Euclidean Algorithm in R 
+
+```{r gmp, include = FALSE}
+library(gmp)
+```
+
+```{r eucalglist, echo=TRUE}
+extGCDbigz <- function (a, b, showTrace = FALSE) 
+{
+  u <- c(as.bigz(1), as.bigz(0), as.bigz(a))
+  v <- c(as.bigz(0), as.bigz(1), as.bigz(b))
+  if(showTrace)
+      cat(paste("v =", v[1], v[2], v[3], "\n"))
+    while (v[3] != 0) {
+      # Invariant: v[1]*a + v[2]*b = v[3]
+      q <- u[3] %/% v[3]
+      t <- u - v * q
+      u <- v
+      v <- t
+      if(showTrace)
+        cat(paste("v =", v[1], v[2], v[3], "\n"))
+    }
+    return(list(g = u[3], c = u[1], d = u[2]))
+}
+```
+
+## Implementation of Euclidean Algorithm in R 
+
+<div class="column-left">
+```{r eucalg2, echo = TRUE}
+
+extGCDbigz <- function (a, b, showTrace = FALSE) 
+{
+  u <- c(as.bigz(1), as.bigz(0), as.bigz(a))
+  v <- c(as.bigz(0), as.bigz(1), as.bigz(b))
+  if(showTrace)
+      cat(paste("v =", v[1], v[2], v[3], "\n"))
+    while (v[3] != 0) {
+      # Invariant: v[1]*a + v[2]*b = v[3]
+      q <- u[3] %/% v[3]
+      t <- u - v * q
+      u <- v
+      v <- t
+      if(showTrace)
+        cat(paste("v =", v[1], v[2], v[3], "\n"))
+    }
+    return(list(g = u[3], c = u[1], d = u[2]))
+}
+```
+</div>
+
+<div class="column-right">
+```{r eucalgexec, echo = TRUE}
+extGCDbigz(1180,482, TRUE)
+```
+</div>
+
+## How fast is the extended Euclidean algorithm? 
+
+```{r bigexample1, echo = TRUE}
+extGCDbigz(672348327378426,24236368482, TRUE)
+```
+
+## How fast is the extended Euclidean algorithm? 
+
+```{r bigexample2, echo = TRUE}
+extGCDbigz(672348327378326,242363684823423, TRUE)
+```
+
+## Punchline: It's fast
+
+The extended Euclidean algorithm runs in linear time on the number of digits (i.e., logarithmic time on the size of the numbers.)
+
+## Finding inverses in $\mathbb{Z}_n$ 
+
+The extended Euclidean algorithm gives us a way to find inverses in $\mathbb{Z}_n$. Suppose that $\gcd(a,n)=1$. Then we can use the extended Euclidean algorithm to find integers $c$ and $d$ such that $ca + dn = 1$. This gives us the multiplicative inverse of $a$. (How?)
+
+>- $ca = 1-dn = 1 \mod n$
+>- So $c = a^{-1}$ in $\mathbb{Z}_n$
+
+---
+
+```{r}
+a <- as.bigz("908234890234894325723983248234892349")
+n <- 256
+gcd(a,n)
+gcdex(a,n) # gmp version of extended Euclidean algorithm
+(21 * a) %% n
+```
+
+## Inverses using `gmp`
+
+There is also a `gmp` function that gives inverses in $\mathbb{Z}_n$ directly:
+
+```{r}
+inv.bigz(a,n) # gmp function for inverse in  Z_n
+```
+
+## What if $\gcd(a,n)\neq 1$?
+
+Suppose $a$ and $n$ are *not* relatively prime. Then there is a common divisor $d > 1$ such that $a = kd$ and $n = ld$.
+
+- Then $kld = kn = 0 \mod n$.
+- But $kld = al$.
+- So $al = 0 \mod n$, which makes $a$ a zero divisor in $\mathbb{Z}_n$.
+- So $a$ is not invertible.
+
+## Group Exercise
+
+> Each function $s:\mathbb{Z}_{26}\longrightarrow \mathbb{Z}_{26}$ below defines an affine cipher. For each function, find the decryption function $s^{-1}$ or prove that no such function exists.
+>
+> 1. $x \stackrel{s}{\longmapsto} 11 x + 4$
+> 
+> 2. $x \stackrel{s}{\longmapsto} 13 x + 5$
+
+Work in your group's voice channel with your group's Jamboard.
+
+# Assignments
+
+## Programming Assignment: due Sunday, 11:59 pm 
+
+https://djhunter.github.io/cryptography/programming/01affine.html
+
+## Written Assignment: due Monday, 11:59 pm 
+
+https://djhunter.github.io/cryptography/assignments/02shiftaffine.html
+
+
