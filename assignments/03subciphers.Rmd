@@ -1,0 +1,34 @@
+---
+title: "Substitution and Vigenère Ciphers"
+output:
+  html_document:
+    toc: false
+    df_print: paged
+    theme: spacelab
+---
+
+Upload to Canvas a PDF scan of your work for problems 1--3. For this assignment, you will probably prefer to type. Any mode of typing is fine, just export to PDF and upload a PDF. 
+
+## Assignment: due Wednesday, 11:59 pm
+
+0. Add the functions `letterCounts`, `digramTable`, and `vigenere` to your R Package, with appropriate documentation. (This will be submitted later, but you will need the functions for the following problems.) Also, fix any issues that you may have had with Version 0.1.0. Delete the `NAMESPACE` file before you Install and Restart and ROxygen will build a new `NAMESPACE` file for you.
+
+1. The following ciphertext was encrypted by a substitution cipher. The plaintext is from a book written in English. Perform a letter-frequency analysis attack to find the plaintext. 
+    - Give a written **summary** (in words, not in code) of the process you went through to decrypt: Which letters did you identify using single-letter frequency? Which did you identify using digrams? 
+    - Include a copy of the decyrpted **plaintext**.
+    
+```
+olkkaljllsldkwejnxdklejtbhegzxbndxzptyktbwypaweglelwbyowyqwodxpptbdzbxnkalkxsjxqehexkalbqxbjdkalqxbuxzqxbyjnwuhegwejqxbyjpaweghegwblrowejywbglkalqxbuxzlyhkldgwklullslbdqaxsbxvhjlpblwkhvljhblpkhxewejnwewglnlekqhkahedsalbldxzdxphwyyhzllvleqalblkalhnslktdzxbpawegljbwqdzbxnsxstywbwghkwkhxehkjxldexkgwhekbwpkhxetekhyhkhdlnrbwpljwejsbxswgwkljrolyhkldkalblwdxezxbkahdwdhawvldwhjhdkawkptyktblhdwrxtkaxqdxphlkhldjlzhelblwyhkoqawkhdgxxjrwjbhgakqbxegblwyteblwyhnsxbkwektehnsxbkwekwejdxxekahdpwswphkohdexklvleyojhdkbhrtkljhewdxphlkortkhdpxeplekbwkljheplbkwhehedkhktkhxedwejwnxegplbkwheylwjlbdahsgbxtsdqaxawvlwyxsdhjljwpplddkxkalnlwedxzptyktbwysbxjtpkhxekaldllyhkldxslbwklheqlyyjlvlyxsljelkqxbudwejsxqlbztyhedkhktkhxedxvlbkhnlptyktbwyheexvwkhxehdkbwedywkljwejjhzztdljjllsbxxkljptyktbwypaweglklejdkxrlgheqhkakaxdlqaxdlqxbuhdnxdkpxeplsktwywejhevhdhrylwejhknxvldkabxtgakxkaxdlqaxdlqxbuhdnxdkpxepblklwejvhdhrylhewvlbopbtjlzxbntywkhxekalsbxplddrlghedqhkakalxbhdkdqaxglelbwklhjlwdwejuexqyljglnxvldkxbldlwbpalbdqaxlfsyxblblvhdllfswejwejvwyhjwklhjlwdnxvldxekxklwpalbdwejljtpwkxbdqaxswddkaxdlhjlwdxekxxkalbdkaleswddldxekxsxstywbhilbdqaxdhnsyhzohjlwdwejsbwpkhkhxelbdqaxwssyokaxdlhjlwdwyyxzkahdxzpxtbdlkbwedshbldkabxtgaelkqxbudwejdkbtpktbldxzptyktbwysbxjtpkhxeptyktbwypaweglhdnxdklejtbhegqalehkslelkbwkldkaldkbtpktblxzxtbhnwghewkhxezbwnlqxbudxzuexqyljglwejjhdptddhxekalslbplskhxexzlvlbojwoblwyhkokahdbwblyohzlvlbawssledkabxtgagbwddbxxkdsxyhkhpwynxrhyhiwkhxekaxtgagbwddbxxkdnxrhyhiwkhxepwerlwnwehzldkwkhxexzjllslbptyktbwykbwedzxbnwkhxe
+```
+2. The following key vector
+
+```{r, eval=FALSE, indent='    '}
+keyVec <- c(2,7,20,24)
+```
+was used to create the following ciphertext using a Vigenère cipher. Find the plaintext.
+```
+voyywabmtvzrjlksqaygpabcryytkvoqryiznlgguhqcnselqdhqqjcmnvaguazpqtnfgbhgxllqkasmhccpiphgc
+```
+
+3. Explain, using the example in Question 2, why the Vigenère cipher is not a substitution cipher. In your explanation, you should refer specifically to characters in both the plaintext and the ciphertext.
+

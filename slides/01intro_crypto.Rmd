@@ -239,7 +239,6 @@ shiftCipher("melcgsx", 16)
 
 - ciphertext only
 - known plaintext
-- known ciphertext
 - chosen plaintext
 - chosen ciphertext
 

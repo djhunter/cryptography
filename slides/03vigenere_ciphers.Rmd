@@ -1,0 +1,272 @@
+---
+title: "Substitution and Vigenère Ciphers"
+date: "September 8, 2020"
+output: 
+  revealjs::revealjs_presentation:
+    fig_width: 14
+    fig_height: 7
+    self_contained: true
+    theme: night
+    highlight: zenburn
+    css: slidesdjh.css
+    center: false
+    transition: slide
+    reveal_options:
+      controls: true
+      progress: false
+      width: 1080
+      height: 540
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_chunk$set(comment = NA)
+options(width = 100)
+library(gmp)
+```
+
+# Substitution Ciphers
+
+## Recall: Ciphers
+
+> A **cipher** is an algorithm that inputs a plaintext string and outputs a ciphertext string, according to some given key.
+
+Mathematically, a cipher is a one-to-one and onto function on the alphabet set $X$.
+
+$$
+c : X \longrightarrow X
+$$
+
+## Shift and Affine Ciphers
+
+Suppose that a plaintext message is composed from an alphabet set $X$. If $c : X \longrightarrow X$ is a one-to-one correspondence, then $c$ defines a cipher that can be applied to the plaintext. Such a cipher is a **substitution cipher.**
+
+Examples:
+
+- Shift cipher
+- Affine cipher
+
+## Brute force attacks
+
+The time required for a brute force attack (trying all the keys) is proportional to the number of possible keys. 
+
+> *Warm-up question:* How many different keys are there for the following ciphers on $\mathbb{Z}_{26}$?
+>
+> a. The shift cipher $x \mapsto x+h$, where $h$ is a chosen element of $\mathbb{Z}_{26}$.
+> b. The affine cipher $x \mapsto \alpha x + \beta$, where $\alpha, \beta$ are chosen elements of $\mathbb{Z}_{26}$.
+> c. A general substitution cipher $x \mapsto \sigma(x)$, where $\sigma$ is a chosen permutation of the elements of $\mathbb{Z}_{26}$.
+
+## Letter-frequency attacks {.smaller}
+
+A **frequency analysis attack** exploits the fact that, in any natural language, some letters are used more than others. For example, in English, the frequencies of each letter are as follows.
+
+```{r}
+englishFreqs <- c(0.082,0.015,0.028,0.043,0.127,0.022,0.020,0.061,0.070, 0.002,0.008,0.040,0.024,
+                  0.067,0.075,0.019,0.001,0.060,0.063,0.091,0.028,0.010,0.023,0.001,0.020,0.001)
+names(englishFreqs) <- letters
+sort(englishFreqs,decreasing=TRUE)
+```
+
+## Example
+
+```{r subexamplesetup, include=FALSE}
+scramble <- function(txt, perm) {
+  l <- unlist(strsplit(txt,""))
+  k <- letters[perm]
+  names(k) <- letters
+  scramList <- k[l]
+  return(paste0(scramList,collapse=""))
+}
+plaintext <- "howeverinthisextremedistresshewasnotdestituteofhisusualsagacitybuttrustinghimselftotheprovidenceofgodheputhislifeintohazardinthemannerfollowingandnowsaidhesinceitisresolvedamongyouthatyouwilldiecomeonletuscommitourmutualdeathstodeterminationbylothewhomthelotfallstofirstlethimbekilledbyhimthathaththesecondlotandthusfortuneshallmakeitsprogressthroughusallnorshallanyofusperishbyhisownrighthandforitwouldbeunfairifwhentherestaregonesomebodyshouldrepentandsavehimselfthisproposalappearedtothemtobeveryjustandwhenhehadprevailedwiththemtodeterminethismatterbylotshedrewoneofthelotsforhimselfalsohewhohadthefirstlotlaidhisneckbaretohimthathadthenextassupposingthatthegeneralwoulddieamongthemimmediatelyfortheythoughtdeathifjosephusmightbutdiewiththemwassweeterthanlifeyetwashewithanotherlefttothelastwhetherwemustsayithappenedsobychanceorwhetherbytheprovidenceofgodandashewasverydesirousneithertobecondemnedbythelotnorifhehadbeenlefttothelasttoimbruehisrighthandinthebloodofhiscountrymenhepersuadedhimtotrusthisfidelitytohimandtoliveaswellashimself"
+testKey <- c(22,3,10,12,8,1,21,18,24,25,4,13,19,5,23,16,7,11,9,2,15,20,17,14,26,6)
+ciphertext <- scramble(plaintext, testKey)
+```
+
+Suppose that the following ciphertext is the result of a substitution cipher:
+
+```{r, tidy=TRUE, tidy.opts=list(width.cutoff=60)}
+ciphertext
+```
+
+## Count the letters
+
+```{r}
+letterCounts <- function(txt)
+{
+  return(sort(table(unlist(strsplit(txt,""))),decreasing=TRUE))
+}
+letterCounts(ciphertext)
+```
+
+Assuming that the plaintext is in English, what do you conclude?
+
+## Make some substitutions {.build}
+
+```{r}
+dct <- gsub("h","E",ciphertext)
+dct <- gsub("b","T",dct)
+dct
+```
+
+
+## Look at digrams 
+
+```{r}
+digramTable <- function(txt)
+  # returns a table with the numbers of digrams of each possible type
+{
+  l <- unlist(strsplit(txt,""))
+  dgs <- data.frame(l,c(l[2:length(l)],NA))
+  names(dgs) <- c("first","second")
+  table(dgs)
+}
+```
+
+The most common digrams in English are TH HE IN ER AN RE ED ON ES. 
+
+## {.smaller}
+```{r}
+digramTable(ciphertext)
+```
+
+## Make more substitutions based on digrams
+
+```{r}
+dct <- gsub("r", "H", dct)
+dct <- gsub("k", "R", dct)
+dct
+```
+
+## Make more substitutions *ad hoc*
+
+See R console.
+
+## Check your answer; see the key
+
+```{r, eval=FALSE}
+letterCounts(ciphertext)
+letterCounts(dct)
+```
+
+## Types of Attack
+
+A letter-frequency analysis is a *Ciphertext only* attack.
+
+- Ciphertext only attacks are always possible, because the ciphertext is what gets sent over public channels.
+- *Known plaintext:* If you have the plaintext and the ciphertext, how could you obtain the key?
+- *Chosen plaintext/ciphertext* attack:
+    - If you got access to the encryption (or decryption) machine for a substitution cipher, how could you obtain the key?
+
+# The Vigenère cipher
+
+## Passphrase encryption
+
+Some systems, like [PassPack](https://passpack.com), encrypt data using a key based on a **passphrase** you provide. They don't store the key/passphrase; they only store the encrypted data, so if you forget your passphrase you are out of luck. 
+
+## Vigenère cipher
+
+In 1553, Giovan Battista Bellaso published a [paper](https://en.wikipedia.org/wiki/Giovan_Battista_Bellaso#/media/File:Bellaso_foreword.jpg) describing a passphrase-based encryption method.
+
+The system was later attributed (falsely) to Blaise de Vigenère, so that's what everyone calls it now.
+
+## How the Vigenère cipher works {.build}
+
+The key is a passphrase, usually consisting of a word or two. For example, `mypassphrase`.
+
+To encrypt, you line up the letters of the plaintext with repeated copies of the passphrase and add (mod 26).
+
+```
+thisistheplaintextthatwewouldliketoencryptusingthevigenerecipher
+mypassphrasemypassphrasemypassphrasemypassphrasemypassphrasemypassphrase
+```
+
+`t` corresponds to 19, `m` corresponds to 12, so the first letter of ciphertext corresponds to $(19+12) \bmod 26 = 5$, i.e., `f`
+
+```
+ffxsakiovpdeuliepliortoiimjlvdxrvtgizagyhljzznyxtckiywclieumbftr
+```
+
+## Discuss: Think/group/share:
+
+1. How would you decrypt the Vigenère cipher, given the key?
+2. Is the Vigenère cipher a substitution cipher? Why or why not?
+
+Step 1: Take a moment to just **think** about the answers to these questions.
+
+## Discuss at your tables
+
+1. How would you decrypt the Vigenère cipher, given the key?
+2. Is the Vigenère cipher a substitution cipher? Why or why not?
+
+Step 2: Discuss the answers in your table **groups**. 
+
+```{r, echo=FALSE}
+library(knitr)
+roster <- c("Sam", "Wesley", "Andrew", "Winston", "Michael", "Logan", "Christian", "Caleb", "James", "Joe", "Emily", "Giselle", "Nathan")
+set.seed(982020) 
+n <- length(roster)
+ngps <- 3
+maxingp <- ceiling(n/ngps)
+# just make random groups
+groups <- matrix(c(roster[sample(n)], 
+                   rep("",(maxingp - (n %% maxingp)) %% maxingp)), 
+                 ncol=maxingp, byrow=FALSE)
+rownames(groups) <- paste0("Table #", 1:nrow(groups))
+kable(t(groups))
+```
+
+## Discuss as a large group
+
+1. How would you decrypt the Vigenère cipher, given the key?
+2. Is the Vigenère cipher a substitution cipher? Why or why not?
+
+Step 3: **Share** what we discussed in a large group.
+
+## Vigenère cipher in math 
+
+Passphrase: A vector $\mathbf{v} = (k_1, k_2, \ldots, k_n) \in \mathbb{Z}_{26}^n$.
+
+Plaintext: a vector $\mathbf{p} \in \mathbb{Z}_{26}^{N}$, where $N$ is the number of characters in the plaintext.
+
+For simplicity, assume that $N=nk$ for some $k$. We could then break the plaintext $\mathbf{p}$ into **blocks** $\mathbf{p}_1, \mathbf{p}_2, \ldots, \mathbf{p}_k$, where each of these blocks $\mathbf{p}_i$ is in $\mathbb{Z}_{26}^n$. 
+
+Then the encryption process is represented by a function $\mathbb{Z}_{26}^{n} \longrightarrow \mathbb{Z}_{26}^{n}$, given by
+$$
+\mathbf{p}_i \longmapsto \mathbf{p}_i + \mathbf{v}
+$$
+where the addition is componentwise, modulo 26.
+
+## Terminology {.build}
+
+> A cipher is called **symmetric** if it uses the same key to encrypt as to decrypt.
+
+All of the ciphers we have seen so far are symmetric.
+
+> A **block cipher** is a cipher algorithm that operates on fixed-length sections, or **blocks** of plaintext. 
+
+The Vigenère cipher is an example of a symmetric block cipher. So are DES and AES. 
+
+## Vigenère cipher in code
+
+```{r}
+stringToMod26 <- function(x) {utf8ToInt(x)-utf8ToInt("a")}
+mod26ToString <- function(x) {intToUtf8(x+utf8ToInt("a"))}
+
+vigenere <- function(txt, keyVector)
+{
+  pt <- stringToMod26(txt)
+  suppressWarnings( 
+    ct <- (pt + keyVector) %% 26
+  )                               
+  return(mod26ToString(ct))
+}
+
+plaintext <- "thisistheplaintextthatwewouldliketoencryptusingthevigenerecipher"
+keyAsVector <- stringToMod26("mypassphrase")
+vigenere(plaintext, keyAsVector)
+```
+
+## Written Assignment: Due Wednesday, 11:59pm
+
+[Substitution and Vigenère Ciphers](../assignments/03subciphers.html)
+
