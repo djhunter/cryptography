@@ -31,7 +31,7 @@ library(gmp)
 
 > A **cipher** is an algorithm that inputs a plaintext string and outputs a ciphertext string, according to some given key.
 
-Mathematically, a cipher is a one-to-one and onto function on the alphabet set $X$.
+Mathematically, a *substitution cipher* is a one-to-one and onto function on the alphabet set $X$.
 
 $$
 c : X \longrightarrow X
