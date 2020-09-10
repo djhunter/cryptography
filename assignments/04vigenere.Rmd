@@ -1,0 +1,27 @@
+---
+title: "Properties of Vigenère Ciphers"
+output:
+  html_document:
+    toc: false
+    df_print: paged
+    theme: spacelab
+---
+
+Upload to Canvas a PDF scan of your work for problems 1--4. For this assignment, you will probably prefer to type. Any mode of typing is fine, just export to PDF and upload a PDF. 
+
+## Assignment: due Monday, 11:59 pm
+
+1. The following ciphertext was encrypted with a Vigenère cipher. Determine the key length by counting matches between shifts of the ciphertext. Include a list of number of matches corresponding to each shift, up to 30. 
+```
+jmxejtahwseoidysjwxmwpdtzalgplsialyggqelzweaamymzwelrycdvmcidikcdheuazcvesafaulfrzmjvzpwdivqozjoweglsmjoapxtrebwnqxsnmaohzvpifvlsejqluwwjenegfsezxgulasjmvvzpwaijezqsnsfqowizowcfofaimvqfrpqdvzpcsmjgkpgqzwvzpwaijezhsqtvpwginpsxwmiccfywlvauaulloavojwyaakgohlvaestotxdvgtelphqxgdtjapsufpzaztgwyrkzecdpzavljgdilmjkgowspaezhippapcxsobltsyuqqdnavippwpayipmwplsgavlwjjxqzfqmesjkdqkpvevkrwnxewfvgmibcdngqgnqwuswenukfaqjekmnltiomegjrijkagk
+```
+
+2. Use your function `findVigKey` to produce the key used to produce the above ciphertext, and then use the function `vigenere` to decrypt the ciphertext. Include the decrypted ciphertext.
+
+3. Suppose you had only been given the following fragment of the above ciphertext:
+```
+jmxejtahwseoidysjwxmwpdtzalgplsialyggqelzweaamymzwelrycdvmcidikc
+```
+Does your method from Question 1 reliably determine the key length? Given the correct key length, does your method from Question 2 correctly determine the key? Interpret your results. Through experimentation, estimate how many characters of ciphertext are needed for the methods of Questions 1 and 2 to work.
+
+4. Suppose that a plaintext string is encrypted using a Vigenère cipher with key length 4, and then the resulting ciphertext is encrypted using a second Vigenère cipher with key length 6. Explain why the composition of these two ciphers is a Vigenère cipher. What is the key length of the composite cipher? Justify your answer, either with a mathematical argument, or with a computer demonstration on a suitably chosen example.

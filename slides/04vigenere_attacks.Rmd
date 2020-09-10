@@ -1,0 +1,379 @@
+---
+title: "Attacks on Vigenère Ciphers"
+date: "September 10, 2020"
+output: 
+  revealjs::revealjs_presentation:
+    fig_width: 14 
+    fig_height: 7
+    self_contained: true
+    theme: night
+    highlight: zenburn
+    css: slidesdjh.css
+    center: false
+    transition: slide
+    reveal_options:
+      controls: true
+      progress: false
+      width: 1080
+      height: 540
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_chunk$set(comment = NA)
+options(width = 100)
+library(gmp)
+letterCounts <- function(txt)
+{
+  return(sort(table(unlist(strsplit(txt,""))),decreasing=TRUE))
+}
+
+digramTable <- function(txt)
+  # returns a table with the numbers of digrams of each possible type
+{
+  l <- unlist(strsplit(txt,""))
+  dgs <- data.frame(l,c(l[2:length(l)],NA))
+  names(dgs) <- c("first","second")
+  table(dgs)
+}
+```
+
+# The Vigenère cipher
+
+## Recall: The Vigenère cipher
+
+```{r}
+stringToMod26 <- function(x) {utf8ToInt(x)-utf8ToInt("a")}
+mod26ToString <- function(x) {intToUtf8(x+utf8ToInt("a"))}
+
+vigenere <- function(txt, keyVector)
+{
+  pt <- stringToMod26(txt)
+  suppressWarnings( 
+    ct <- (pt + keyVector) %% 26
+  )                               
+  return(mod26ToString(ct))
+}
+
+vigenere("albuquerque", stringToMod26("walter"))
+```
+
+## Brute force attack?
+
+>  Suppose you knew the length $n$ of the key for a Vigenère cipher. How many keys would you have to try for a ciphertext-only brute force attack?
+
+```
+-poll "How many keys would you have to try in a brute-force ciphertext-only attack on a Vigenère cipher of key length n?" n n^2 26n 26^n n^26 n! 26!
+```
+
+## Letter-frequency of Vigenère ciphertext
+
+Will a letter-frequency attack work?
+
+```{r}
+plaintext <- "howeverinthisextremedistresshewasnotdestituteofhisusualsagacitybuttrustinghimselftotheprovidenceofgodheputhislifeintohazardinthemannerfollowingandnowsaidhesinceitisresolvedamongyouthatyouwilldiecomeonletuscommitourmutualdeathstodeterminationbylothewhomthelotfallstofirstlethimbekilledbyhimthathaththesecondlotandthusfortuneshallmakeitsprogressthroughusallnorshallanyofusperishbyhisownrighthandforitwouldbeunfairifwhentherestaregonesomebodyshouldrepentandsavehimselfthisproposalappearedtothemtobeveryjustandwhenhehadprevailedwiththemtodeterminethismatterbylotshedrewoneofthelotsforhimselfalsohewhohadthefirstlotlaidhisneckbaretohimthathadthenextassupposingthatthegeneralwoulddieamongthemimmediatelyfortheythoughtdeathifjosephusmightbutdiewiththemwassweeterthanlifeyetwashewithanotherlefttothelastwhetherwemustsayithappenedsobychanceorwhetherbytheprovidenceofgodandashewasverydesirousneithertobecondemnedbythelotnorifhehadbeenlefttothelasttoimbruehisrighthandinthebloodofhiscountrymenhepersuadedhimtotrusthisfidelitytohimandtoliveaswellashimself"
+keyAsVector <- stringToMod26("skyler")
+ciphertext <- vigenere(plaintext, keyAsVector)
+letterCounts(plaintext)
+letterCounts(ciphertext)
+```
+
+
+## Histogram of letter counts
+
+```{r, echo=FALSE}
+p1 <- hist(letterCounts(plaintext), plot=FALSE)
+p2 <- hist(letterCounts(ciphertext), plot=FALSE)
+plot( p1, col=rgb(0,0,1,0.3), main="blue=plaintext, pink=ciphertext", 
+      xlab="letter counts", ylab="# of letters")  # transparent blue 
+plot( p2, col=rgb(1,0,0,0.3), add=TRUE)  # transparent red 
+```
+
+## Unbreakable?
+
+See *Scientific American Monthly*, 4(4), 1921, pp. 332-334.
+
+> But before we proceed, let us return to the popular misapprehension, the delusion regarding the invulnerability of this system which is so firmly fixed that we come in contact with statements and articles describing it as "indecipherable" and some even refer to it as "new." 
+
+---
+
+> I have in mind an article published in the Proceedings of the Engineers' Club of Philadelphia and reprinted in the Scientific American Supplement (No. 2143) of January 17, 1917, entitled "A New Cipher Code" in which our old and well-known Vigenère table appears as the subject of an interesting if somewhat erroneous article. 
+
+---
+
+> The author's closing paragraph is of especial interest and is quoted herewith "The method used for the preparation and reading of code messages is simple in the extreme and at the same time *impossible of translation unless the key-word is known.* The ease with which the key may be changed is another point in favor of the adoption of this code by those desiring to transmit important messages *without the slightest danger of their messages being read by political or business rivals,*" etc. The italics are ours!
+
+# Attacking the Vigenère cipher, step 1: Find the key length
+
+## Chosen plaintext
+
+```{r}
+vigenere("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", stringToMod26("skyler"))
+```
+
+## Repeats
+
+Observe: if all the letters of the plaintext are the same, the ciphertext will repeat every $k$ letters, where $k$ is the length of the key.
+
+```{r}
+vigenere("eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee", stringToMod26("skyler"))
+```
+
+## Repeats {.build}
+
+If follows that, if many of the letters of the plaintext are the same (e.g., `e`'s), there will be lots of repeats every $k$ letters in the ciphertext (and not as many repeats for other intervals).
+
+```{r}
+vigenere("eeereeeweeeeeerefeeegeeeedeeeeqeeeveeeseem", stringToMod26("skyler"))
+```
+
+```
+woccivwgcpivwoppjvwoepivwncpiviocpzvwoqpid        # ciphertext
+      woccivwgcpivwoppjvwoepivwncpiviocpzvwoqpid  # shifted by 6
+      * * ***  * *** * **  ***  ** * * *          # matches
+```
+
+Therefore, to find the key length, you just find the shift that maximizes the number of matches.
+
+## R technique: subscripting
+
+(See console.)
+
+## Tools for shifting
+
+```{r}
+stringToMod26 <- function(x) {utf8ToInt(x)-utf8ToInt("a")}
+
+shiftVec <- function(v, n) {
+  v[(seq_along(v) - (n+1)) %% length(v) + 1]
+}
+
+stringToMod26("tucosalamanca")
+shiftVec(stringToMod26("tucosalamanca"), 3)
+```
+
+## R technique: Boolean vectors and `sum`
+
+(See console.)
+
+## Count matches
+
+```{r}
+ctv <- stringToMod26(ciphertext)
+matches <- sapply(1:20, function(x){sum(ctv-shiftVec(ctv, x)==0)})
+names(matches) <- 1:20
+matches
+```
+
+## Plot matches
+
+```{r, echo=FALSE}
+ctv <- stringToMod26(ciphertext)
+matches <- sapply(1:100, function(x){sum(ctv-shiftVec(ctv, x)==0)})
+plot(matches, xlab="shift distance (ciphertext)")
+axis(side=3, at=6*(0:16))
+abline(v=6*(0:16))
+```
+
+## Count matches in shifts of plaintext
+
+```{r}
+ptv <- stringToMod26(plaintext)
+matches <- sapply(1:20, function(x){sum(ptv-shiftVec(ptv, x)==0)})
+names(matches) <- 1:20
+matches
+```
+
+## Plot matches in shifts of plaintext
+
+```{r, echo=FALSE}
+ptv <- stringToMod26(plaintext)
+matches <- sapply(1:100, function(x){sum(ptv-shiftVec(ptv, x)==0)})
+plot(matches, xlab="shift distance (plaintext)")
+abline(h=mean(matches), col="gray")
+axis(side=3, at=6*(0:16))
+abline(v=6*(0:16))
+```
+
+## Does it work without letter frequency patterns?
+
+```{r}
+nfPlaintext <- mod26ToString(sample(0:25, 1043, replace=TRUE)) # random ciphertext
+nfCiphertext <- vigenere(nfPlaintext, keyAsVector)
+ctv <- stringToMod26(nfCiphertext)
+matches <- sapply(1:20, function(x){sum(ctv-shiftVec(ctv, x)==0)})
+names(matches) <- 1:20
+matches
+```
+
+## Does it work without letter frequency patterns?
+
+```{r echo=FALSE}
+matches <- sapply(1:100, function(x){sum(ctv-shiftVec(ctv, x)==0)})
+plot(matches, xlab="shift distance (ciphertext)")
+axis(side=3, at=6*(0:16))
+abline(v=6*(0:16))
+```
+
+## Summary: finding the key length {.build}
+
+> **Summary.** To find the key length of a Vigenère cipher given only the ciphertext, count the matches between the ciphertext and shifts of the ciphertext, and find the (smallest) shift that maximizes the number of matches.
+
+## Can we systemetize this process?
+
+```{r}
+ctv <- stringToMod26(ciphertext)
+matches <- sapply(1:30, function(x){sum(ctv-shiftVec(ctv, x)==0)})
+matches
+```
+
+We can view every 6th entry of the vector `matches`:
+
+```{r}
+matches[c(6,12,18,24,30)]
+```
+
+Or better yet:
+
+```{r}
+matches[seq(6,30,by=6)]
+```
+
+## Find the shift that maximizes mean matches
+
+```{r}
+for(i in 1:10) {
+  matches_by_i <- matches[seq(i,30,by=i)]
+  cat("by", i, ":", matches_by_i, "mean:", mean(matches_by_i), "\n")
+}
+```
+
+## Avoid `for` loops
+
+```{r}
+sapply(1:10, function(i) {mean(matches[seq(i,30,by=i)])})
+```
+
+And in one line, we can find which one is the max:
+
+```{r}
+which.max(sapply(1:10, function(i) {mean(matches[seq(i,30,by=i)])}))
+```
+
+So the key length is 6 (probably).
+
+# Attacking the Vigenère cipher, step 2: Find the key, given its length
+
+## We can find the key length. Now what?
+
+- Brute force attack.
+- ?
+
+## New Example
+
+```{r}
+ciphertext <- "fsbvoiutlbsjienutpwcdlmvlxnrmhfnjcmmiftrnnghjrsznebwmuhkdkaimgrlvtcawzbekxwvrzieplkwkhjetzryipopxbanwddejnmfhwtthzubadphrnyubvxthfmzzhaniiwuztmfdxlrytwnaryaujpamqhrslpvabeqeawlvzxmucdlmvsxqrqtbiilhdusqftowzcwyhyegxhpdlddiiowcymrvomjngohpeerjtrwigpometgwrdnhvbbdziylsobtihwddenbndisuwoabacuzpedwcbjgmiznowlmpiiyiiovmptavtztrbljuvrzvmwryzeortbiheazkziwsqiqlgbgmfdxlryrmvyqnjjtycgceyvxyjzpfdxwvyrptrlwxkwcim"
+ctv <- stringToMod26(ciphertext)
+matches <- sapply(1:30, function(x){sum(ctv-shiftVec(ctv, x)==0)})
+names(matches) <- 1:30
+matches
+```
+
+So it looks like the key length is $k=9$.
+
+## Finding the key given the key length
+
+If the key length is $k$, then the letters in position $1, k+1, 2k+1, 3k+1, \ldots$ of the ciphertext should all have been shifted the same amount. (Similarly for positions $2, k+2, 2k+2, 3k+2, \ldots$, and so on.)
+
+In our example, we found that $k=9$.
+
+```{r}
+ct <- stringToMod26(ciphertext)
+every9thct <- ct[seq(1,length(ctv), 9)]  # take every 9th element, starting with the first 
+letterCounts(mod26ToString(every9thct))
+```
+
+```
+-poll "Guess the first element of the key, based on this output." a:0 d:3 h:7 l:11 n:13 q:16
+```
+
+## Mathematical tool: Dot products
+
+Recall: For vectors $\mathbf{a}, \mathbf{b} \in \mathbb{R}^n$, $\mathbf{a} \cdot \mathbf{b} = \lVert \mathbf{a} \rVert \lVert \mathbf{b} \rVert \cos \theta$, where $\theta$ is the angle between $\mathbf{a}$ and $\mathbf{b}$. Therefore, as the angle changes, the dot product is greatest when the vectors point in the same direction.
+
+Consequence: Given a collection of equal-length vectors $\mathbf{u}_1, \mathbf{u}_2, \ldots, \mathbf{u}_n$ and a vector $\mathbf{v}$, the vector $\mathbf{u}_i$ that *maximizes the dot product* $\mathbf{u}_i \cdot \mathbf{v}$ will be the vector whose direction is closest to the direction of $\mathbf{v}$.
+
+## Big Idea: Match letter frequencies
+
+- Let $\mathbf{u}_0$ be the letter frequencies of the letters in position $1, k+1, 2k+1, 3k+1, \ldots$ of the ciphertext, where $k$ is the key length.
+- If $\mathbf{u}_1, \mathbf{u}_2, \ldots, \mathbf{u}_{25}$ are all the possible shifts of $\mathbf{u}_0$, and $\mathbf{v}$ is the vector of English letter frequencies, then the $\mathbf{u}_i$ that maximizes $\mathbf{u}_i \cdot \mathbf{v}$ is the most likely shift.
+- That is, the first element of the key is $i$.
+- Repeat. For the $p$th element of the key, look at the letters in position $p, k+p, 2k+p, 3k+p, \ldots$.
+
+## R tools we need
+
+Given a string `txt` and integers $n$ and $r$, returns a string consisting of the characters in positions $n, n+r, n+2r, n+3r,\ldots$, etc.
+```{r}
+skipString <- function(txt, n, r) {
+  l <- unlist(strsplit(txt,""))
+  ss <- l[seq(n,length(l),r)]
+  return(paste0(ss,collapse=""))
+}
+```
+
+Compute the relative frequencies of the letters in a string of lowercase letters.
+```{r}
+letterFreq <- function(txt) {
+  l <- unlist(c(strsplit(txt,""),letters))
+  t <- as.vector(table(l))-1
+  return(t/sum(t))
+}
+```
+
+
+## Which shift of English frequencies matches best? {.smaller}
+
+```{r}
+englishFreqs <- c(0.082,0.015,0.028,0.043,0.127,0.022,0.020,0.061,0.070, 0.002,0.008,0.040,0.024,
+                  0.067,0.075,0.019,0.001,0.060,0.063,0.091,0.028,0.010,0.023,0.001,0.020,0.001)
+u <- letterFreq(skipString(ciphertext,1,9))
+for(i in 0:25) {
+  cat(paste("shift =", i, "\t", " u_i dot v =", u %*% shiftVec(englishFreqs, i), "\n"))
+}
+```
+
+## Which shift of English frequencies matches best?
+
+```{r}
+englishFreqs <- c(0.082,0.015,0.028,0.043,0.127,0.022,0.020,0.061,0.070, 0.002,0.008,0.040,0.024,
+                  0.067,0.075,0.019,0.001,0.060,0.063,0.091,0.028,0.010,0.023,0.001,0.020,0.001)
+u <- letterFreq(skipString(ciphertext,1,9))
+matchFreqs <- sapply(0:25, function(i){u %*% shiftVec(englishFreqs, i)})
+matchFreqs
+which.max(matchFreqs)-1
+```
+
+So the first element of the key is (probably) `d:3`.
+
+## What about the rest of the key?
+
+```{r}
+vKey <- numeric(9) # preallocate a vector length 9
+for(p in 1:9) {
+  u <- letterFreq(skipString(ciphertext,p,9))
+  matchFreqs <- sapply(0:25, function(i){u %*% shiftVec(englishFreqs, i)})
+  vKey[p] <- which.max(matchFreqs)-1
+}
+mod26ToString(vKey) # print out the key
+```
+
+## Decrypt, using the key
+
+```{r}
+vigenere(ciphertext, -vKey)
+```
+
+## Programming Assignment, Due Sunday night
+
+
+## Written Assignment, Due Monday night
