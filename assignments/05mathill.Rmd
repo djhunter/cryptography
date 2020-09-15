@@ -1,5 +1,5 @@
 ---
-title: "Matrix inversion and the Hill cipher"
+title: "Matrices and the Hill cipher"
 output:
   html_document:
     toc: false
@@ -36,7 +36,7 @@ $a\mathbf{w} + b\mathbf{x} + c\mathbf{y} + d\mathbf{z} = \mathbf{0}$.
      a. Write a system of three equations that the four variables $a,b,c,d$ must satisfy.
      b.  Find all possible dependence relations, and explain how you know you have found them all.
 
-3. Add the hillCipher function to your R package, with appropriate documentation.  Show, by example, that changing one letter of plaintext can change more than one letter of ciphertext. How much of the ciphertext changes? Does it matter which letter of plaintext changes?
+3. Add the `hillCipher` function to your R package, with appropriate documentation and examples.  Show, by example, that changing one letter of plaintext can change more than one letter of ciphertext. How much of the ciphertext changes? Does it matter which letter of plaintext changes?
 
 ```{r, eval=FALSE}
 hillCipher <- function(txt, keyMatrix) {

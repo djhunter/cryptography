@@ -47,6 +47,7 @@ This site provides slides, assignments, and other resources that I use in my Cod
 2. [Shift ciphers and affine ciphers](assignments/02shiftaffine.html)
 3. [Substitution and Vigenère Ciphers](assignments/03subciphers.html)
 4. [Properties of Vigenère Ciphers](assignments/04vigenere.html)
+5. [Matrices and the Hill Cipher](assignments/05mathill.html)
 
 # Programming Assignments
 
