@@ -1,0 +1,55 @@
+---
+title: "Matrix inversion and the Hill cipher"
+output:
+  html_document:
+    toc: false
+    df_print: paged
+    theme: spacelab
+---
+
+Upload to Canvas a PDF scan of your work for problems 1--3. 
+
+## Assignment: due Wednesday, 11:59 pm
+
+1.  In $M_2(\mathbb{Z}_{26})$, compute the inverse of the matrix $\begin{bmatrix} 3 & 2 \\ 2 & 5\end{bmatrix}$ using Gaussian elimination. Show all the steps, one row operation at a time. The first step is done for you.
+$$
+\begin{aligned}
+& 
+\left[\begin{array}{cc|cc}
+3 & 2 & 1 & 0 \\
+2 & 5 & 0 & 1
+\end{array}\right] \\
+\sim &
+\left[\begin{array}{cc|cc}
+1 & 18 & 9 & 0 \\
+2 & 5 & 0 & 1
+\end{array}\right] 
+&
+R_1 \leftarrow 9R_1 \\
+\sim &
+\,\,\cdots
+\end{aligned}
+$$
+
+2.   Let $\mathbf{w} = (1,0,1)$, $\mathbf{x} = (0,1,0)$, $\mathbf{y} = (0,1,1)$, and $\mathbf{z} = (1,1,0)$ be vectors in $\mathbb{Z}_2^3$. Finding a dependence relation on these vectors amounts to finding scalars $a,b,c,d \in \mathbb{Z}_2$ such that
+$a\mathbf{w} + b\mathbf{x} + c\mathbf{y} + d\mathbf{z} = \mathbf{0}$.
+     a. Write a system of three equations that the four variables $a,b,c,d$ must satisfy.
+     b.  Find all possible dependence relations, and explain how you know you have found them all.
+
+3. Add the hillCipher function to your R package, with appropriate documentation.  Show, by example, that changing one letter of plaintext can change more than one letter of ciphertext. How much of the ciphertext changes? Does it matter which letter of plaintext changes?
+
+```{r, eval=FALSE}
+hillCipher <- function(txt, keyMatrix) {
+  pt <- stringToMod26(txt)
+  n <- attributes(keyMatrix)$dim[2]
+  suppressWarnings(
+    mPtxt <- matrix(pt,nrow=n) # repeats text so length is a multiple of n
+  )
+  mCtxt <- (keyMatrix %*% mPtxt) %% 26
+  return(mod26ToString(as.vector(mCtxt)))
+}
+
+key <- matrix(c(1,4,11, 2,5,9, 3,6,8), nrow = 3, ncol = 3);
+hillCipher("whathappensifyouchangeoneletteroftheplaintext", key)
+```
+

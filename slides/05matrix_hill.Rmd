@@ -1,0 +1,445 @@
+---
+title: "Matrices and the Hill Cipher"
+date: "September 15, 2020"
+output: 
+  revealjs::revealjs_presentation:
+    fig_width: 14 
+    fig_height: 7
+    self_contained: true
+    theme: night
+    highlight: zenburn
+    css: slidesdjh.css
+    center: false
+    transition: slide
+    reveal_options:
+      controls: true
+      progress: false
+      width: 1080
+      height: 540
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_chunk$set(comment = NA)
+options(width = 100)
+library(gmp)
+stringToMod26 <- function(x) {utf8ToInt(x)-utf8ToInt("a")}
+mod26ToString <- function(x) {intToUtf8(x+utf8ToInt("a"))}
+vigenere <- function(txt, keyVector)
+{
+  pt <- stringToMod26(txt)
+  suppressWarnings( 
+    ct <- (pt + keyVector) %% 26
+  )                               
+  return(mod26ToString(ct))
+}
+letterCounts <- function(txt)
+{
+  return(sort(table(unlist(strsplit(txt,""))),decreasing=TRUE))
+}
+```
+
+# Linear Algebra Review (or maybe Just-In-Time Linear Algebra)
+
+## Representing Cryptography with Algebra
+
+| Cryptography Object    | Algebraic Object    |
+| :------------------- | :------------------ |
+| Letters a,b,c, ..., z | The ring $\mathbb{Z}_{26}$ |
+| Shift cipher | The function $x \mapsto x + b$ |
+| Affine cipher | The function $x \mapsto \alpha x + \beta$ |
+| Passphrase | A vector $\mathbf{v}=(v_1, v_2, \ldots , v_n) \in \mathbb{Z}_{26}^n$ |
+| Vigenère cipher | The function $\mathbf{x} \mapsto \mathbf{x}+(\mathbf{v}, \mathbf{v}, \ldots, \mathbf{v})$ |
+
+## Matrices and Linear Functions
+
+- An $m\times n$ **matrix** $M$ over a ring $R$ is a rectangular array of ring elements:
+$$
+M= \begin{bmatrix} a_{1,1} & a_{1,2} & \cdots & a_{1,n} \\ a_{2,1} & a_{2,2} & \cdots & a_{2,n} \\  \vdots & \vdots & \ddots & \vdots \\ a_{m,1} & a_{m,2} & \cdots & a_{m,n} \end{bmatrix}
+$$
+
+- A matrix represents a **linear function** $R^n \longrightarrow R^m$ given by $\mathbf{v} \mapsto M\mathbf{v}$.
+- Linear functions respect addition and scalar multiplication:
+
+$$
+M(a\mathbf{v} + b\mathbf{w}) = aM\mathbf{v} + bM\mathbf{w}
+$$
+
+## Matrix calculations
+
+The function $\mathbf{v} \mapsto M\mathbf{v}$ is calculated as: 
+
+$$
+\begin{bmatrix} v_1 \\ v_2 \\ \vdots \\ v_n \end{bmatrix} \stackrel{M}{\longmapsto} 
+v_1 \begin{bmatrix} a_{1,1} \\ a_{2,1} \\ \vdots \\ a_{m,1} \end{bmatrix}
++ v_2 \begin{bmatrix} a_{1,2} \\ a_{2,2} \\ \vdots \\ a_{m,2} \end{bmatrix}
++ \cdots
++ v_n \begin{bmatrix} a_{1,n} \\ a_{2,n} \\ \vdots \\ a_{m,n} \end{bmatrix}
+$$
+
+where $M = \begin{bmatrix} a_{1,1} & a_{1,2} & \cdots & a_{1,n} \\ a_{2,1} & a_{2,2} & \cdots & a_{2,n} \\  \vdots & \vdots & \ddots & \vdots \\ a_{m,1} & a_{m,2} & \cdots & a_{m,n} \end{bmatrix}$.
+
+(Example)
+
+## Try, then answer poll question
+
+In $\mathbb{Z}_3$, the matrix
+$$
+\begin{bmatrix}
+1 & 0 & 1 \\
+2 & 1 & 1 \\
+1 & 2 & 1 \\
+0 & 1 & 1 
+\end{bmatrix}
+$$
+defines a function $\mathbb{Z}_3^3 \longrightarrow \mathbb{Z}_3^4$.
+Compute:
+$$
+M
+\begin{bmatrix}
+0 \\ 1 \\ 2
+\end{bmatrix}
+$$
+
+```
+-poll "Which is M[0 1 2]^T?" "[1 2 1 1]^T" "[2 0 1 0]^T" "[2 2 1 0]^T" "[2 0 1 1]^T" "None of these"
+```
+
+## Matrix multiplication
+
+- The product of an $m\times n$ matrix $A$ and a $n \times p$ matrix $B$ is a $m \times p$ matrix $AB$.
+- The columns of $AB$ are all of the form $A\mathbf{v}$, where $\mathbf{v}$ is a column of $B$.
+- Miracle: $AB$ represents the composition of functions $A \circ B$.
+
+Example: In $\mathbb{Z}_5$, consider $A = \begin{bmatrix} 2 & 1  \\  4 & 3 \\ 0 & 2 \end{bmatrix}$ and $B = \begin{bmatrix} 1 & 2 \\ 1 & 3 \end{bmatrix}$:
+
+$$
+AB = \left[A \begin{bmatrix} 1 \\ 1 \end{bmatrix} \,\, A \begin{bmatrix} 2 \\ 3 \end{bmatrix}  \right] = \begin{bmatrix} 3 & 2 \\ 2 & 2 \\ 2 & 1 \end{bmatrix}
+$$
+(board)
+
+## The identity matrix
+
+The identity function $R^n \longrightarrow R^n$ is represented by the matrix
+$$
+I = 
+\begin{bmatrix}
+1 & 0 & 0 & \cdots & 0 \\
+0 & 1 & 0 & \cdots & 0 \\
+0 & 0 & 1 & \cdots & 0 \\
+\vdots & \vdots & \vdots & \ddots & \vdots \\
+0 & 0 & 0 & \cdots & 1
+\end{bmatrix}
+$$
+
+Note that $I\mathbf{v} = \mathbf{v}$ for any $\mathbf{v} \in R^n$.
+
+## Inverse matrices in $M_n(R)$
+
+We denote the set of $n\times n$ matrices over a ring $R$ as $M_n(R)$. 
+
+If a linear function $R^n \longrightarrow R^n$ is represented by the matrix $A$, then the inverse of the function (if it exists) is represented by the matrix $A^{-1}$, satisfying the property that $AA^{-1} = I$.
+
+**Example.** In $M_2(\mathbb{Z}_5)$, show that $\begin{bmatrix} 1 & 2 \\ 3 & 4 \end{bmatrix}$ and $\begin{bmatrix} 3 & 1 \\ 4 & 2 \end{bmatrix}$ are inverses.
+
+(board)
+
+## Computing Inverse Matrices {.smaller}
+
+Computing a matrix inverse involves solving a system of equations. For example, over $\mathbb{Z}_{26}$,
+$$
+\begin{bmatrix}
+1 & 2 & 3 \\
+4 & 5 & 6 \\
+11 & 9 & 8
+\end{bmatrix}
+\cdot
+\begin{bmatrix}
+a & b & c \\
+d & e & f \\
+g & h & i
+\end{bmatrix}
+=
+\begin{bmatrix}
+1 & 0 & 0 \\
+0 & 1 & 0 \\
+0 & 0 & 1
+\end{bmatrix}
+$$
+corresponds to the system
+$$
+\left\{
+\begin{aligned}
+a  + 2d  + 3g &=1 \\
+4a + 5d +  6g &= 0 \\
+11a + 9d + 8g &= 0 \\
+b  + 2e  + 3h &=0 \\
+4b + 5e +  6h &= 1 \\
+11b + 9e + 8h &= 0 \\
+c  + 2f  + 3i &=0 \\
+4c + 5f +  6i &=0 \\
+11c + 9f + 8i &= 1 
+\end{aligned}
+\right.
+$$
+
+## Computing Inverses using Row Operations
+
+Elementary Row Operations:
+
+- Multiply a row by an invertible constant.
+- Add a multiple of one row to another row.
+- Swap two rows
+ 
+**Gaussian elimination.** Starting with an *augmented matrix* of the form $[A \mid I]$, perform elementary row operations to obtain a matrix of the form $[I \mid B]$. Then $B=A^{-1}$. 
+ 
+ Example in $M_2(\mathbb{Z}_5)$. (on board)
+ $$
+ \left[\begin{array}{cc|cc}
+ 1 & 2  & 1 & 0 \\ 
+ 3 & 4  & 0 & 1
+ \end{array}\right]
+ $$
+
+## Dependence Relations
+
+A set of vectors (or rows or columns) $\mathbf{v}_1, \mathbf{v}_2, \ldots, \mathbf{v}_k$ is **dependent** if there are scalars $a_1, a_2, \ldots, a_k$ (not all 0) such that
+$$
+a_1\mathbf{v}_1+a_2\mathbf{v}_2+ \cdots + a_k\mathbf{v}_k = \mathbf{0}
+$$
+Such an equation is called a **dependence relation**.
+
+Example: The vectors $\begin{bmatrix} 2 \\ 1 \end{bmatrix}$, $\begin{bmatrix} 1 \\ 1 \end{bmatrix}$, $\begin{bmatrix} 1 \\ 2 \end{bmatrix}$ are dependent over $\mathbb{Z}_5$.
+
+Find $a,b,c \in \mathbb{Z}_5$ such that $a\begin{bmatrix} 2 \\ 1 \end{bmatrix} +b\begin{bmatrix} 1 \\ 1 \end{bmatrix} +c\begin{bmatrix} 1 \\ 2 \end{bmatrix}= \begin{bmatrix} 0 \\ 0 \end{bmatrix}$
+
+```
+-poll "What are a,b,c?" "1,1,2" "1,2,1" "2,2,1" "2,1,1" 
+```
+
+## Dependence Relations and Matrices
+
+Let $A$ be an $m\times n$ matrix, and let $\mathbf{x} = (x_1, x_2, \ldots, x_n)$. Then a dependence relation on the columns of $A$ corresponds to a nontrivial solution to the equation $A\mathbf{x} = \mathbf{0}$.
+
+Example: In $\mathbb{Z}_5$, our previous solution solves:
+
+$$
+\begin{bmatrix} 2 & 1 & 1 \\ 1 & 1 & 2 \end{bmatrix} \begin{bmatrix} a \\ b \\ c \end{bmatrix} = \begin{bmatrix} 0 \\ 0   \end{bmatrix}
+$$
+
+## Dependence Relations and Gaussian Elimination
+
+**Fact:** Let $A$ be a matrix. Suppose a row of zeros appears after applying Gaussian Elimination. Then there is a dependence relation on the rows of $A$.
+
+Reason: Row operations create linear combinations of rows.
+
+## Fields
+
+> A *field* is a ring in which every nonzero element has a multiplicative inverse.
+
+- The ring $\mathbb{Z}_{26}$ is not a field, because 13 has no inverse.
+- Fact: The ring $\mathbb{Z}_p$ is a field iff $p$ is prime.
+
+## Condition for Invertibility
+
+The following theorem is true over a field.
+
+> **Theorem.** A square matrix is invertible if and only if there are no dependence relations among its rows (or columns).
+
+Example: Use Gaussian elimination to row reduce the following matrix. Then decide whether or not the matrix is invertible in $M_3(\mathbb{Z}_3)$. 
+$$
+\begin{bmatrix}
+2 & 1 & 0 \\
+1 & 2 & 1 \\
+2 & 1 & 1 
+\end{bmatrix}
+$$
+
+(groups on Jamboard)
+
+## Join your table group
+
+```{r, echo=FALSE}
+library(knitr)
+roster <- c("Sam", "Wesley", "Andrew", "Winston", "Michael", "Logan", "Christian", "Caleb", "James", "Joe", "Emily", "Nathan")
+set.seed(9152020) 
+n <- length(roster)
+ngps <- 3
+maxingp <- ceiling(n/ngps)
+# just make random groups
+groups <- matrix(c(roster[sample(n)], 
+                   rep("",(maxingp - (n %% maxingp)) %% maxingp)), 
+                 ncol=maxingp, byrow=FALSE)
+rownames(groups) <- paste0("Table #", 1:nrow(groups))
+kable(t(groups))
+```
+
+Work on your group's [Jamboard](https://jamboard.google.com/d/1xgHNJwx4qvLMo9zHW16qLe25sdPS3dYKjMWgH7ohxcE/edit?usp=sharing). You may want to upload a photo of your written work.
+
+## Matrices in R
+
+```{r}
+A <- matrix(c(1,4,11, 2,5,9, 3,6,8), nrow=3, ncol=3)
+A
+solve(A) # computes the inverse over the real numbers
+```
+
+How about the inverse over $\mathbb{Z}_{26}$?
+
+## Inverting Matrices over $\mathbb{Z}_n$
+
+```{r}
+B <- (3*solve(A)*9) %% 26 # Note: 3*9 = 1 in Z_26
+B
+(A %*% B) %% 26
+```
+
+## Inverting Matrices over $\mathbb{Z}_n$ (using `round`)
+
+```{r}
+B <- round(3*solve(A)*9) %% 26 # Note: 3*9 = 1 in Z_26
+B
+(A %*% B) %% 26
+```
+
+## The R Inferno
+
+"Once we had crossed the Acheron, we arrived in the first Circle, home of the virtuous pagans. These are people who live in ignorance of the Floating Point Gods. These pagans expect 
+```
+.1 == .3 / 3
+``` 
+to be true."
+
+-- Patrick Burns, [The R Inferno](https://www.burns-stat.com/pages/Tutor/R_inferno.pdf)
+
+# Other Ciphers
+
+## The Hill Cipher (1929)
+
+Choose a block size $n$, and break the plaintext $\mathbf{p}$ into blocks $\mathbf{p}_1, \mathbf{p}_2, \ldots, \mathbf{p}_k$, where each of these blocks $\mathbf{p}_i$ is in $\mathbb{Z}_{26}^n$.
+
+Form an $n\times k$ matrix $P = \begin{bmatrix} \mathbf{p}_1 & \mathbf{p}_2 & \cdots & \mathbf{p}_k \end{bmatrix}$.
+
+For the key, choose an $n\times n$ matrix $M$ over $\mathbb{Z}_{26}$. This matrix needs to be invertible.
+
+The Hill Cipher is then given by the function $P \mapsto MP$, where the ciphertext is formed by reading the columns of $MP$ in order.
+
+*Note: This version differs from the Hill Cipher described in [T], which uses rows instead of columns.*
+
+## Example
+
+Key: $M = \begin{bmatrix} 1 & 2 & 3 \\ 4 & 5 & 6 \\ 11 & 9 & 8 \end{bmatrix}$. Note that, over $\mathbb{Z}_{26}$, $M^{-1} = \begin{bmatrix} 22 & 5 & 1 \\ 6 & 17 & 24 \\ 15 & 13 & 1 \end{bmatrix}$.
+
+Plaintext as vector: $\mathbf{p} = (5, 8,  5, 19,  4,  4, 13, 11,  4, 19, 19,  4, 17, 15, 19)$.
+
+Plaintext as matrix: $P = \begin{bmatrix} 5 & 19 & 13 & 19 & 17 \\ 8 & 4 & 11 & 19 & 15 \\ 5 & 4 & 4 & 4 & 19 \end{bmatrix}$
+
+Ciphertext: $\small MP = \begin{bmatrix} 1 & 2 & 3 \\ 4 & 5 & 6 \\ 11 & 9 & 8 \end{bmatrix} \cdot \begin{bmatrix} 5 & 19 & 13 & 19 & 17 \\ 8 & 4 & 11 & 19 & 15 \\ 5 & 4 & 4 & 4 & 19 \end{bmatrix} = 
+\begin{bmatrix} 10 & 13 &  21 &  17 & 0 \\ 12 & 16 & 1 & 13 & 23 \\ 11 & 17 & 14 & 22 & 6 \end{bmatrix}$
+
+## Decryption: Use $M^{-1}$
+
+$$
+\begin{align}
+P & = M^{-1}(MP) \\
+&= \begin{bmatrix} 22 & 5 & 1 \\ 6 & 17 & 24 \\ 15 & 13 & 1 \end{bmatrix}\begin{bmatrix} 10 & 13 &  21 &  17 & 0 \\ 12 & 16 & 1 & 13 & 23 \\ 11 & 17 & 14 & 22 & 6 \end{bmatrix} \\
+&= \begin{bmatrix} 5 & 19 & 13 & 19 & 17 \\ 8 & 4 & 11 & 19 & 15 \\ 5 & 4 & 4 & 4 & 19 \end{bmatrix}
+\end{align}
+$$
+
+## {data-background="https://upload.wikimedia.org/wikipedia/commons/9/9a/Hill%27s_message_protector.png" data-background-size="contain"}
+
+## Hill Cipher mechanical implementation
+
+1932 Patent:
+
+https://patents.google.com/patent/US1845947
+
+## Hill Cipher in R
+
+```{r}
+hillCipher <- function(txt, keyMatrix) {
+  pt <- stringToMod26(txt)
+  n <- attributes(keyMatrix)$dim[2]
+  suppressWarnings(
+    mPtxt <- matrix(pt,nrow=n) # repeats text so length is a multiple of n
+  )
+  mCtxt <- (keyMatrix %*% mPtxt) %% 26
+  return(mod26ToString(as.vector(mCtxt)))
+}
+```
+
+## Hill Cipher in R
+
+```{r}
+A %*% B %% 26
+hillCipher("thehillcipherisablockcipher", A)
+hillCipher("tfseednyvppajinjttwwsligoup", B)
+```
+
+## Histogram of letter counts (discuss: why?)
+
+```{r, echo=FALSE}
+plaintext <- "howeverinthisextremedistresshewasnotdestituteofhisusualsagacitybuttrustinghimselftotheprovidenceofgodheputhislifeintohazardinthemannerfollowingandnowsaidhesinceitisresolvedamongyouthatyouwilldiecomeonletuscommitourmutualdeathstodeterminationbylothewhomthelotfallstofirstlethimbekilledbyhimthathaththesecondlotandthusfortuneshallmakeitsprogressthroughusallnorshallanyofusperishbyhisownrighthandforitwouldbeunfairifwhentherestaregonesomebodyshouldrepentandsavehimselfthisproposalappearedtothemtobeveryjustandwhenhehadprevailedwiththemtodeterminethismatterbylotshedrewoneofthelotsforhimselfalsohewhohadthefirstlotlaidhisneckbaretohimthathadthenextassupposingthatthegeneralwoulddieamongthemimmediatelyfortheythoughtdeathifjosephusmightbutdiewiththemwassweeterthanlifeyetwashewithanotherlefttothelastwhetherwemustsayithappenedsobychanceorwhetherbytheprovidenceofgodandashewasverydesirousneithertobecondemnedbythelotnorifhehadbeenlefttothelasttoimbruehisrighthandinthebloodofhiscountrymenhepersuadedhimtotrusthisfidelitytohimandtoliveaswellashimself"
+hciphertext <- hillCipher(plaintext, A)
+keyAsVector <- stringToMod26("skyler")
+vciphertext <- vigenere(plaintext, keyAsVector)
+p1 <- hist(letterCounts(plaintext), plot=FALSE)
+p2 <- hist(letterCounts(vciphertext), plot=FALSE)
+p3 <- hist(letterCounts(hciphertext), plot=FALSE)
+plot( p1, col=rgb(0,0,1,0.3), main="blue=plaintext, pink=Vigenère ciphertext, green=Hill ciphertext", 
+      xlab="letter counts", ylab="# of letters")  # transparent blue 
+plot( p2, col=rgb(1,0,0,0.3), add=TRUE)  # transparent red 
+plot( p3, col=rgb(0,1,0,0.3), add=TRUE)  # transparent green 
+```
+
+## Diffusion and Confusion
+
+Roughly and somewhat subjectively speaking:
+
+> **Diffusion.** Changing one letter of plaintext should change several letters of ciphertext.
+
+Consequence of Diffusion: Frequency distributions are "blunted".
+
+> **Confusion.** The relationship between the ciphertext and the plaintext is not obvious.
+
+Condition for Confusion: Each character of the ciphertext depends on several parts of the key.
+
+## Attacks on Hill cipher
+
+Ciphertext only is hard.
+
+Known plaintext is easy (amounts to solving a matrix equation, i.e., inverting a matrix.)
+
+## One-Time Pad
+
+Plaintext: a vector $\mathbf{p} \in \mathbb{Z}_{26}^{N}$, where $N$ is the number of characters in the plaintext.
+
+Key: a vector $\mathbf{k} \in \mathbb{Z}_{26}^{N}$, where $N$ is the number of characters in the plaintext.
+
+Encryption function: $\mathbf{p} \longmapsto \mathbf{p} + \mathbf{k}$
+
+Pros: Unbreakable
+
+Cons: Big key
+
+https://www.vice.com/en_us/article/ezvyyj/cubas-mysterious-numbers-station-is-still-on-the-air
+
+```
+!soundcloud https://soundcloud.com/wrench86/cuban-numbers-station-5-883-am
+```
+
+## Diffusion and Confusion?
+
+Rank each on a scale of 1 to 10: 
+
+| Cryptosytem   | Confusion?    | Diffusion?    |
+| :------------ | :------------ | :------------ |
+| Shift Cipher | | |
+| Affine Cipher  | | |
+| Vigenère Cipher | | |
+| Substitution Cipher | | |
+| Hill Cipher | | |
+| One-Time Pad | | |
+
+
