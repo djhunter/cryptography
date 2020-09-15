@@ -40,6 +40,7 @@ This site provides slides, assignments, and other resources that I use in my Cod
 2. [Affine Ciphers and the GCD](slides/02affine_ciphers.html) 
 3. [Substitution and Vigenère Ciphers](slides/03vigenere_ciphers.html)
 4. [Attacks on Vigenère Ciphers](slides/04vigenere_attacks.html)
+5. [Matrices and the Hill Cipher](slides/05matrix_hill.html)
 
 # Written Assignments
 
