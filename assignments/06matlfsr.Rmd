@@ -1,0 +1,46 @@
+---
+title: "Matrices and Linear Feedback Shift Registers"
+output:
+  html_document:
+    toc: false
+    df_print: paged
+    theme: spacelab
+---
+
+Upload to Canvas a PDF scan of your work for problems 1--4. For this assignment, you will probably prefer to type. Any mode of typing is fine, just export to PDF and upload a PDF. 
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_chunk$set(comment = NA)
+stringToMod26 <- function(x) {utf8ToInt(x)-utf8ToInt("a")}
+mod26ToString <- function(x) {intToUtf8(x+utf8ToInt("a"))}
+```
+
+## Assignment: due Monday, 11:59 pm
+
+1. The ciphertext `jghbqlxdvdohooikfcvqtkxljasmusjh` was produced by a Hill cipher. The key used was
+$$
+\begin{bmatrix}
+16 & 6 & 1 & 3 \\
+5 & 3 & 0 & 3 \\
+10 & 3 & 1 & 0 \\
+1 & 0 & 0 & 3
+\end{bmatrix}
+$$ 
+Find the original plaintext. Give the matrix you used to perform the decryption. 
+
+
+2.  Let $M$ be a $3\times 3$ matrix over $\mathbb{Z}_2$. Consider the following matrix.
+$$
+T = \begin{bmatrix}
+1 & 0 & 1 & 0 & 1 & 0 & 1 \\
+0 & 1 & 1 & 0 & 0 & 1 & 1 \\
+0 & 0 & 0 & 1 & 1 & 1 & 1 
+\end{bmatrix}
+$$
+Explain how and why the matrix $MT$ can be inspected to determine whether $M$ is invertible. If $M$ were an $n\times n$ matrix over $\mathbb{Z}_2$, what would the dimensions of an analogous such $T$ have to be (in terms of $n$)?
+
+3.  The bit string $1 0 1 0 0 1 1 1 0 1 0$ was produced by a linear recurrence.  Use your `recurrenceLength` function to guess the length of the linear recurrence. Using this length, solve a system to find the coefficients of the linear recurrence, and give a formula for the recurrence.
+
+4. Use an appropriate [primitive polynomial](http://www.partow.net/programming/polynomials/primitive_polynomials_GF2.txt) over $\mathbb{Z}_2$ to obtain a linear recurrence of length 7, such that the period of the sequence it produces is greater than 100. Explain how you know that the period is greater than 100.

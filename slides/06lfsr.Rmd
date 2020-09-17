@@ -1,0 +1,465 @@
+---
+title: "Linear Feedback Shift Registers"
+date: "September 17, 2020"
+output: 
+  revealjs::revealjs_presentation:
+    fig_width: 14 
+    fig_height: 7
+    self_contained: true
+    theme: night
+    highlight: zenburn
+    css: slidesdjh.css
+    center: false
+    transition: slide
+    reveal_options:
+      controls: true
+      progress: false
+      width: 1080
+      height: 540
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_chunk$set(comment = NA)
+options(width = 100)
+library(gmp)
+stringToMod26 <- function(x) {utf8ToInt(x)-utf8ToInt("a")}
+mod26ToString <- function(x) {intToUtf8(x+utf8ToInt("a"))}
+```
+
+# $\mathbb{Z}_2$
+
+## One-Time Pad
+
+Plaintext: a vector $\mathbf{p} \in \mathbb{Z}_{26}^{N}$, where $N$ is the number of characters in the plaintext.
+
+Key: a vector $\mathbf{k} \in \mathbb{Z}_{26}^{N}$, where $N$ is the number of characters in the plaintext.
+
+Encryption function: $\mathbf{p} \longmapsto \mathbf{p} + \mathbf{k}$
+
+Pros: Unbreakable
+
+Cons: Big key
+
+https://www.vice.com/en_us/article/ezvyyj/cubas-mysterious-numbers-station-is-still-on-the-air
+
+```
+!soundcloud https://soundcloud.com/wrench86/cuban-numbers-station-5-883-am
+```
+
+## [Ascii](http://www.asciitable.com/) and Binary {.smaller}
+
+| Decimal | Hexadecimal | Binary | Character |
+| :------ | :---------- | :----- | :-------- |
+| 94 |	5E |	01011110 |	^ |
+| 95 |	5F |	01011111 |	_ |
+| 96 |	60 |	01100000 |	` |	
+| 97 |	61 |	01100001 |	a |	 
+| 98 |	62 |	01100010 |	b |	 
+| 99 |	63 |	01100011 |	c |	 
+| 100 |	64 |	01100100 |	d |	 
+| 101 |	65 |	01100101 |	e |	 
+| 102 |	66 |	01100110 |	f |	 
+| 103 |	67 |	01100111 |	g |	 
+| 104 |	68 |	01101000 |	h |	 
+| 105 |	69 |	01101001 |	i |	 
+| 106 |	6A |	01101010 |	j |	 
+| 107 |	6B |	01101011 |	k |
+
+## Binary and Hexadecimal in R
+
+<div class="column-left">
+
+```{r}
+charToRaw("a")
+charToRaw("abc")
+rawToBits(charToRaw("a")) # note: backwards
+```
+
+</div>
+  
+<div class="column-right">
+
+| Decimal | Hex | Binary | Char |
+| :------ | :---------- | :----- | :------ |
+| 94 |	5E |	01011110 |	^ |
+| 95 |	5F |	01011111 |	_ |
+| 96 |	60 |	01100000 |	` |	
+| 97 |	61 |	01100001 |	a |	 
+| 98 |	62 |	01100010 |	b |	 
+| 99 |	63 |	01100011 |	c |	 
+| 100 |	64 |	01100100 |	d |	 
+| 101 |	65 |	01100101 |	e |	 
+| 102 |	66 |	01100110 |	f |	 
+| 103 |	67 |	01100111 |	g |	 
+| 104 |	68 |	01101000 |	h |	 
+| 105 |	69 |	01101001 |	i |	 
+| 106 |	6A |	01101010 |	j |	 
+| 107 |	6B |	01101011 |	k |
+
+</div>
+
+## Bitwise Logical Operators
+
+<div class="column-left">
+
+```{r}
+charToRaw("a") & charToRaw("b") # bitwise and
+charToRaw("a") | charToRaw("b") # bitwise or
+xor(charToRaw("a"),charToRaw("b")) # bitwise xor
+```
+
+</div>
+
+<div class="column-right">
+
+| Decimal | Hex | Binary | Char |
+| :------ | :---------- | :----- | :------ |
+| 94 |	5E |	01011110 |	^ |
+| 95 |	5F |	01011111 |	_ |
+| 96 |	60 |	01100000 |	` |	
+| 97 |	61 |	01100001 |	a |	 
+| 98 |	62 |	01100010 |	b |	 
+| 99 |	63 |	01100011 |	c |	 
+| 100 |	64 |	01100100 |	d |	 
+| 101 |	65 |	01100101 |	e |	 
+| 102 |	66 |	01100110 |	f |	 
+| 103 |	67 |	01100111 |	g |	 
+| 104 |	68 |	01101000 |	h |	 
+| 105 |	69 |	01101001 |	i |	 
+| 106 |	6A |	01101010 |	j |	 
+| 107 |	6B |	01101011 |	k |
+
+</div>
+
+## The ring $\mathbb{Z}_2$ {transition="slide-in fade-out"}
+
+| Operation in $\mathbb{Z}_2$ | Operation on bits |
+| :------ | :------ |
+| Addition |  |
+| Multiplication |  | 
+| Subtraction |  | 
+
+## The ring $\mathbb{Z}_2$ {transition="fade-in fade-out"}
+
+| Operation in $\mathbb{Z}_2$ | Operation on bits |
+| :------ | :------ |
+| Addition | XOR |
+| Multiplication |  | 
+| Subtraction |  | 
+
+## The ring $\mathbb{Z}_2$ {transition="fade-in fade-out"}
+
+| Operation in $\mathbb{Z}_2$ | Operation on bits |
+| :------ | :------ |
+| Addition | XOR |
+| Multiplication | AND | 
+| Subtraction |  | 
+
+## The ring $\mathbb{Z}_2$ {transition="fade-in slide-out"}
+
+| Operation in $\mathbb{Z}_2$ | Operation on bits |
+| :------ | :------ |
+| Addition | XOR |
+| Multiplication | AND | 
+| Subtraction | XOR | 
+
+Bonus feature: In $\mathbb{Z}_2$, $-1 = 1$. So you don't need negative signs!
+
+## $\mathbb{Z}_2$ is a Field
+
+- A field is a ring where every nonzero element has an inverse (and multiplication is commutative).
+- Examples: $\mathbb{Q}$, $\mathbb{R}$, $\mathbb{Z}_p$, $p$ prime.
+- Can add, subtract, multiply, and *divide*.
+- Lots of good theorems.
+
+## Punchline: Implement OTP in $\mathbb{Z}_2$
+
+- Plaintext: a vector $\mathbf{p} \in \mathbb{Z}_{2}^{N}$, where $N$ is the number of characters in the plaintext.
+- Key: a vector $\mathbf{k} \in \mathbb{Z}_{2}^{N}$, where $N$ is the number of characters in the plaintext.
+- Encryption function: $\mathbf{p} \longmapsto \mathbf{p} + \mathbf{k}$
+
+```{r}
+oneTimePad <- function(plaintext, key) # needs fixing
+{
+  ptHex <- charToRaw(plaintext)
+  keyHex <- charToRaw(key)
+  ctHex <- xor(ptHex, keyHex[seq_along(ptHex)])
+  return(rawToChar(ctHex))
+}
+```
+
+## Null characters are a problem
+
+```{r, eval=FALSE}
+oneTimePad("hello", "mellow")
+oneTimePad("hello", "harry")
+```
+
+One way to fix: 
+
+- First, compute `ctHex` as in the original `oneTimePad`.
+- Before converting `ctHex` to a string, change the leftmost bit of each byte from a `0` to a `1`. 
+- Take this conversion into account when decrypting.
+
+# Linear Feedback Shift Registers
+
+## Fibonacci Numbers in $\mathbb{Z}_2$
+
+The Fibonacci numbers are given by the following recurrence relation.
+$$
+F(n) = \left\{ \begin{array}{ll}
+1 & \mbox{if $n=1$ or $n=2$} \\
+F(n-1)+F(n-2) & \mbox{if $n>2$}
+\end{array}\right.
+$$
+
+Interpreted as a function $F: \mathbb{N} \longrightarrow \mathbb{N}$, we get the following sequence of natural numbers:
+$$
+1, 1, 2, 3, 5, 8, 13, 21, 34, 55, 89, \ldots
+$$
+
+Interpreted as a function $F: \mathbb{N} \longrightarrow \mathbb{Z}_2$, we get the following sequence of binary digits:
+$$
+1, 1, 0, 1, 1, 0, 1, 1, 0, 1, 1, \ldots
+$$
+
+## Linear recurrence
+
+In any ring, a **linear recurrence**  of length $m$ is a recursively-defined sequence of the form
+$$
+x_{n+m} = c_0x_n + c_1x_{n+1} + c_2x_{n+2} + \ldots + c_{m-1}x_{n+m-1}
+$$
+where $x_1, x_2, \ldots, x_n$ are given **initial values.** Note: We require $c_0 \neq 0$.
+
+For example, the Fibonacci sequence is a linear congruence of length 2.
+$$ 
+x_{n+2} = x_n+x_{n+1}
+$$
+with $x_1 = 1 = x_2$.
+
+## Linear recurrences can look "random" {.smaller}
+
+For example, let $x_{n+31} = x_n + x_{n+3}$, and let the first 31 digits be 
+$1 0 0 1 1 1 0 1 0 1 1 0 1 0 0 0 0 1 1 0 1 1 0 0 0 1 0 1 1 0 1$. The period of the resulting sequence is more than 2 billion.
+
+```{r}
+x <- numeric(1000)
+x[1:31] <- c(1,0,0,1,1,1,0,1,0,1,1,0,1,0,0,0,0,1,1,0,1,1,0,0,0,1,0,1,1,0,1)
+for(i in 1:969) {
+  x[i+31] <- (x[i] + x[i+3]) %% 2 
+}
+x
+```
+
+## Period of linear recurrences
+
+- The maximum period of a length $m$ linear recurrence in $\mathbb{Z}_2$ is $2^m-1$. (why?)
+- [Theorem](http://www.ams.org/journals/mcom/1965-19-090/S0025-5718-1965-0184406-1/S0025-5718-1965-0184406-1.pdf): This maximum is achieved for recurrences 
+$$x_{n+m} = c_0x_n + c_1x_{n+1} + c_2x_{n+2} + \ldots + c_{m-1}x_{n+m-1}$$
+for which the polynomial
+$$
+p(x) = 1 + c_{m-1}x + c_{m-2}x^2 + \cdots + c_{1}x^{m-1} + x^m
+$$
+is [primitive](http://www.partow.net/programming/polynomials/primitive_polynomials_GF2.txt) over $\mathbb{Z}_2$. 
+
+## Linear recurrences and OTP
+
+A more practical OTP?
+
+- Agree on a linear recurrence (i.e., A Linear Feedback Shift Register) with large period.
+- Share an initial vector.
+- Use the LFSR to generate a key for a one-time pad.
+- ???
+- Profit!
+
+## How to hack a linear recurrence
+
+Given a segment of bits from a linear recurrence, can we recover its formula?
+
+Example: 
+
+```{r, echo=FALSE}
+x <- numeric(32)
+x[1:5] <- c(1,0,0,1,1)
+for(i in 1:27) {
+  x[i+5] <- (x[i] +x[i+3]) %% 2 
+}
+sm2 <- matrix(c(x[1:2],x[2:3]), nrow=2)
+sm3 <- matrix(c(x[1:3],x[2:4],x[3:5]), nrow=3)
+cat(x)
+```
+
+| 1 | 0 | 0 | 1 | 1 | 0 | 1 | 0 | 0 | $\cdots$ |
+| :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- |
+| $x_0$ | $x_1$ | $x_2$ | $x_3$ | $x_4$ | $x_5$ | $x_6$ | $x_7$ | $x_8$ | $\cdots$ | 
+
+1. Suppose $x_{n+2} = c_0x_n + c_1x_{n+1}$. Try to solve system of 2 equations. (me)
+2. Suppose $x_{n+3} = c_0x_n + c_1x_{n+1} + c_2x_{n+2}$. Try to solve system of 3 equations. (You. Don't actually solve it, but try to write it as a matrix equation.)
+3. etc.
+
+## Another way to check invertibility
+
+> Theorem. An $n \times n$ matrix over a field is invertible if and only if its determinant is nonzero.
+
+(examples)
+
+## Determinants in R
+
+```{r}
+sm2
+det(sm2) %% 2
+```
+
+## Determinants in R
+
+```{r}
+sm3
+det(sm3) %% 2
+```
+
+## Inverses
+```{r}
+sm3inv <- solve(sm3) %% 2
+sm3inv
+(sm3inv %*% sm3) %% 2
+```
+
+## Join your table group
+
+```{r, echo=FALSE}
+library(knitr)
+roster <- c("Sam", "Wesley", "Andrew", "Winston", "Michael", "Logan", "Christian", "Caleb", "James", "Joe", "Emily", "Nathan")
+set.seed(9172020) 
+n <- length(roster)
+ngps <- 3
+maxingp <- ceiling(n/ngps)
+# just make random groups
+groups <- matrix(c(roster[sample(n)], 
+                   rep("",(maxingp - (n %% maxingp)) %% maxingp)), 
+                 ncol=maxingp, byrow=FALSE)
+rownames(groups) <- paste0("Table #", 1:nrow(groups))
+kable(t(groups))
+```
+
+Work on your group's [Jamboard](https://jamboard.google.com/d/1i8facJo6uJHeLJYADdMwPq2rjNI4wKLeEiILDWXybpw/edit?usp=sharing). You may want to upload a photo of your written work.
+
+## Did it work?
+
+**Group exercise:** Use the inverse matrix to solve for $c_0, c_1, c_2$, and check to see if it gives you the right recurrence relation.
+
+1. Solve the matrix equation for $c_0$, $c_1$, $c_2$.
+2. Compute the sequence defined by $x_{n+3} = c_0x_n + c_1x_{n+1} +c_2x_{n+2}$, starting with `100`. Do we get our given sequence?
+
+## Binary Sequences and Shift Matrices
+
+From a binary sequence, we can form an $n\times n$ matrix by taking the $i$th row to be the next $n$ terms of the sequence, starting at $i$. For the sequence $1, 1, 0, 1, 1, 0, 1, 1, 0, 1, 1, \ldots$, we get the following **shift matrices.**
+$$
+\begin{bmatrix}
+1 & 1 \\
+1 & 0
+\end{bmatrix}, \quad
+\begin{bmatrix}
+1 & 1 & 0 \\
+1 & 0 & 1 \\
+0 & 1 & 1 
+\end{bmatrix}, \quad
+\begin{bmatrix}
+1 & 1 & 0 & 1 \\
+1 & 0 & 1 & 1 \\
+0 & 1 & 1 & 0 \\
+1 & 1 & 0 & 1
+\end{bmatrix}, \quad
+\begin{bmatrix}
+1 & 1 & 0 & 1 & 1\\
+1 & 0 & 1 & 1 & 0\\
+0 & 1 & 1 & 0 & 1\\
+1 & 1 & 0 & 1 & 1\\
+1 & 0 & 1 & 1 & 0
+\end{bmatrix}
+$$
+
+Which of these are invertible?
+
+## Theorem: Linear recurrences are weak
+
+> **Weakness Theorem.** Let $b_1, b_2, b_3, \ldots$ be a sequence of bits generated by a linear congruence. Suppose that the shortest linear congruence in $\mathbb{Z}_2$ that generates this sequence has the form $x_{n+m} = c_0x_n + c_1x_{n+1} + c_2x_{n+2} + \ldots + c_{m-1}x_{n+m-1}$. Let $S_N$ be the $N\times N$ shift matrix formed from the sequence. Then $S_m$ is invertible, and $S_N$ is not invertible for $N>m$. 
+
+## Given bit string, find recurrence
+
+1. Given bit string, form shift matrices $S_N$, and find the last $N$ that gives an invertible matrix.
+2. Solve a system of equations to find the coefficients of the recurrence.
+
+*Example:*
+
+```{r, echo=FALSE}
+x <- numeric(32)
+x[1:5] <- c(1,0,0,1,1)
+for(i in 1:27) {
+  x[i+5] <- (x[i] +x[i+3]) %% 2 
+}
+cat(x)
+```
+
+## Shift matrices {.smaller}
+
+```{r}
+sm2 <- matrix(c(x[1:2],x[2:3]), nrow=2)
+sm3 <- matrix(c(x[1:3],x[2:4],x[3:5]), nrow=3)
+sm4 <- matrix(c(x[1:4],x[2:5],x[3:6],x[4:7]), nrow=4)
+sm5 <- matrix(c(x[1:5],x[2:6],x[3:7],x[4:8],x[5:9]), nrow=5)
+sm6 <- matrix(c(x[1:6],x[2:7],x[3:8],x[4:9],x[5:10],x[6:11]), nrow=6)
+sm7 <- matrix(c(x[1:7],x[2:8],x[3:9],x[4:10],x[5:11],x[6:12],x[7:13]), nrow=7)
+cat(det(sm2), det(sm3), det(sm4), det(sm5), det(sm6), det(sm7))
+```
+
+So it looks like our recurrence is length 5. Let $M$ be the 5th shift matrix. Then we need to solve 
+$$
+M \begin{bmatrix} c_0 \\ c_1 \\ c_2 \\ c_3 \\ c_4 \end{bmatrix} 
+= \begin{bmatrix} 0 \\ 1 \\ 0 \\ 0 \\ 1 \end{bmatrix}
+$$
+
+## Multiply both sides by the inverse
+
+$$
+\begin{align}
+M \begin{bmatrix} c_0 \\ c_1 \\ c_2 \\ c_3 \\ c_4 \end{bmatrix} 
+&= \begin{bmatrix} 0 \\ 1 \\ 0 \\ 0 \\ 1 \end{bmatrix} \\
+\begin{bmatrix} c_0 \\ c_1 \\ c_2 \\ c_3 \\ c_4 \end{bmatrix} &=
+M^{-1}
+\begin{bmatrix} 0 \\ 1 \\ 0 \\ 0 \\ 1 \end{bmatrix} 
+= \begin{bmatrix} 1 \\ 0 \\ 0 \\ 1 \\ 0 \end{bmatrix}
+\end{align}
+$$
+
+## R code to do this
+
+```{r}
+sm5inv <- round(solve(sm5) * 5) %% 2
+(sm5inv %*% matrix(c(0,1,0,0,1), ncol = 1)) %% 2
+```
+
+Recurrence should be:
+$$
+x_{n+5} = x_n + x_{n+3}
+$$
+
+Check answer: Does the recurrence produce this sequence?
+```{r echo=FALSE}
+cat(x)
+```
+
+## Bonus: Compute the period
+
+By the above theorem, the maximum period of a sequence produced by a length $m$ linear recurrence is $2^m - 1$. So the period of
+```{r echo=FALSE}
+cat(x)
+```
+must be $2^5-1 = 31$, because we observe no repeats in the first 31 digits.
+
+Another way to see this is to look at the associated polynomial $p(x) = 1 + x^2 + x^5$. Since this polynomial is primitive over $\mathbb{Z}_2$, the period must be maximal.
+
+Just for fun, here's a [list of primitive polynomials](http://www.partow.net/programming/polynomials/primitive_polynomials_GF2.txt) over $\mathbb{Z}_2$.
+
+
+

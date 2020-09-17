@@ -41,6 +41,7 @@ This site provides slides, assignments, and other resources that I use in my Cod
 3. [Substitution and Vigenère Ciphers](slides/03vigenere_ciphers.html)
 4. [Attacks on Vigenère Ciphers](slides/04vigenere_attacks.html)
 5. [Matrices and the Hill Cipher](slides/05matrix_hill.html)
+6. [Linear Feedback Shift Registers](slides/06lfsr.html)
 
 # Written Assignments
 
@@ -49,11 +50,13 @@ This site provides slides, assignments, and other resources that I use in my Cod
 3. [Substitution and Vigenère Ciphers](assignments/03subciphers.html)
 4. [Properties of Vigenère Ciphers](assignments/04vigenere.html)
 5. [Matrices and the Hill Cipher](assignments/05mathill.html)
+6. [Matrices and LFSR's](assignments/06matlfsr.html)
 
 # Programming Assignments
 
 1. [Getting started with R packages](programming/01affine.html)
 2. [Tools for Breaking a Vigenère Cipher](programming/02vigbreak.html)
+3. [OTP and LFSR tools](programming/03mathillotp.html)
 
 # Other Resources
 
