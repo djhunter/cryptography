@@ -7,7 +7,7 @@ output:
     theme: spacelab
 ---
 
-Upload to Canvas a PDF scan of your work for problems 1--4. For this assignment, you will probably prefer to type. Any mode of typing is fine, just export to PDF and upload a PDF. 
+Upload to Canvas a PDF of your work for problems 1--4.  
 
 
 ```{r setup, include=FALSE}
