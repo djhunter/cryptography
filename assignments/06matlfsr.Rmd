@@ -28,7 +28,7 @@ $$
 1 & 0 & 0 & 3
 \end{bmatrix}
 $$ 
-Find the original plaintext. Give the matrix you used to perform the decryption. 
+Find the original plaintext. Give the matrix you used to perform the decryption. (Feel free to use R to compute it, unless you really want to practice inverting matrices by hand!) 
 
 
 2.  Let $M$ be a $3\times 3$ matrix over $\mathbb{Z}_2$. Consider the following matrix.
