@@ -42,6 +42,7 @@ This site provides slides, assignments, and other resources that I use in my Cod
 4. [Attacks on Vigenère Ciphers](slides/04vigenere_attacks.html)
 5. [Matrices and the Hill Cipher](slides/05matrix_hill.html)
 6. [Linear Feedback Shift Registers](slides/06lfsr.html)
+7. [Data Encryption Standard (DES); Finite Fields](slides/07desaes1.html)
 
 # Written Assignments
 
@@ -51,6 +52,7 @@ This site provides slides, assignments, and other resources that I use in my Cod
 4. [Properties of Vigenère Ciphers](assignments/04vigenere.html)
 5. [Matrices and the Hill Cipher](assignments/05mathill.html)
 6. [Matrices and LFSR's](assignments/06matlfsr.html)
+7. [Meet-in-the-middle; Finite Fields](assignments/07mitmff.html)
 
 # Programming Assignments
 
