@@ -221,7 +221,7 @@ rownames(groups) <- paste0("Table #", 1:nrow(groups))
 kable(t(groups))
 ```
 
-Work on your group's [Jamboard](https://jamboard.google.com/d/1i7R8aTDD4WqKf31Mf0v4Ipf9uOKv7yYjUq7qSy73dlk/edit?usp=sharing). 
+Work on your group's [Jamboard](https://jamboard.google.com/d/1wzXHqGPc2fVgqpCK0E1c7DWpXPF-UC7GhjPSxys-weE/edit?usp=sharing). 
 
 ## Activity
 
