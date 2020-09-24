@@ -1,0 +1,34 @@
+---
+title: "AES and Modes of Operation"
+output:
+  html_document:
+    toc: false
+    df_print: paged
+    theme: spacelab
+---
+
+Upload to Canvas a PDF of your work for the following problems
+
+## Assignment: due Monday, 11:59 pm
+
+1. The following code block will generate 100000 random AES keys, pick one of those keys at random, and then run your brute force attack. The `system.time` command will tell you how much time it took to finish. Run this code block at least 10 times, and calculate an average time for how long a brute force attack on 100000 keys takes, using your `bfkpAESattack` function. (Use `elapsed` time, in seconds.)
+
+```{r, eval=FALSE}
+randomKeys <- replicate(100000, paste(sample(letters, 16), collapse=""))
+chosenKey <- sample(randomKeys, 1)
+library(digest) # also load your cryptoXYZ package
+aes <- AES(charToRaw(chosenKey), mode="ECB")
+knownPlaintext <- "greatgrandmother"
+cipherText <- aes$encrypt(knownPlaintext)
+system.time(bfkpAESattack(knownPlaintext, rawToChar(cipherText), randomKeys))
+```
+
+2. Based on your result from question 1, how long (in years) would a brute force attack on AES take if you had to search through all possible 128-bit keys? (Assume you have enough RAM and electricity to run such an attack on your computer.)
+
+For 3-5, I'm assuming you'll just do the calculations by hand. Show your work, and feel free just to hand in a scan of your writing.
+
+3. Define an encryption function on 4-bit blocks by representing 4-digit bit strings as polynomials in the field $\mathbb{Z}_2[x]/(p(x))$, where $p(x) = x^4+x^3+x^2+x+1$, and defining $E(p(x)) = x^2 p(x)$. **Encrypt** the 3-block string $001101010011$ using this cipher in ECB mode. In addition, give a formula for the decryption function.
+
+4. Define an encryption function on 4-bit blocks by representing 4-digit bit strings as polynomials in the field of Problem 3, and defining $E(p(x)) = x^2 p(x)$. Encrypt the 3-block string $001101010011$ using this cipher in CBC mode, with an initial vector of $1011$. 
+
+5. Define an encryption function on 4-bit blocks by representing 4-digit bit strings as polynomials in the field of Problem 3, and defining $E(p(x)) = x^2 p(x)$. Encrypt the 3-block string $001101010011$ using this cipher in CTR mode, with an initial vector of $1011$. (For the purposes of this problem, replace $L_8$ with the identity function.) Show all work. (Warning: The counter in CTR mode uses binary addition, while the $\oplus$ operation corresponds to addition in the field (which works like an XOR). These are different operations. For example, in this problem, $X_1 = 1011$, so when incremented by the counter, $X_2 = X_1 + 1 = 1011+1=1100$. As elements of the field, these bit strings correspond to $X_1 = x^3+x+1$ and $X_2 = x^3+x^2$, so in the field, $X_2 \neq X_1 + 1$.)
