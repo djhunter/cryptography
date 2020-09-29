@@ -33,7 +33,7 @@ plainText <- as.bigz("453787497332492283997614676595994471")
 
 Notice that, for this example, the ciphertext number has many more digits than the plaintext number. Will the RSA ciphertext always be longer than the plaintext? Try some other examples. 
 
-2. Suppose that $n$ is a 2048-bit RSA modulus. Approximately how many of the numbers between 0 and $n$ have the same number of bits as $n$? Assuming that RSA ciphertexts are uniformly distributed in the set $\{1,2,3,\ldots,n-1\}$, what percentage (approximately) of RSA ciphertexts will be at least 2047 bits long? (Show your calculations and assumptions.)
+2. Suppose that $n$ is a 2048-bit RSA modulus. Approximately how many of the numbers between 0 and $n$ have the same number of bits as $n$? Assuming that RSA ciphertexts are uniformly distributed in the set $\{1,2,3,\ldots,n-1\}$, what percentage (approximately) of RSA ciphertexts will be at least 2047 bits long? In other (more mathematical) words, assuming that RSA moduli are uniformly distributed among all 2048-bit numbers, what is the expected percentage of RSA ciphertexts with at least 2047 bits? (Show your calculations and assumptions.)
 
 3. Suppose that an implementation of RSA uses the public encryption exponent `65537` and the (small) public modulus `371319292755115219695668554559`. Alice sends the ciphertext `50412340282781311528939282945`. Determine the plaintext.
 
