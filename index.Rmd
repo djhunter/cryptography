@@ -44,6 +44,7 @@ This site provides slides, assignments, and other resources that I use in my Cod
 6. [Linear Feedback Shift Registers](slides/06lfsr.html)
 7. [Data Encryption Standard (DES); Finite Fields](slides/07desaes1.html)
 8. [Advanced Encryption Standard (AES)](slides/08desaes2.html)
+9. [RSA Public Key Encryption](slides/09rsa1.html)
 
 # Written Assignments
 
@@ -55,6 +56,7 @@ This site provides slides, assignments, and other resources that I use in my Cod
 6. [Matrices and LFSR's](assignments/06matlfsr.html)
 7. [Meet-in-the-middle; Finite Fields](assignments/07mitmff.html)
 8. [AES and Modes of Operation](assignments/08aesmodes.html)
+9. [Some RSA Calculations](assignments/09rsacalc.html)
 
 # Programming Assignments
 

@@ -1,0 +1,426 @@
+---
+title: "The RSA Algorithm"
+date: "September 29, 2020"
+output: 
+  revealjs::revealjs_presentation:
+    fig_width: 14 
+    fig_height: 7
+    self_contained: true
+    theme: night
+    highlight: zenburn
+    css: slidesdjh.css
+    center: false
+    transition: slide
+    reveal_options:
+      controls: true
+      progress: false
+      width: 1080
+      height: 540
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_chunk$set(comment = NA)
+options(width = 100)
+library(gmp)
+library(openssl)
+```
+
+# Symmetry and Asymmetry
+
+## Public Key Cryptosystems 
+
+>- AES is great, but it is a **symmetric key** cryptosystem; it uses the same key to encrypt as to decrypt.
+>-Suppose you have thousands of customers, and you want a secure way of collecting credit card information from them: if you want to use AES, you need a secure way of getting each of them a (different) key. 
+>-RSA is a **public key** cryptosystem. The key to encrypt is made public, but the key to decrypt is kept private.
+
+## Public key cryptosystems {transition="slide-in fade-out"}
+
+Problem: Alice (e.g., a customer with a credit card) would like to send a secret message to Bob (e.g., an online store), but Alice and Bob have never met or exchanged private key information.
+
+## Public key cryptosystems {transition="fade-in slide-out"}
+
+Problem: Alice (e.g., a customer with a credit card) would like to send a secret message to Bob (e.g., an online store), but Alice and Bob have never met or exchanged private key information.
+
+**Physical analogy:** Lockbox and key
+
+- Alice asks Bob to send her an unlocked lockbox.
+- Bob sends the lockbock to Alice, leaves it unlocked, and keeps the key.
+- Alice puts her credit card number in the box, locks it, and sends it to Bob.
+- Bob receives the lockbox, unlocks it, and gets the credit card number.
+
+In transit, Eve could be in possession of the lockbox, but would not get the credit card number.
+
+## Example: https (Source: [tiptopsecurity.com](https://tiptopsecurity.com/how-does-https-work-rsa-encryption-explained/))
+
+<div style="height:512px;width:1000px;overflow-y:scroll;">
+<img src="https://tiptopsecurity.com/wp-content/uploads/2017/06/How-HTTPS-Works.png" alt="HTTPS from tiptopsecurity image" style="width:1080px;">
+</div>
+
+# Prime numbers
+
+## One-way functions
+
+In the natural numbers $\mathbb{N}$,
+
+- Given large primes $p$ and $q$, it is very easy to compute $pq$.
+- Given $n = pq$ where $p$ and $q$ are large primes, it is very difficult to compute $p$ and $q$.
+
+Idea behind RSA: If you know $pq$, you can encrypt a message, but you have to know $p$ and $q$ to decrypt the message.
+
+## Table groups
+
+```{r, echo=FALSE}
+library(knitr)
+roster <- c("Sam", "Wesley", "Andrew", "Winston", "Logan", "Christian", "Caleb", "James", "Joe", "Emily", "Nathan")
+set.seed(9292020) 
+n <- length(roster)
+ngps <- 3
+maxingp <- ceiling(n/ngps)
+# just make random groups
+groups <- matrix(c(roster[sample(n)], 
+                   rep("",(maxingp - (n %% maxingp)) %% maxingp)), 
+                 ncol=maxingp, byrow=FALSE)
+rownames(groups) <- paste0("Table #", 1:nrow(groups))
+kable(t(groups))
+```
+
+Work on your group's [Jamboard](https://jamboard.google.com/d/1owGJoVw8X_gBRR_FtXC8vFXQjP0w3AEgTab9QIE2nD4/edit?usp=sharing). 
+
+
+
+## Group Discussion
+
+> **Without using technology**, compute:
+>
+> $3^{100}$ in $\mathbb{Z}_4$
+>
+> $3^{100}$ in $\mathbb{Z}_5$
+>
+> $3^{100}$ in $\mathbb{Z}_7$
+>
+> $3^{100}$ in $\mathbb{Z}_8$
+>
+> $3^{100}$ in $\mathbb{Z}_{10}$
+>
+> What patterns do you notice?
+
+## Powers of invertible elements in $\mathbb{Z}_n$
+
+Recall, $a$ is invertible in $\mathbb{Z}_n$ if and only if $\gcd(a,n)=1$.
+
+Let $u_1, u_2, \ldots, u_k$ be the distinct invertible elements of $\mathbb{Z}_n$.
+
+Let $a$ be one of the invertible elements, and consider the following sequence in $\mathbb{Z}_n$.
+$$
+au_1, au_2, \ldots, au_k
+$$
+
+>- Every element in this sequence is invertible. (Why?)
+>- There will be no repeats in this sequence. (Why?)
+>- The product of this sequence will equal $u_1u_2\cdots u_k$. (Why?)
+
+## Euler's Theorem
+
+Let $\phi(n)$ be the number of invertible elements in $\mathbb{Z}_n$. We have proved the following theorem.
+
+> **Euler's Theorem:** If $\gcd(a,n)=1$, then $a^{\phi(n)} \equiv 1 \pmod n$.
+
+The function $\phi$, which counts the number of elements that are relatively prime to $n$, is called the **Euler Phi Function** or the **Euler Totient Function**.
+
+## Corollary: Fermat's Little Theorem
+
+- **Euler's Theorem:** If $\gcd(a,n)=1$, then $a^{\phi(n)} \equiv 1 \pmod n$.
+
+- **Fermat's Little Theorem:** For $p$ prime and $a \neq 0$, $a^{p-1} = 1$ in $\mathbb{Z}_p$.
+
+# RSA 
+
+## The RSA algorithm
+
+1. Bob chooses large primes $p$ and $q$ and computes $n=pq$.
+2. Bob chooses exponent $e$ relatively prime to $(p-1)(q-1)$. 
+3. Bob computes $d = e^{-1}$ modulo $(p-1)(q-1)$.
+4. Bob makes $n$ and $e$ public, but keeps $p$, $q$, and $d$ secret.
+5. Alice codes a plaintext message as a number $m$. She computes $c = m^e \bmod n$ and sends $c$ to Bob.
+6. Bob decrypts by computing $m = c^d \bmod n$.
+
+## RSA step 1: choose $p$ and $q$ and compute $n$ {.build}
+
+```{r rsa1, echo=TRUE}
+p <- 885320963
+q <- 238855417
+n <- p*q
+print(n)
+```
+
+Not good. We need to see more digits.
+
+```{r rsa1a, echo=TRUE}
+options(digits=20)
+print(n)
+```
+
+Still not good. (Why?)
+
+## RSA step 1: choose $p$ and $q$ and use `bigz`
+
+```{r rsa1b, echo=TRUE, message=FALSE}
+library(gmp) # for big integers
+p <- as.bigz("885320963")
+q <- as.bigz("238855417")
+n <- p*q
+print(n)
+```
+
+## RSA step 2: choose an exponent $e$ {.smaller}
+
+```{r rsa2, echo=TRUE}
+e <- 9007
+```
+
+We should check that $e$ is relatively prime to $(p-1)(q-1)$.
+
+```{r}
+gcd(e, (p-1)*(q-1))
+```
+
+## RSA step 3:  Compute $d = e^{-1}$.
+
+```{r rsa3, echo=TRUE}
+gcdex(e,(p-1)*(q-1)) # given in gmp package
+```
+
+So we know that $1 = -95061235518491201e + 4049(p-1)(q-1)$. Therefore set $d = -95061235518491201 \bmod (p-1)(q-1)$  and check that $de \equiv 1 \pmod {(p-1)(q-1)}$.
+
+```{r rsa3a, echo=TRUE}
+d <- mod.bigz(gcdex(e,(p-1)*(q-1))[2], (p-1)*(q-1))
+cat(paste0("d = ", d, ", de mod (p-1)(q-1) = ", mod.bigz(d*e, (p-1)*(q-1)))) 
+```
+
+## RSA step 3:  Compute $d = e^{-1}$. (easy way)
+
+```{r rsa3e, echo=TRUE}
+inv.bigz(e,(p-1)*(q-1)) # given in gmp package
+```
+
+## RSA step 4
+
+Bob makes $n$ and $e$ public:
+
+```{r rsa4a, echo=FALSE}
+cat(paste0("n = ", n, "\n", "e = ", e))
+```
+
+but keeps $p$, $q$, and $d$ secret.
+
+```{r rsa4b, echo=FALSE}
+cat(paste0("p = ", p, "\n", "q = ", q, "\n", "d = ", d))
+```
+
+
+## RSA step 5: code $m$ and send $c = m^e \bmod n$
+
+We would like to send the message "Cubs!". Any text message can be coded into a single (big) integer. For example,
+
+```{r}
+#' Convert string to big integer
+#'
+#' Converts a string to a bigz integer. First the characters of the string are converted to raw, then the
+#' raw (hexadecimal) vector is converted to an integer, where the place values of this vector are assigned
+#' from right to left.
+stringToBigz <- function(txt) {
+  nraw <- charToRaw(txt)
+  l <- length(nraw)
+  return(sum(as.bigz(256)^(l-(1:l))*as.numeric(nraw)))
+}
+stringToBigz("Cubs!")
+```
+
+## RSA step 5: code $m$ and send $c = m^e \bmod n$
+
+```{r}
+m <- stringToBigz("Cubs!")
+m
+```
+
+Note that this message better be smaller than $n$. If not, we would use blocks.
+
+Alice, who knows $n$ and $e$, which are public, sends $c = m^e \bmod n$.
+
+```{r rsa5, echo=TRUE}
+c <- mod.bigz(pow.bigz(m,e),n) # Warning: don't do it this way
+c
+```
+
+## RSA step 6: compute $c^d \bmod n$ {.build}
+
+Bob decrypts by computing $m = c^d \bmod n$.
+
+```{r, eval=FALSE, echo=TRUE}
+mod.bigz(pow.bigz(c,d),n) # danger!
+```
+Boom! R dies. (why?)
+
+Fortunately, package `gmp` has a function for computing powers mod $n$.
+
+```{r rsa6, echo=TRUE}
+powm(c,d,n)
+```
+
+## Convert integer back to text
+
+```{r}
+#' Convert (some) big integers to strings
+#'
+#' This function is intended to serve as an inverse to the stringToBigz function.
+#' If the raw representation of n contains 00's, this function will produce an
+#' `embedded nul in string` error. Thus it is not suitable for all integers.
+bigzToString <- function(n) {
+  numbytes <- ceiling(log2.bigz(n)/8)
+  nnumeric <- numeric(numbytes)
+  for(i in 0:(numbytes-1)) {
+    b <- as.numeric(mod.bigz(n, 256))
+    n <- divq.bigz(n, 256)
+    nnumeric[numbytes-i] <- b
+  }
+  return(rawToChar(as.raw(nnumeric)))
+}
+bigzToString(powm(c,d,n))
+```
+
+## Proof that RSA works: why we use $pq$
+
+**Euler's Theorem:** If $\gcd(a,n)=1$, then $a^{\phi(n)} \equiv 1 \pmod n$.
+
+In our case, $n=pq$. How many numbers are relatively prime to $pq$?
+
+- $p, 2p, 3p, \ldots, (q-1)p$ are *not*.
+- $q, 2q, 3q, \ldots, (p-1)q$ are *not*.
+- Everything else less than $pq$ is relatively prime to $pq$.
+
+$pq-1 - (q-1) - (p -1) = pq - q - p + 1 = (p-1)(q-1)$.
+
+So $\phi(n)=(p-1)(q-1)$.
+
+## Proof that RSA works: how to recover $m$
+
+When Bob decrypts, he computes:
+
+$$
+\begin{aligned}
+c^d \bmod n &= (m^e)^d \bmod n \\
+&= m^{de} \bmod n \\
+&= m^{1 + k(p-1)(q-1)} \bmod n\\
+&= m \cdot \left(m^{(p-1)(q-1)}\right)^k \bmod n \\
+& = m \cdot 1^k \\
+&= m
+\end{aligned}
+$$
+
+## Practice on a "toy" example (tables/Jamboard)
+
+- Public: modulus: 77, encryption exponent: 13
+- Encrypt the plaintext 20.
+- Determine the decryption exponent.
+- Check that the decryption exponent works.
+- Would this example work if the encryption exponent were 3 instead of 13? Try it.
+
+Work on your group's [Jamboard](https://jamboard.google.com/d/1owGJoVw8X_gBRR_FtXC8vFXQjP0w3AEgTab9QIE2nD4/edit?usp=sharing). 
+
+# Some practical considerations
+
+## Computational cost of RSA?
+
+1. Bob chooses large primes $p$ and $q$ and computes $n=pq$.
+2. Bob chooses exponent $e$ relatively prime to $(p-1)(q-1)$. 
+3. Bob computes $d = e^{-1}$ modulo $(p-1)(q-1)$.
+4. Bob makes $n$ and $e$ public, but keeps $p$, $q$, and $d$ secret.
+5. Alice codes a plaintext message as a number $m$. She computes $c = m^e \bmod n$ and sends $c$ to Bob.
+6. Bob decrypts by computing $m = c^d \bmod n$.
+
+## Fast exponentiation
+
+```{r pow, echo=TRUE}
+rPower <- function(x, n)
+{
+  if(n==0) return(1)
+  x*rPower(x, n-1)
+}
+
+qPower <- function(x, n)
+{
+  if(n==0) return(1)
+  ifelse(n %% 2 == 0, (qPower(x, n/2))^2, x*(qPower(x, n %/% 2))^2)
+}
+```
+
+For big integers, `powm` is some version of the latter.
+
+## Why does RSA use prime numbers?
+
+Which step of the following derivation relies on $p$ and $q$ being prime?
+
+$$
+\begin{aligned}
+c^d \bmod n &= (m^e)^d \bmod n \\
+&= m^{de} \bmod n \\
+&= m^{1 + k(p-1)(q-1)} \bmod n\\
+&= m \cdot \left(m^{(p-1)(q-1)}\right)^k \bmod n \\
+& = m \cdot 1^k \\
+&= m
+\end{aligned}
+$$
+
+## Basic prime number facts {.build}
+
+- A natural number $n$ is **prime** if it has no divisors other than $n$ and $1$.
+- If a number is not prime, it is called **composite.**
+- If all of the prime numbers up to $\sqrt{n}$ fail to divide $n$, then $n$ is prime.
+
+Next time we'll focus on how to deal with big prime numbers.
+
+## How big do the primes need to be? {.build}
+
+- Long enough so they can't be factored.
+- Long enough so the blocks aren't annoyingly small.
+
+```{r}
+factorize("211463707796206571")
+```
+
+## Factorization records?
+
+During 2007-2009, a team of 10 researchers managed to factor one of the RSA challenge numbers:
+
+```{r}
+rsaChallenge <- as.bigz("12301866845301177551304949583849627207728535695953347921973
+                22452151726400507263657518745202199786469389956474942774063845925192
+                55732630345373154826850791702612214291346167042921431160222124047927
+                4737794080665351419597459856902143413")
+log2(rsaChallenge)
+log10(rsaChallenge)
+```
+
+Try `factorize("rsaChallenge")` and see what happens.
+
+## Message/block length can't exceed modulus 
+
+```{r}
+m <- stringToBigz("I would like to send a message that could correspond 
+                   to a reasonably complicated sentence.")
+m
+log10(m) ## number of decimal digits in m
+log2(m) ## number of bits in m
+```
+
+## OpenSSL currently recommends 2048-bit moduli
+
+```{r, linewidth=50}
+key <- rsa_keygen()
+rsaModulus <- as.list(key)$data$n
+rsaModulus
+```
+
+(See console.)
+

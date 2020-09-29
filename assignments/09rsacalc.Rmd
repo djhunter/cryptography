@@ -1,0 +1,41 @@
+---
+title: "Some RSA Calculations"
+output:
+  html_document:
+    toc: false
+    df_print: paged
+    theme: spacelab
+---
+
+Upload to Canvas a PDF of your work for the following problems
+
+## Assignment: due Wednesday, 11:59 pm
+
+You will need to do some/most of the calculations below using the `gmp` package.
+
+1. Compute the RSA ciphertext for the following modulus, public exponent, and plaintext.
+
+```{r, echo=TRUE, eval=FALSE}
+library(gmp)
+rsaModulus <- as.bigz("195788142788358164233804492957398488634726254
+80010690459681625329893085627204988093818307212739677049956352567177
+87746099255774603493751657981591279103676377321834690778523173801439
+56666453740761405761559112081931710294389007965357426686841571207915
+63250256451028748849392888561065149545396193209901120150922222695733
+85885218236653180615298633266570810577713313325153177729917576091579
+04367035499790847594316987574068066165228272596810445659823407499566
+73617955415896513151098470897855653135143572581766041083134024184173
+37290933287861015998551958245267490476692680563890349711670121990426
+2326557198534825303109914717")
+rsaExponent <- as.bigz("65537")
+plainText <- as.bigz("453787497332492283997614676595994471")
+```
+
+Notice that, for this example, the ciphertext number has many more digits than the plaintext number. Will the RSA ciphertext always be longer than the plaintext? Try some other examples. 
+
+2. Suppose that $n$ is a 2048-bit RSA modulus. Approximately how many of the numbers between 0 and $n$ have the same number of bits as $n$? Assuming that RSA ciphertexts are uniformly distributed in the set $\{1,2,3,\ldots,n-1\}$, what percentage (approximately) of RSA ciphertexts will be at least 2047 bits long? (Show your calculations and assumptions.)
+
+3. Suppose that an implementation of RSA uses the public encryption exponent `65537` and the (small) public modulus `371319292755115219695668554559`. Alice sends the ciphertext `50412340282781311528939282945`. Determine the plaintext.
+
+
+
