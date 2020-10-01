@@ -1,0 +1,43 @@
+---
+title: "Prime numbers and RSA"
+output:
+  html_document:
+    toc: false
+    df_print: paged
+    theme: spacelab
+---
+
+Upload to Canvas a PDF of your work for the following problems. 
+
+## Assignment: due Monday, 11:59 pm
+
+1. Use your Fermat primality test `FermatTest` to find all of the weak pseudoprimes between 1000 and 10000 for the base 7. Use the `isprime` function to determine that your pseudoprimes are composite.
+
+2. Consider the following (composite) number.
+
+```{r, eval=FALSE}
+bigComp <- as.bigz("41495155688809929585124078636911611510124462322424
+                   368999956573296906528114129081463997081530206029675
+                   796566441088639070653584409712811422453347196222375
+                   13761725653531896260925123613")
+```
+
+Check that this number is composite by using your Fermat test. Notice that the square of the following number is close to `bigComp`.  
+
+```{r, eval=FALSE}
+sqRoot <- as.bigz("203703597633448608626844568840937816105146839366593
+                  6250636140449354381299763336706183397647")
+```
+
+Use this information, and the fact that the factors of `bigComp` are approximately the same size, to factor `bigComp` using the Fermat factorization method ([T] p. 182). 
+   
+3. Suppose Buford implements RSA with the following choices.
+
+```{r, eval=FALSE}
+p <- as.bigz(39241)
+q <- as.bigz(95347)
+e <- as.bigz(9007)
+```
+
+Compute his decryption exponent $d$, and try encrypting the plaintext 1000, and then decrypting the result. What happens? Which part of the [derivation](https://djhunter.github.io/cryptography/slides/09rsa1.html#/proof-that-rsa-works-how-to-recover-m) fails? Why does it fail?
+

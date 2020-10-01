@@ -45,6 +45,7 @@ This site provides slides, assignments, and other resources that I use in my Cod
 7. [Data Encryption Standard (DES); Finite Fields](slides/07desaes1.html)
 8. [Advanced Encryption Standard (AES)](slides/08desaes2.html)
 9. [RSA Public Key Encryption](slides/09rsa1.html)
+10. [Attacks on RSA and Primality Testing](slides/10rsa2.html)
 
 # Written Assignments
 
@@ -57,6 +58,7 @@ This site provides slides, assignments, and other resources that I use in my Cod
 7. [Meet-in-the-middle; Finite Fields](assignments/07mitmff.html)
 8. [AES and Modes of Operation](assignments/08aesmodes.html)
 9. [Some RSA Calculations](assignments/09rsacalc.html)
+10. [Prime Numbers and RSA](assignments/10primes.html)
 
 # Programming Assignments
 
@@ -64,6 +66,7 @@ This site provides slides, assignments, and other resources that I use in my Cod
 2. [Tools for Breaking a Vigenère Cipher](programming/02vigbreak.html)
 3. [OTP and LFSR tools](programming/03mathillotp.html)
 4. [GF(256) and AES](programming/04gf256aes.html)
+5. [RSA tools](programming/05rsa.html)
 
 # Other Resources
 
