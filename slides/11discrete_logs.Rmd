@@ -1,0 +1,283 @@
+---
+title: "Discrete Logarithms, Diffie-Hellman, and ElGamal"
+date: "October 13, 2020"
+output: 
+  revealjs::revealjs_presentation:
+    fig_width: 14 
+    fig_height: 7
+    self_contained: true
+    theme: night
+    highlight: zenburn
+    css: slidesdjh.css
+    center: false
+    transition: slide
+    reveal_options:
+      controls: true
+      progress: false
+      width: 1080
+      height: 540
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_chunk$set(comment = NA)
+options(width = 100)
+library(gmp)
+library(openssl)
+```
+
+# Groups and Generators
+
+## The group of units of $\mathbb{Z}_n$
+
+The set of all invertible elements of the ring $\mathbb{Z}_n$ is denoted $U(n)$, and is called **the group of units** of $\mathbb{Z}_n$. 
+
+> Exercise: Find all the elements of $U(8)$, and make a multiplication table. Is U(8) a ring? Why or why not?
+
+## Groups, cyclic groups, generators
+
+A set with (an associative) multiplication and multiplicative inverses is called a **group**. For example, $U(n)$ is a group.
+
+If all the elements of a group $G$ are powers of a single element $\alpha$ of the group, then $G$ is called a **cyclic group**, and $\alpha$ is called a **generator** of the group $G$.
+
+> Exercise: Which of the following are cyclic groups? 
+>
+> - $U(8)$
+> - $U(10)$
+> - $U(7)$
+
+## The Primitive Root Theorem
+
+**Theorem.** The group $U(n)$ is cyclic if and only if $n$ is $1$, $2$, $4$, $p^k$, or $2p^k$, where $p$ is an odd prime and $k\geq 1$.
+
+For a proof, see [Guichard], *Mathematics Magazine* 72:2, April 1999, pp. 139--142.
+
+When $U(n)$ is cyclic, a generator of $U(n)$ is called a **primitive root** modulo $n$.
+
+## Order of an element in a group
+
+**Definition.** Let $G$ be a finite group, and let $g\in G$. The **order** of the element $g$ is the smallest number $e$ such that $g^e = 1$.
+
+**Theorem.** The order of an element in a finite group divides the size of the group.
+
+Proof: Math 110
+
+(Example)
+
+## Finding Primitive Roots modulo $p$ {.build .smaller}
+
+- Brute Force
+- Using the factorization of $p-1$ (See also Exercise 21, p. 107)
+
+Example: Find a generator of $U(43)$ (i.e., a primitive root modulo 43)
+
+## Brute Force
+
+Is 2 primitive?
+
+```{r}
+powm(rep(2,42), 1:42, 43) # Brute force
+```
+
+Is 3 primitive?
+
+```{r}
+powm(rep(3,42), 1:42, 43) # Brute force
+```
+
+## Use the factors of $p-1$
+
+Is 2 primitive?
+
+```{r}
+powm(c(2,2,2), c(21,6,14), 43) # Using factorization 42 = 2*3*7
+```
+
+Is 3 primitive?
+
+```{r}
+powm(c(3,3,3), c(21,6,14), 43) # Using factorization 42 = 2*3*7
+```
+
+## Shortcut to test primitivity
+
+Suppose $p$ is prime and $p-1 = q_1^{i_1}q_2^{i_2}\cdots q_n^{i_n}$ is a prime factorization.
+
+- If $g^r = 1$ for some $r<p-1$, then $g$ is not primitive. If no such $r$ exists, then $g$ is primitive.
+- If $r<p-1$ divides $p-1$, then it has to divide $(p-1)/q_k$ for some $k$.
+- If $g^r = 1$ for some $r<p-1$, then $r$ must divide $(p-1)/q_k$ for some $k$.
+- So we only need to check powers of the form $g^{(p-1)/q_k}$ to determine whether $g$ is primitive.
+
+```{r}
+powm(c(3,3,3), c(21,6,14), 43) # Using factorization 42 = 2*3*7
+```
+
+# Discrete Logarithms
+
+## Diffie-Hellman Key Exchange
+
+Alice and Bob wish to create a shared secret $K$ (e.g., to make an AES key) using unencrypted communication.
+
+1. Alice and Bob agree on a choice of a large prime $p$ and a generator $\alpha \in U(p)$.
+2. Alice chooses a secret random $x \in \{1,2,\ldots, p-2\}$. Bob chooses a secret random $y \in \{1,2,\ldots,p-2\}$.
+3. Alice sends $\alpha^x$ to Bob. Bob sends $\alpha^y$ to Alice. (All computations are done in $U(p)$.)
+4. Alice calculates $K = (\alpha^y)^x$. Bob calculates $K = (\alpha^x)^y$
+
+In practice, an AES (or other) key is obtained by taking a "hash" of $K$. (More details in Chapter 8.)
+
+## Discrete Logarithms
+
+In the Diffie-Hellman key exchange, Eve can observe $\alpha^x$ and $\alpha^y$, but she can't obtain the secret $K$ unless she knows $x$ or $y$. So the security of this algorithm relies on the fact that, in $U(p)$, the equation
+$$
+\beta = \alpha^x
+$$
+is difficult to solve for $x$.
+
+> **Definition.** Let $\alpha,\beta \in U(p)$, with $p$ prime. The least nonnegative integer $x$ that satisfies the equation $\beta = \alpha^x$ is called the **discrete logarithm** of $\beta$ with respect to $\alpha$, denoted $L_\alpha(\beta)$.
+
+Example: In $U(11)$, compute $L_3(4)$.
+
+## Attacks on Diffie-Hellman: Computing $L_\alpha(\beta)$
+
+- Brute force 
+- Pohlig-Hellman Algorithm
+- Baby Step, Giant Step
+
+## Table groups
+
+```{r, echo=FALSE}
+library(knitr)
+roster <- c("Sam", "Wesley", "Andrew", "Winston", "Logan", "Christian", "Caleb", "James", "Joe", "Emily", "Nathan")
+set.seed(10132020) 
+n <- length(roster)
+ngps <- 3
+maxingp <- ceiling(n/ngps)
+# just make random groups
+groups <- matrix(c(roster[sample(n)], 
+                   rep("",(maxingp - (n %% maxingp)) %% maxingp)), 
+                 ncol=maxingp, byrow=FALSE)
+rownames(groups) <- paste0("Table #", 1:nrow(groups))
+kable(t(groups))
+```
+
+Work on your group's [Jamboard](https://jamboard.google.com/d/1aZFmY7o_eEHQSDMD2K_8juyS4yV_hRYiX9LTOgKI62Y/edit?usp=sharing). 
+
+## Discrete Logarithms modulo 2
+
+Suppose $\alpha$ is a primitive root modulo $p$ and consider solving $\beta = \alpha^x$ in $U(p)$. (i.e., compute $L_\alpha(\beta)$ modulo $p$.)
+
+The size of $U(p)$ is $p-1$. Write $p-1 = 2c$.
+
+**Exercise 1.** All calculations below are in $U(p)$.
+
+1. What is $\alpha^{2c}$? Why?
+2. What is $\alpha^c$? Why?
+3. Write $\beta^c$ in terms of $x$.
+
+If $x$ is even, what must be true? What if $x$ is odd?
+
+## Solving simultaneous congruences
+
+**Exercise 2.** Find a value of $x$ that satisfies both of the following congruences.
+$$
+\begin{aligned}
+x &\equiv 3 \pmod{5} \\
+x &\equiv 2 \pmod{7}
+\end{aligned}
+$$
+
+**Exercise 3.** Find a value of $x$ that satisfies both of the following congruences.
+$$
+\begin{aligned}
+x &\equiv 3 \pmod{4} \\
+x &\equiv 2 \pmod{6}
+\end{aligned}
+$$
+
+## The Chinese Remainder Theorem
+
+**Theorem.** Let $m_1, m_2, \ldots m_k$ be integers that are *pairwise relatively prime*, and let $M = m_1m_2\cdots m_k$. Given integers $a_1, a_2, \ldots, a_k$, there is a solution $x$ to the following simultaneous congruences. Furthermore, this solution is unique modulo $M$.
+$$
+\begin{aligned}
+x &\equiv a_1 \pmod{m_1} \\
+x &\equiv a_2 \pmod{m_2} \\
+&\,\,\vdots \\
+x &\equiv a_k \pmod{m_k} \\
+\end{aligned}
+$$
+
+Constructive proof: Let $x = a_1y_1z_1 + a_2y_2z_2 + \ldots + a_ky_kz_k$, where $z_i = M/m_i$ and $y_i = z_i^{-1} \bmod m_i$.
+
+## CRT: Example
+
+**Exercise 4.** Find a value of $x$ that satisfies all of the following congruences.
+$$
+\begin{aligned}
+x &\equiv 2 \pmod{5} \\
+x &\equiv 1 \pmod{6} \\
+x &\equiv 3 \pmod{7}
+\end{aligned}
+$$
+
+## Applying the CRT
+
+1. Solve your problem for a collection of small moduli $m_i$.
+2. Use the CRT find the solution for the modulus $M = m_1m_2\cdots m_k$.
+
+## Pohlig-Hellman Algorithm (overview)
+
+Suppose $p-1 = m_1m_2\cdots m_k$, where each $m_i$ is a power of a small prime.
+
+1. Compute $L_\alpha(\beta)$ modulo $m_i$, for each $i$.
+2. Apply the Chinese Remainder Theorem to compute $L_\alpha(\beta)$.
+
+Facts used:
+
+- $\beta^{(p-1)/2}$ tells us $L_\alpha(\beta)$ mod 2 immediately (Exercise 1).
+- $\alpha^{m_1} \equiv \alpha^{m_2} \pmod{p}$ iff $m_1\equiv m_2 \pmod{p-1}$. 
+
+## Pohlig-Hellman Attack: Toy Example
+
+Compute $L_7(12)$ in $U(41)$. (i.e., Solve $7^x = 12$.)
+
+- $p-1 = 41 - 1 = 40 = 2^3 \cdot 5$
+- Since $12^{20} \equiv -1 \pmod{41}$, we know $L_7(12) \equiv 1 \pmod{2}$.
+    - In fact, *$L_7(12) \equiv 5 \pmod{8}$*. (Details omitted.)
+- Since $12^{40/5} \equiv 18 \pmod{41}$, and $7^{40/5} \equiv 37 \pmod{41}$, and $37^3 \equiv 18 \pmod{41}$, we know *$L_7(12) \equiv 3 \pmod{5}$*. 
+- Now use CRT: $L_7(12) = (5)(5)(5) + (3)(2)(8) \pmod{40} = 13$.
+
+## Avoid the Pohlig-Hellman Attack?
+
+How to avoid this attack: Make sure $p-1$ has at least one large prime factor.
+
+## Baby Step, Giant Step
+
+(Similar to meet-in-the-middle attack.)
+
+To solve $\alpha^x = \beta$ in $U(p)$: Choose large $N > \sqrt{p-1}$
+
+1. Compute $\alpha^j$ for $j = 1, 2, \ldots, N$. (Baby step.)
+2. Compute $\beta\alpha^{-Nk}$ for $k = 1, 2, \ldots, N$. (Giant step.)
+
+If a match is found in these two lists, $x=j+Nk$ is a solution. (Note that $k$ and $j$ are the "digits" in the base $N$ representation of $x$.)
+
+How to avoid this attack: Use large primes.
+
+## In practice: Use "good" Diffie-Hellman groups.
+
+[Secure Diffie-Hellman Groups](https://datatracker.ietf.org/doc/rfc3526/?include_text=1)
+
+## ElGamal public key cryptosystem
+
+1. Bob chooses a large prime $p$ and a generator $\alpha\in U(p)$, as well as a secret exponent $a$. Bob computes $\beta = \alpha^a$ in $U(p)$, and makes the triple $(p,\alpha, \beta)$ public.
+2. Alice chooses a secret random $k$ and computes $r = \alpha^k$ in $U(p)$.
+3. To send the plaintext message $m$, Alice computes $t = \beta^km$ in $U(p)$ and sends the pair $(r,t)$ to Bob.
+
+Decryption: In $U(p)$, Bob uses the secret $a$ to compute $tr^{-a}$. This works because
+$$
+tr^{-a} = \beta^km(\alpha^k)^{-a} = (\alpha^a)^km\alpha^{-ak} = m
+$$
+
+
+
+

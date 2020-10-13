@@ -46,6 +46,7 @@ This site provides slides, assignments, and other resources that I use in my Cod
 8. [Advanced Encryption Standard (AES)](slides/08desaes2.html)
 9. [RSA Public Key Encryption](slides/09rsa1.html)
 10. [Attacks on RSA and Primality Testing](slides/10rsa2.html)
+11. [Discrete Logarithms, Diffie-Hellman, ElGamal](slides/11discrete_logs.html)
 
 # Written Assignments
 
@@ -59,6 +60,7 @@ This site provides slides, assignments, and other resources that I use in my Cod
 8. [AES and Modes of Operation](assignments/08aesmodes.html)
 9. [Some RSA Calculations](assignments/09rsacalc.html)
 10. [Prime Numbers and RSA](assignments/10primes.html)
+11. [Discrete Logarithms](assignments/11dlogs.html)
 
 # Programming Assignments
 

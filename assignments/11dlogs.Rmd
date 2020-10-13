@@ -1,0 +1,35 @@
+---
+title: "Discrete Logarithms"
+output:
+  html_document:
+    toc: false
+    df_print: paged
+    theme: spacelab
+---
+
+Upload to Canvas a PDF of your work for the following problems. 
+
+## Assignment: due Monday, 11:59 pm
+
+1. Use the [shortcut](../slides/11discrete_logs.html#/shortcut-to-test-primitivity) to find a primitive root modulo 811177151133889. (Use the `gmp` function `factorize` to find the unique factors of 811177151133888. Also use `powm`.) Explain how you know that you have found a primitive root.
+
+2.  Suppose Alice and Bob conduct a Diffie-Hellman key exchange as follows.
+    - Alice and Bob agree on prime $p = 240922393$ and primitive root $\alpha=103$.
+    - Alice chooses secret $x = 120461539$ and sends $\alpha^x$ to Bob.
+    - Bob chooses secret $y = 81635591$ and sends $\alpha^y$ to Alice.
+    
+    Compute the shared secret key. Remember to do your calculations in $U(p)$.
+
+3. Suppose, in the situation in question 2, that Eve is able to intercept messages between Alice and Bob and alter them (i.e., Eve is an "intruder in the middle") as follows:
+    - Eve chooses a "fake" exponent $z = 49182605$.
+    - Eve intercepts Alice's message $\alpha^x$ and sends Bob $\alpha^z$ instead.
+    - Eve intercepts Bob's message $\alpha^y$ and sends Alice $\alpha^z$ instead.
+
+    If Alice and Bob are not aware that Eve is doing this, what "shared secrets" do they compute? Is it possible for Eve to also know these secrets? Explain.
+    
+4.  Alice and Bob are communicating using the ElGamal cryptosystem with $p = 179841529021446883498969891$ and $\alpha = 7$. Bob's secret exponent is $a = 10000$. 
+    a. Give the triple that Bob makes public.
+    b. Suppose Alice wants to send the message `370288657646690981668211`. Compute a ciphertext pair that Alice could send.
+    c. Decrypt to check your answer. <br><br>
+    
+5. In $U(53457634678734567834567367867346003)$, compute $L_5(31224112303063959919880288679125645)$ modulo 2. Show your work.
