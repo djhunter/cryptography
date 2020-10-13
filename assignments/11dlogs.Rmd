@@ -9,7 +9,7 @@ output:
 
 Upload to Canvas a PDF of your work for the following problems. 
 
-## Assignment: due Monday, 11:59 pm
+## Assignment: due Wednesday, 11:59 pm
 
 1. Use the [shortcut](../slides/11discrete_logs.html#/shortcut-to-test-primitivity) to find a primitive root modulo 811177151133889. (Use the `gmp` function `factorize` to find the unique factors of 811177151133888. Also use `powm`.) Explain how you know that you have found a primitive root.
 
