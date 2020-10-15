@@ -1,0 +1,29 @@
+---
+title: "Hash Functions and the Birthday Theorem"
+output:
+  html_document:
+    toc: false
+    df_print: paged
+    theme: spacelab
+---
+
+Upload to Canvas a PDF of your work for the following problems. 
+
+## Assignment: due Monday, 11:59 pm
+
+1. Explain what the following code is counting, and what it has to do with diffusion.
+
+```{r, message=FALSE}
+library(openssl)
+m1 <- "Oh, say, can you see, By the dawn's early light, What so proudly we hailed At the twilight's last gleaming? Whose broad stripes and bright stars, Through the perilous fight, O'er the ramparts we watched, Were so gallantly streaming?" 
+m2 <- "Oh, say, can you see, By the dawn's early light, What so proudly we hailed At the twilight's last gleaming? Whose broad stripes and bright stars, Through the perilous night, O'er the ramparts we watched, Were so gallantly streaming?"
+sum(rawToBits(xor(as.raw(sha256(charToRaw(m1))), as.raw(sha256(charToRaw(m2))))) != rawToBits(as.raw(0)))
+```
+
+2. In the last programming assignment, the hash function `miniSHA` defaults to a 32-bit hash.
+    a. The examples say that `birthdayAttack(miniSHA, giveUp = 100000)` "probably" should find a collision. Use the Birthday Theorem to calculate the probability of finding a collision in this case.
+    b. The examples say that `birthdayAttack(miniSHA, giveUp = 1000000)` "almost certainly" should find a collision. Use the Birthday Theorem to calculate the probability of finding a collision in this case.
+    c. Approximately how many messages would have to be hashed to do a birthday attack on `miniSHA` that has a probability of 0.25 of succeeding? (Use the Birthday Theorem.)
+    d. Approximately how many messages would have to be hashed to do a birthday attack on `miniSHA` that has a probability of 0.99 of succeeding? (Use the Birthday Theorem.)
+
+3. For the 32-bit `miniSHA` hash, calculate the probability of finding a nonce on the first try that produces a hash of all zeroes. Then use that result to calculate the number of tries it would take to have a probability of 0.99 of finding such a nonce. (Compare your answer to 2d, and note that it should be different.)

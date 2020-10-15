@@ -8,7 +8,7 @@
 #'
 #' @return A 16-character string giving the key that was used
 #' @export
-#' @import digest
+#' @importFrom digest AES
 #'
 #' @examples
 #' knownPT <- "myplaintextblock"

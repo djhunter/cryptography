@@ -47,6 +47,7 @@ This site provides slides, assignments, and other resources that I use in my Cod
 9. [RSA Public Key Encryption](slides/09rsa1.html)
 10. [Attacks on RSA and Primality Testing](slides/10rsa2.html)
 11. [Discrete Logarithms, Diffie-Hellman, ElGamal](slides/11discrete_logs.html)
+12. [Hash Functions](slides/12hash_functions.html)
 
 # Written Assignments
 
@@ -61,6 +62,7 @@ This site provides slides, assignments, and other resources that I use in my Cod
 9. [Some RSA Calculations](assignments/09rsacalc.html)
 10. [Prime Numbers and RSA](assignments/10primes.html)
 11. [Discrete Logarithms](assignments/11dlogs.html)
+12. [Hash Functions and the Birthday Theorem](assignments/12hash.html)
 
 # Programming Assignments
 
@@ -69,6 +71,7 @@ This site provides slides, assignments, and other resources that I use in my Cod
 3. [OTP and LFSR tools](programming/03mathillotp.html)
 4. [GF(256) and AES](programming/04gf256aes.html)
 5. [RSA tools](programming/05rsa.html)
+6. [Discrete Logarithms and Hash Functions](programming/06discloghash.html)
 
 # Other Resources
 

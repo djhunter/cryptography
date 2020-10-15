@@ -1,0 +1,275 @@
+---
+title: "Hash Functions"
+date: "October 15, 2020"
+output: 
+  revealjs::revealjs_presentation:
+    fig_width: 14 
+    fig_height: 7
+    self_contained: true
+    theme: night
+    highlight: zenburn
+    css: slidesdjh.css
+    center: false
+    transition: slide
+    reveal_options:
+      controls: true
+      progress: false
+      width: 1080
+      height: 540
+---
+
+# Last Time: Primitive Roots
+
+## Recall: Primitive Roots
+
+- When $U(n)$ is cyclic, a generator of $U(n)$ is called a **primitive root** modulo $n$.
+- In $U(p)$ where $p$ is prime, for any $a$, $a^{p-1} = 1$ (Fermat's Little Theorem).
+- However, the powers $a, a^2, a^3, \ldots a^{p-1}$ are not always *distinct* elements of $U(n)$. But they are distinct exactly when $a$ is primitive.
+
+*Programming Problem:* Automate your procedure in Problem #1 from last night: `nextPrimRoot` function.
+
+## Recall: Discrete Logarithms are hard to compute
+
+Suppose $\alpha$ is a primitive root modulo large prime $p$.
+
+- Given $\alpha$ and $x$, it is easy to compute $\alpha^x$.
+- Given $\alpha$ and $\alpha^x$, it is nearly impossible to compute $x$.
+
+*Programming Problems:* Implement two discrete logarithm finders.
+
+1. Brute force.
+2. Baby-step, Giant-step
+
+## Baby Step, Giant Step
+
+To solve $\alpha^x = \beta$ in $U(p)$: Choose large $N > \sqrt{p-1}$
+
+1. Compute $\alpha^j$ for $j = 1, 2, \ldots, N$. (Baby step.)
+2. Compute $\beta\alpha^{-Nk}$ for $k = 1, 2, \ldots, N$. (Giant step.)
+
+If a match is found in these two lists, $x=j+Nk$ is a solution. (Note that $k$ and $j$ are the "digits" in the base $N$ representation of $x$.)
+
+**Advice:** Check out R's built-in `match` function. It doesn't work on `bigz`'s, but it works on strings, so you can `as.character()` your `bigz`'s to strings before you try using `match()`
+
+## Using `match`
+
+```{r}
+w1 <- c("I", "thought", "you", "said", "your", "dog", "did", "not", "bite")
+w2 <- c("That", "is", "not", "my", "dog")
+m <- match(w1, w2)
+m
+which(!is.na(m))
+commonWords <- w2[m]
+commonWords
+commonWords[!is.na(commonWords)]
+```
+
+## Hash functions
+
+Given a set of data (e.g., an employee's name, address, birthday etc.) we would like to assign a "unique" identifier to the data set in a fast, algorithmic way. This identifier is called a **hash** or a **message digest** of the given set of data.
+
+Applications:
+
+>- Organizing data
+>- Checking for data integrity
+>- Finding duplicate records
+>- Password checking
+>- Digital signatures
+>- Pseudorandom bit string generation
+>- Generating a key (e.g. AES) from a passphrase
+
+## Hash Functions
+
+A **hash function** $h:M \longrightarrow D$ is a function that inputs a message of arbitrary length and outputs a **message digest** of fixed length. 
+
+## Example: Checking data integrity
+
+```{r}
+library(openssl)
+bg1 <- "Take me out to the ball game, Take me out with the crowd; Buy me some peanuts and 
+        Cracker Jack, I don't care if I never get back. Let me root, root, root for the 
+        home team, If they don't win, it's a shame. For it's one, two, three strikes, 
+        you're out, At the old ball game."
+bg2 <- "Take me out to the ball game, Take me out to the crowds;  Buy me some peanuts and 
+        Cracker Jack, I don't care if I never get back. Let me root, root, root for the 
+        home team, If they don't win, it's a shame. For it's one, two, three strikes, 
+        you're out, At the old ball game."
+md5(c(bg1,bg2))
+```
+
+## Example: Password verification
+
+A system stores hashed passwords:
+
+```{r}
+passwords <- c("qwerty", "mypass", "admin", "Runner4567")
+sha256(passwords) 
+```
+
+When a user enters a password $m$, the hash $h(m)$ is compared to the stored values.
+
+## Properties of Cryptographic Hash Functions 
+
+Cryptographic hash functions should satisfy the following properties:
+
+>- **Efficiency.** Computing $h(m)$ is fast.
+>- **One-way.** Given a digest $d$, it is practically impossible to find a message $m$ such that $h(m)=d$.
+>- **Collision-free.** It is practically impossible to find messages $m_1$ and $m_2$ such that $h(m_1)=h(m_2)$.
+>- **Diffusion.** Changing one bit of $m$ completely changes $h(m)$.
+
+## Examples
+
+Discuss. For each possible hash function $h$, which properties (efficiency, one-way, collision-free, diffusion) does $h$ have?
+
+> 1. $h(m) = m \bmod p$, where $m > p$.
+> 2. $h(m) = \alpha^m \bmod p$, where $\alpha$ is a primitive root modulo $p$.
+> 3. $h(m) =$ the first block of the AES ciphertext of $m$ using a public key.
+
+## Common Hash Functions
+
+| Function | Year | Digest size | Secure? |
+|----------|------|-------------|---------|
+| MD5 | 1991 | 128 bit | no (2004-2005)|
+| SHA-1 | 1993 | 160 bit | no (2005) |
+| SHA-2 | 2001 | 224, 256, 384, or 512 bit | yes | 
+| SHA-3 | 2015 | 224, 256, 384, or 512 bit | yes |
+
+<br>
+
+For example, openssl defaults to `sha256`, which is SHA-2. [Check out the pseudocode.](https://en.wikipedia.org/wiki/SHA-2#Pseudocode)
+
+## Dictionary attacks
+
+Suppose a set $P$ of passwords are stored as hashes: $\{h(p) \mid p \in P\}$.
+
+An attacker can create a list $L = \{h(d) \mid d \in \mathcal{D}\}$, where $\mathcal{D}$ is a **dictionary** list of common passwords.
+
+A match between $L$ and $P$ will reveal a password.
+
+```{r}
+passwords <- c("qwerty", "mypass", "admin", "Runner4567")
+sha256(passwords) 
+```
+
+## Salt
+
+Password systems sometimes incorporate a random string, called **salt**, into a password before it is hashed.
+
+```
+nyoung:$6$WQ0w1hcR$7wO.W0nyjzcakz42KgoPhfgdP8NWOZXSSTZzxEhPBTCiXAKcJ1kHv4VgTMKyx
+U6Y7XNXaBmkPtlsLp1q7VPVC1:18212:0:99999:7:::
+rfrink:$6$T3ortZMG$HOC3KWnrWHGvjujYnH42ZrfhdDVBbbfXLYFFG80rG9kvnJynEY8O/V37l.1T/
+kcitXgkBFobngRxFYlhmXEL5.:18166:0:99999:7:::
+roroku:$6$YTcauXgg$CFgWgR/oXj3NhFV56oqosnQAxrBto5Ho640uzTmcAR0OnRD.qkY4O6zbjVP
+NqIoguUuLCK4Y8WW.PDmPWPK0:18227:0:99999:7:::
+samundson:$6$CllynVdl$9N76VLgzfR1XsrqwSscksfgMOWs59oSW67ai4g3oHu29lnXe2pwk4g9Wvmp
+A6XMHH8W0Sq4togY1I6UQKgeBMV0:18166:0:99999:7:::
+```
+
+*Question:* If $B$ is the number of bits of salt, how does salting affect the time needed for a dictionary attack?
+
+## Pepper
+
+- Similar to salt 
+- Pepper is random and secret, while salt is just random.
+- Store pepper somewhere else; salt gets stored with the hashed passwords.
+
+## Random Oracle
+
+An ideal hash function $h: M \longrightarrow D$ is a **random oracle**.
+
+- The oracle answers the question $m\in M$ with a randomly selected $h(m) \in D$ (selected with replacement).
+- If the same question $m$ is asked a second time, the same answer $h(m)$ is given.
+
+To calculate theoretical probabilities, we often assume we have a random oracle hash function.
+
+## The Birthday Paradox 
+
+> What is the probability that two people in a group have the same birthday?
+
+- Write down your birthday (day/month) and the birthdays of two family members.
+- Did we obtain a collision?
+
+```{r, echo=FALSE, eval=FALSE}
+1-prod(1-(1:33)/365)
+```
+
+## The Birthday Theorem
+
+**Birthday Theorem.**  Suppose $h:M \longrightarrow D$ is a hash function, where there are $N$ possible hashes. Assuming that $h$ is a random oracle, the probability of a collision when hashing $r$ messages is
+$$
+1-\left(\frac{N-1}{N}\right)\left(\frac{N-2}{N}\right)\cdots\left(\frac{N-r+1}{N}\right)
+$$
+This probability is approximately $1-e^{-r^2/2N}$.
+
+```{r}
+1-prod(1-(1:33)/365)
+1-exp(-33^2/(2*365))
+```
+
+## Birthday Attacks 
+
+Choose a value for $r$, and look for collisions.
+
+How big must $r$ be to have a "high" probability $\gamma$ of finding a collision? Solve (asymptotically):
+
+$$
+1-e^{-r^2/(2N)} = \gamma
+$$
+
+$r \approx \sqrt{N}$, asymptotically. (Can solve exactly, given $\gamma$.)
+
+"Number of bits of security" $\approx \frac{1}{2} \times \text{digest size}$
+
+## Programming a birthday attack
+
+*Programming problem:* Write a birthday attack on a semi-weak hash function `miniSHA`.
+
+- Try hashing a bunch of strings, and find a collision (i.e., a duplicated hash for two different strings).
+- **Advice:** Check out R's built-in `duplicated` function. Read the help menu to see how it works.
+- Your hashes will be strings, so `duplicated` will work just fine.
+
+## How `duplicated` works
+
+The function `duplicated` "determines which elements of a vector or data frame are duplicates of elements with smaller subscripts, and returns a logical vector indicating which elements (rows) are duplicates."
+
+```{r}
+piDigits <- c(3, 1, 4, 1, 5, 9, 2, 6, 5, 3, 5)
+dups <- duplicated(piDigits)
+dups
+which(dups)
+piDigits[which(dups)]
+```
+
+## Application: Using hash functions to encrypt
+
+Idea: create a random bitstring using hash functions, a key, and some sort of feedback. Encrypt by XORing (as with certain block cipher modes).
+
+## Application: Merkle Tree data structure
+
+Problem: verify the integrity of $n$ independent blocks $B_1, B_2, \ldots, B_n$. (e.g., peer-to-peer data)
+
+- $h(B_1), h(B_2), \ldots, h(B_n)$ form the leaves of the tree.
+- Each parent node is formed by concatenating the children and hashing.
+- Only the top hash needs to be checked to verify integrity of all blocks.
+
+## Application: Block chaining
+
+Examples: Git, Bitcoin
+
+- Each new block contains a hash of the previous block.
+- Difficult to go back and change an old block, because the hashes won't check.
+
+## Application: Bitcoin Proof of Work
+
+Problem: A new block needs to be added to the Bitcoin blockchain. Who decides?
+
+- Miners race to find a *nonce*, such that, when appended to the new block, the hash begins with a certain number of zeroes. 
+- Anybody can check that the nonce works, to verify the integrity of the new block.
+- The first one to find a nonce that works adds the new block to the blockchain and gets rewarded. Everybody is going to accept the new blockchain because it is the longest.
+
+Reference: https://bitcoin.org/bitcoin.pdf
+
+
+
+
