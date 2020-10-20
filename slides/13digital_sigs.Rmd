@@ -1,0 +1,181 @@
+---
+title: "Digital Signatures"
+date: "October 20, 2020"
+output: 
+  revealjs::revealjs_presentation:
+    fig_width: 14 
+    fig_height: 7
+    self_contained: true
+    theme: night
+    highlight: zenburn
+    css: slidesdjh.css
+    center: false
+    transition: slide
+    reveal_options:
+      controls: true
+      progress: false
+      width: 1080
+      height: 540
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_chunk$set(comment = NA)
+options(width = 100)
+library(gmp)
+library(openssl)
+```
+
+# Digital Signatures 
+
+## Signatures
+
+Why do we sign things?
+
+## Public Key Systems:
+
+- $E$ is a public key/encryption function: everyone knows it, everyone can encrypt with it.
+- $E^{-1}$ is a private key/decryption function: only one person knows it, only this person can decrypt with it.
+
+## Signature scheme 
+
+Alice wants to send a public message $m$, and sign the message to indicate (a) that she sent it (authentication), and (b) that she intended to send it (non-repudiation).
+
+1. Alice applies the *decryption* function to $m$, to get $y = E^{-1}(m)$.
+2. Alice publishes the pair $(m, y)$, signifying that "Alice has signed document $m$."
+
+**Questions.** 
+ 
+>1. How could Bob check to make sure Alice, and not an imposter, really signed the message?
+>2. Suppose $m'$ is another message. If an attacker Eve published the pair $(m',y)$, and claimed that Alice signed it, how could Bob show that she is wrong?
+>3. Suppose Eve chooses some $y'$, and publishes the pair $(E(y'), y')$, claiming that Alice signed it. What will Bob conclude?
+
+# RSA and ElGamal
+
+## RSA algorithm (recall)
+
+1. Bob chooses large primes $p$ and $q$ and computes $n=pq$.
+2. Bob chooses exponent $e$ relatively prime to $(p-1)(q-1)$. 
+3. Bob computes $d = e^{-1}$ modulo $(p-1)(q-1)$.
+4. Bob makes $n$ and $e$ public, but keeps $p$, $q$, and $d$ secret.
+5. Alice codes a plaintext message as a number $m$. She computes $c = m^e \bmod n$ and sends $c$ to Bob.
+6. Bob decrypts by computing $m = c^d \bmod n$.
+
+**Exercise.** Make this algorithm into a signature scheme. Let the message be some integer $m$. Then explain what Alice makes public, and what Bob does to verify the signature. (Notice that Alice is the one who does steps 1--4.)
+
+## RSA Signature Scheme
+
+Do the above exercise.
+
+## ElGamal public key cryptosystem (recall)
+
+1. Bob chooses a large prime $p$ and a generator $\alpha\in U(p)$, as well as a secret exponent $a$. Bob computes $\beta = \alpha^a$ in $U(p)$, and makes the triple $(p,\alpha, \beta)$ public.
+2. Alice chooses a secret random $k$ and computes $r = \alpha^k$ in $U(p)$.
+3. To send the plaintext message $m$, Alice computes $t = \beta^km$ in $U(p)$ and sends the pair $(r,t)$ to Bob.
+
+Decryption: In $U(p)$, Bob uses the secret $a$ to compute
+$$
+tr^{-a} = \beta^km(\alpha^k)^{-a} = (\alpha^a)^km\alpha^{-ak} = m
+$$
+
+## El Gamal Signature Scheme 
+
+Alice want to sign the message $m$.
+
+1. Alice chooses a large prime $p$ and primitive root $\alpha$, as well as a secret exponent $a$.  Alice computes $\beta = \alpha^a$ in $U(p)$, and makes the triple $(p,\alpha, \beta)$ public.
+2. Alice chooses a secret random $k$ in $U(p-1)$ and computes $r = \alpha^k$ in $U(p)$.
+3. Alice computes $s=k^{-1}(m-ar) \bmod p-1$. The signed message is $(m,r,s)$.
+
+To verify, Bob checks that $\beta^rr^s = \alpha^m$ in $U(p)$.
+
+**Exercise.** 
+
+>1. Check that conditions 1--3 ensure that Bob's verification will work.
+>2. What facts ensure that Alice really signed the message?
+
+## ElGamal Signatures: What if the same $k$ is used twice? {.build}
+
+Suppose Alice signs messages $m_1, m_2$ with the same $k$, posting $(m_1, r_1, s_1)$ and $(m_2, r_2, s_2)$.
+ 
+>1. How are $r_1$ and $r_2$ related?
+>2. Find an equation (congruence) involving $k$ (unknown) and $m_1, m_2, s_1, s_2$ (public). Solve for $k$.
+>3. Find an equation involving $a$ (unknown) and $r_1, m_1, s_1$ (public) and $k$. Solve for $a$. 
+>    - Eve now has recovered the secret $a$, so she can sign and pretend to be Alice.
+>    - **Moral:** $k$ must be different for every message. (randomness)
+
+# Hashing and Signing
+
+## Usually, just sign a hash of the message
+
+Suppose $s(m)$ represents a signature for the message $m$ in some signature scheme.
+
+Let $h$ be a hash function.
+
+In practice, the pair $(m, s(h(m)))$ is used for the signed document. (Why?)
+
+## Birthday Attacks on Signatures
+
+If the size of the hash is small, Bob can try this:
+
+- Create two contracts with the same hash (one real, one fake). How? Add whitespace, and do a birthday attack.
+- Send Alice the real one, and have her sign it.
+- Replace the real contract with the fake one, so it looks signed.
+
+How can Alice foil this plan?
+
+# DSA
+
+## Digital Signature Algorithm (DSA)
+
+History:
+
+- Proposed in 1991
+- NIST standard in 1994
+- Revised in 1996, 2000, 2009, 2013
+
+Revisions are based primarily on the length of the hashes used.
+
+## DSA 
+
+>1. Choose a $B$-bit hash function and hash your message to obtain $m$. Choose key-bit-lengths $L$ and $N$, where $N\leq B$ and $N < L$. (e.g., $B= 256$, $N = 256$, $L = 2048$ is one current standard.)
+>2. Choose an $N$-bit prime $q$ and an $L$-bit prime $p$ such that $q \mid (p-1)$.
+>3. Choose a generator $g$ in $U(p)$. Let $\alpha = g^{(p-1)/q}$ in $U(p)$. (Note: $\alpha^q = 1$ in $U(p)$.)
+>4. Alice chooses $a < q-1$ and calculates $\beta = \alpha^a$. The private key is $a$, and the public key is $(p, q, \alpha, \beta)$.
+>5. To sign a message $m$, Alice chooses random, secret, $k < q-1$. Then she computes $r=(\alpha^k \bmod p) \bmod q$ and $s = k^{-1}(m+ar) \bmod q$.
+>6. The signed message is $(m,r,s)$.
+
+
+## DSA 
+
+1. Choose a $B$-bit hash function and hash your message to obtain $m$. Choose key-bit-lengths $L$ and $N$, where $N\leq B$ and $N<L$.
+2. Choose an $N$-bit prime $q$ and an $L$-bit prime $p$ such that $q \mid (p-1)$.
+3. Choose a generator $g$ in $U(p)$. Let $\alpha = g^{(p-1)/q}$ in $U(p)$. (Note: $\alpha^q = 1$ in $U(p)$.)
+4. Alice chooses $a < q-1$ and calculates $\beta = \alpha^a$. The private key is $a$, and the public key is $(p, q, \alpha, \beta)$.
+5. To sign a message $m$, Alice chooses random, secret, $k < q-1$. Then she computes $r=(\alpha^k \bmod p) \bmod q$ and $s = k^{-1}(m+ar) \bmod q$. 
+6. The signed message is $(m,r,s)$.
+
+To verify the signature, Bob does the following:
+
+1. Compute $u_1 = s^{-1}m$ and $u_2 = s^{-1}r$ in $U(q)$.
+2. Verify that $(\alpha^{u_1}\beta^{u_2} \bmod p) \bmod q$ equals $r$. 
+
+## DSA Features and Warning
+
+- More secure against discrete log attack (e.g., Pohlig-Hellman).
+- Only two `powm`'s, not three.
+- **Important:** As with ElGamal, $k$ must be different for every message. ([Playstation 3](https://en.wikipedia.org/wiki/PlayStation_3_homebrew))
+
+# How Stuff Works
+
+## Recall
+
+- SSH keys:You have a private RSA key. GitHub has your public key.
+- HTTPS: Session key agreed using public key (or Diffie-Hellman). Then session gets handed over to AES.
+    - What if Eve gets in the middle and tries to spoof a website?
+    
+## Certificate Authorities
+
+- Trusted companies who digitally sign a server's certificate.
+- Example: [DigiCert](https://www.digicert.com/ssl/)
+- Your browser has a list of trusted authorities (look in the settings).
+

@@ -48,6 +48,7 @@ This site provides slides, assignments, and other resources that I use in my Cod
 10. [Attacks on RSA and Primality Testing](slides/10rsa2.html)
 11. [Discrete Logarithms, Diffie-Hellman, ElGamal](slides/11discrete_logs.html)
 12. [Hash Functions](slides/12hash_functions.html)
+13. [Digital Signatures](slides/13digital_sigs.html)
 
 # Written Assignments
 
@@ -63,6 +64,7 @@ This site provides slides, assignments, and other resources that I use in my Cod
 10. [Prime Numbers and RSA](assignments/10primes.html)
 11. [Discrete Logarithms](assignments/11dlogs.html)
 12. [Hash Functions and the Birthday Theorem](assignments/12hash.html)
+13. [Digital Signatures](assignments/13sigs.html)
 
 # Programming Assignments
 

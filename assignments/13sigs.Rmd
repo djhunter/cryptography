@@ -1,0 +1,40 @@
+---
+title: "Digital Signatures"
+output:
+  html_document:
+    toc: false
+    df_print: paged
+    theme: spacelab
+---
+
+Upload to Canvas a PDF of your work for the following problems. 
+
+## Assignment: due Wednesday, 11:59 pm
+
+1. The standard California Residential Lease/Rental Agreement contains 138 sentences ending in a period. For example, `"The security deposit shall not exceed two times the monthly rent. "` At the end of each of these sentences, it is possible to have one whitespace character or two. Consider all the versions of this document that can be formed by putting either one or two whitespace characters after each period.
+    a. How many different versions of this document could be formed this way?
+    b. Is it *possible* that all of these documents have different SHA-256 hashes?
+    c. Is it *likely* that all of these documents have different SHA-256 hashes? Use the Birthday Theorem (approximation) to justify your answer.
+    
+2. Suppose your landlord obtains your digital signature on a lease agreement, charging $2000 per month for rent. Your unscrupulous landlord (who happens to own a very large server farm) then creates a large list of new rental agreements, changing the rent to $3000 per month, and adding whitespace in the manner described in Problem 1. What is the probability that one of these fraudulent contracts has the same SHA-256 hash as the one you signed? Give an exact answer as a numeric expression, and determine or guess its approximate value.
+    
+3. Suppose that Alice signs two documents using the ElGamal signature scheme with Bob's chosen
+$$
+p = 1267650600228229401496703205653
+$$ 
+$\alpha = 2$, and $\beta = 479366713173960022956350873704$. The two signed messages are 
+$$
+(m_1, r_1, s_1) = (73646, 544051462776724778073434116661, 914404324671027799264463858401)
+$$ 
+and 
+$$
+(m_2, r_2, s_2) = (63513, 544051462776724778073434116661, 1236987333514898966758089443580).
+$$
+
+    a. Why is it obvious that Alice used the same value of $k$ for both signatures?
+    b. Find this value of $k$, and also the secret value of $a$ such that $\beta = \alpha^a$ in $U(p)$.
+    
+4. In an *authenticated encryption* scheme, Alice and Bob both have public encryption functions $E_A$ and $E_B$, and private decryption functions $E_A^{-1}$ and $E_B^{-1}$. Let $m$ be a message that Alice wants to send to Bob. Alice sends $c = E_B(E_A^{-1}(m))$. Then Bob applies $E_A(E_B^{-1}(c))$. Describe how to implement an authenticated encryption scheme using RSA. Since Alice and Bob both need private and public keys, start by making both Alice and Bob do steps 1 through 4 of the RSA algorithm (p. 165) to get $n_A, n_B$, etc. Then explain what Alice sends and what Bob does. What aspect of this scheme ensures that the message actually came from Alice, and not an impostor?
+
+    
+    
