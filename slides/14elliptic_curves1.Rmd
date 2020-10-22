@@ -1,0 +1,103 @@
+---
+title: "Elliptic Curves, Introduction"
+date: "October 22, 2020"
+output: 
+  revealjs::revealjs_presentation:
+    fig_width: 14 
+    fig_height: 7
+    self_contained: true
+    theme: night
+    highlight: zenburn
+    css: slidesdjh.css
+    center: false
+    transition: slide
+    reveal_options:
+      controls: true
+      progress: false
+      width: 1080
+      height: 540
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_chunk$set(comment = NA)
+options(width = 100)
+library(gmp)
+library(openssl)
+```
+
+# Curves
+
+## Curves defined by equations
+
+> **Warm-up Exercise.** Sketch the graphs of the curves defined by the following equations.
+>
+> 1. $x^2+y^2=16$
+> 2. $x^2+4y^2=16$
+> 3. $x^2+y^2=x$
+
+
+## Elliptic Curves
+
+An **elliptic curve** is the set of solutions to an equation of the form
+$$
+y^2 = x^3 + bx + c
+$$
+over some field $F$. 
+
+[Applications](http://csrc.nist.gov/groups/SMA/ispab/documents/minutes/2006-03/E_Barker-March2006-ISPAB.pdf)
+
+# Experiments
+
+## Experiment I
+
+See handout.
+
+## Addition: Geometric definition
+
+Suppose $A$ and $B$ are points on an elliptic curve.
+
+1. Draw the line through $A$ and $B$.
+2. This line intersects the curve in the point $P$.
+3. Reflect $P$ over the $x$-axis to obtain the point $A + B$.
+
+(Board)
+
+Questions:
+
+- Is this definition of addition *commutative*?
+- What if $A$ and $B$ are the same point?
+
+## Experiment II
+
+## Group of points on an elliptic curve
+
+## Computational example
+
+Curve: $y^2 = x^3 + 73$
+
+1. Add $(2,9) + (3,10)$.
+2. Add $(-4,-3) + (-4,-3)$.
+
+## Addition: Algebraic formulas
+
+**Addition Law.** If $P$ is any point on an elliptic curve, then $P + \infty = P = \infty + P$. Let $P_1 = (x_1,y_1)$ and $P_2 = (x_2,y_2)$ be points on the elliptic curve $y^2 = x^3 + bx +c$. 
+
+If $P_1 = P_2$ and $y_1 = 0$, then $P_1+P_2 = \infty$.
+
+Otherwise, $P_1 + P_2 = P_3 =  (x_3,y_3)$, where
+$$
+\begin{aligned}
+x_3 &= m^2 -x_1 -x_2 \\
+y_3 &= m(x_1-x_3)-y_1
+\end{aligned}
+$$
+and
+$$
+m = \left\{\begin{array}{cl}
+(y_2-y_1)/(x_2-x_1) & \mbox{if } P_1 \neq P_2 \\
+(3x_1^2+b)/(2y_1) & \mbox{if } P_1 = P_2 
+\end{array}
+\right.
+$$
+

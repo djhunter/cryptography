@@ -49,6 +49,7 @@ This site provides slides, assignments, and other resources that I use in my Cod
 11. [Discrete Logarithms, Diffie-Hellman, ElGamal](slides/11discrete_logs.html)
 12. [Hash Functions](slides/12hash_functions.html)
 13. [Digital Signatures](slides/13digital_sigs.html)
+14. [Real Elliptic Curves](slides/14elliptic_curves1.html)
 
 # Written Assignments
 
@@ -65,6 +66,7 @@ This site provides slides, assignments, and other resources that I use in my Cod
 11. [Discrete Logarithms](assignments/11dlogs.html)
 12. [Hash Functions and the Birthday Theorem](assignments/12hash.html)
 13. [Digital Signatures](assignments/13sigs.html)
+14. [Real Elliptic Curves](assignments/14real_ell.html)
 
 # Programming Assignments
 
@@ -74,6 +76,7 @@ This site provides slides, assignments, and other resources that I use in my Cod
 4. [GF(256) and AES](programming/04gf256aes.html)
 5. [RSA tools](programming/05rsa.html)
 6. [Discrete Logarithms and Hash Functions](programming/06discloghash.html)
+7. [DSA and Real Elliptic Curves](programming/07dsa_real_ell.html)
 
 # Other Resources
 

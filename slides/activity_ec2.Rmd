@@ -1,0 +1,39 @@
+---
+geometry: left=1in, right=0.5in, top=0.5in, bottom=0.5in
+classoption: twoside
+output: 
+  pdf_document:
+    includes:
+      in_header: activityheader.tex
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+library(plot3D)
+```
+## Activity: Elliptic Curve Experiments II \hfill Name:\underline{\mbox{}\hspace{2.5in}} 
+
+The graphs below show two copies of the elliptic curve $y^2=x^3-5x$. On the left-hand copy, locate the point $(A+B)+C$. On the right hand copy, locate $(A+C)+B$. (Use a straightedge.)
+
+```{r, fig.width=8, fig.height=7}
+par(mfrow=c(1,2))
+
+x<-seq(-3,5,length=1000)
+y<-seq(-10,10,length=1000)
+z<-outer(x,y,function(x,y) -y^2 + x^3-5*x  ) 
+contour(x,y,z,levels=0, labels="", labcex=0.1, asp=1)
+points(c(0,-2,-1.6),c(0, sqrt(2),sqrt(5*1.6-1.6^3)), pch=20)
+text(0.4,0, "A")
+text(-2,2.4,"B")
+text(-2.5,1.7,"C")
+
+x<-seq(-3,5,length=1000)
+y<-seq(-10,10,length=1000)
+z<-outer(x,y,function(x,y) -y^2 + x^3-5*x  ) 
+contour(x,y,z,levels=0, labels="", labcex=0.1, asp=1)
+points(c(0,-2,-1.6),c(0, sqrt(2),sqrt(5*1.6-1.6^3)), pch=20)
+text(0.4,0, "A")
+text(-2,2.4,"B")
+text(-2.5,1.7,"C")
+```
+

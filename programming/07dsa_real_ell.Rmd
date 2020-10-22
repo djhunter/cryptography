@@ -1,0 +1,20 @@
+---
+title: "DSA and Real Elliptic Curves"
+output:
+  html_document:
+    toc: false
+    df_print: paged
+    theme: spacelab
+---
+
+## Assignment: due Sunday, 11:59 pm
+
+Add the file [`dsa_real_ell.R`](https://djhunter.github.io/cryptography/R/dsa_real_ell.R) to the `R` subdirectory of your project. 
+
+1. Implement the function `setUpDSA` as described in the documentation. This function should generate the DSA parameters $q$ and $p$ such that $q \mid (p-1)$, $q$ is an $N$-bit prime, and $p$ is an $L$-bit prime. (Hint: find $q$ first, then search for a suitable $p$. If you use `urand.bigz`, make sure it is giving you the right size number.)
+
+2. Implement `ecAddReal` as specified. This function should implement the addition law for real elliptic curves given on page 352 of [Trappe].
+
+3. Implement `ecNeg` as specified to compute the additive inverse (see page 351).
+
+4. Implement `ecPowReal` as specified. Here we use the word "exponentiation" to mean repeated addition of elliptic curves.
