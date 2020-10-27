@@ -1,0 +1,367 @@
+---
+title: "Elliptic Curves Mod p"
+date: "October 27, 2020"
+output: 
+  revealjs::revealjs_presentation:
+    fig_width: 14 
+    fig_height: 7
+    self_contained: true
+    theme: night
+    highlight: zenburn
+    css: slidesdjh.css
+    center: false
+    transition: slide
+    reveal_options:
+      controls: true
+      progress: false
+      width: 1080
+      height: 540
+---
+
+# Elliptic Curves modulo p
+
+## Addition Law for Real Elliptic Curves 
+
+If $P$ is any point on an elliptic curve, then $P + \infty = P = \infty + P$. Let $P_1 = (x_1,y_1)$ and $P_2 = (x_2,y_2)$ be points on the elliptic curve $y^2 = x^3 + bx +c$. 
+
+If $P_1 = P_2$ and $y_1 = 0$, then $P_1+P_2 = \infty$.
+
+Otherwise, $P_1 + P_2 = P_3 =  (x_3,y_3)$, where
+$$
+\begin{aligned}
+x_3 &= m^2 -x_1 -x_2 \\
+y_3 &= m(x_1-x_3)-y_1
+\end{aligned}
+$$
+and
+$$
+m = \left\{\begin{array}{cl}
+(y_2-y_1)/(x_2-x_1) & \mbox{if } P_1 \neq P_2 \\
+(3x_1^2+b)/(2y_1) & \mbox{if } P_1 = P_2 
+\end{array}
+\right.
+$$
+where all computations are performed in $\mathbb{R}$.
+
+## Addition Law for Mod $p$ Elliptic Curves 
+
+If $P$ is any point on an elliptic curve, then $P + \infty = P = \infty + P$. Let $P_1 = (x_1,y_1)$ and $P_2 = (x_2,y_2)$ be points on the elliptic curve $y^2 = x^3 + bx +c$. 
+
+If $P_1 = P_2$ and $y_1 = 0$, then $P_1+P_2 = \infty$.
+
+Otherwise, $P_1 + P_2 = P_3 =  (x_3,y_3)$, where
+$$
+\begin{aligned}
+x_3 &= m^2 -x_1 -x_2 \\
+y_3 &= m(x_1-x_3)-y_1
+\end{aligned}
+$$
+and
+$$
+m = \left\{\begin{array}{cl}
+(y_2-y_1)(x_2-x_1)^{-1} & \mbox{if } P_1 \neq P_2 \\
+(3x_1^2+b)(2y_1)^{-1} & \mbox{if } P_1 = P_2 
+\end{array}
+\right.
+$$
+where all computations are performed in $\mathbb{Z}_p$.
+
+>- **Programming assignment:** Implement addition for mod $p$ elliptic curves.
+
+## Example: real vs. mod $p$
+
+$y^2 = x^3 -2x + 10$, $P=(1,3)$
+
+```{r, eval=FALSE}
+> sapply(1:8, function(x){ecPowReal(-2,10,c(1,3),x)}) # real
+     [,1]      [,2]      [,3]      [,4]      [,5]       [,6]       [,7]     [,8]
+[1,]    1 -1.972222  4.402219  7.670201 -1.293236  0.3031689   74.56223 1.730672
+[2,]    3 -2.504630 -9.300994 21.116645  3.228558 -3.0694506 -643.73252 3.423800
+
+> sapply(1:8, function(x){as.character(ecPowModp(-2,10,8363,c(1,3),x))}) # mod 8363
+     [,1] [,2]   [,3]   [,4]   [,5]   [,6]   [,7]   [,8]  
+[1,] "1"  "3018" "3103" "3650" "1147" "7141" "1658" "1290"
+[2,] "3"  "888"  "1130" "3640" "6505" "2966" "5256" "6565"
+```
+
+
+## Big idea
+
+Mod $p$ elliptic curves give us groups to replace $U(p)$ groups.
+
+- $U(p)$ uses *multiplicative* notation.
+    - "Powers" in $U(p)$ are elements of the form $\alpha^n = \underbrace{\alpha \cdot  \alpha \cdot \cdots \cdot \alpha}_{n \; \alpha \mbox{'s}}$
+    - The discrete logarithm problem was hard in $U(p)$.
+- Mod $p$ elliptic curves use *additive* notation.
+    - "Powers" in mod $p$ elliptic curves are elements of the form $nP = \underbrace{P + P + \cdots + P}_{n \; P \mbox{'s}}$
+    - The discrete "logarithm" problem is *harder* in mod $p$ elliptic curve groups.
+
+# Factorization
+
+## Factorization using gcd
+
+- Suppose a number $n$ is composite (e.g., $n = pq$).
+- If you can find some number $d$ such that $\gcd(d, n) \neq 1$, you can factor $n$.
+- The art lies in choosing clever guesses for $d$.
+
+## Pollard's $p-1$ method
+
+Problem: Factor an integer $n$.
+
+1. Choose a base $a$ between $2$ and $n-2$.
+
+2. Choose a large $B$, and compute $r = a^{B!} \bmod n$.
+
+3. If $\gcd(r-1,n) \neq 1$, then you have found a nontrivial factor of $n$.
+
+Why does this method work? (Fermat)
+
+## Pollard's method: Example
+
+$n = 540143, a = 2, B = 7$
+
+```{r, message=FALSE}
+library(gmp)
+gcd(as.bigz(2)^factorialZ(7)-1, as.bigz("540143"))
+```
+```{r}
+540143/421
+```
+
+## Pollard's $p-1$ method as a group traversal
+
+Problem: Factor an integer $n$.
+
+1. Choose a base $a$ between $2$ and $n-2$.
+
+2. Choose a bound $B$, and for $k$ in $\{1!, 2!, 3!, \ldots B!\}$ attempt the following:
+    a. Compute $r = a^k \bmod n$.
+    b. If $r-1 \in U(n)$, try the next $k$ or another $a$
+    c. If $r-1 \not\in U(n)$, then $\gcd(r-1,n)$ is a nontrivial factor of $n$.
+
+
+## Pollard's method: Example
+
+$n = 540143$
+
+Choose $a = 2$ and $B = 8$.
+
+$$
+\begin{aligned}
+(2^1 \bmod 540143) - 1 &= 1 \in U(540143) \\
+(2^2 \bmod 540143) - 1 &= 3 \in U(540143) \\
+(2^6 \bmod 540143) - 1 &= 63 \in U(540143) \\
+(2^{24} \bmod 540143) - 1 &= 32782 \in U(540143) \\
+(2^{120} \bmod 540143) - 1 &= 54804 \in U(540143) \\
+(2^{720} \bmod 540143) - 1 &= 518076 \in U(540143) \\
+(2^{5040} \bmod 540143) - 1 &= 167137 \not\in U(540143) 
+\end{aligned}
+$$
+
+$\gcd(167137, 540143) = 421$, and $540143/421 = 1283$.
+
+## Pollard's method in R 
+
+```{r}
+powers <- factorialZ(1:10)
+gcd(powm(rep(2,10), powers, 540143)-1, 540143)
+```
+
+It worked because $421-1$ has no large prime factors:
+
+```{r}
+factorize(420)
+```
+
+## Large prime factors make it harder
+
+```{r}
+powers <- factorialZ(1:10)
+gcd(powm(rep(2,10), powers, 455839)-1, 455839)
+```
+
+Here $455839 = 599 \cdot 761$, but $598 = 2 \cdot 3 \cdot 23$ and $760 = 2^3\cdot 5 \cdot 19$.
+
+*Question:* How big a factorial would we need to use?
+
+## Factorization: Lenstra's method
+
+Idea: Replace $U(n)$ with mod $p$ elliptic curve groups
+
+Problem: Factor an integer $n$.
+
+1. Choose an elliptic curve $E$ and a point $P$ on the curve. 
+
+2. Choose a bound $B$, and for $k$ in $\{1!, 2!, 3!, \ldots B!\}$ attempt the following:
+    a. Attempt to compute $kP$ on $E$.
+    b. If the computation succeeds for all $k$, try another $E$.
+    c. If the computation fails because one of the denominators $d$ in the Addition Rule is zero, then $\gcd(d,n)$ is a nontrivial factor of $n$.
+
+## Lenstra's method: Example
+
+Factor $n = 455839$. Choose $E$ to be $y^2 = x^3+5x-5$ modulo $n$. Let $P = (1,1)$. 
+
+$$
+\begin{aligned}
+2P &= (14,455786) \\
+6P &= (179685,427131) \\
+24P &= (67658,34840) \\
+120P &= (129563, 249834) \\
+720P &= (422839, 402728) \\
+5040P &= (70028, 403526) \\
+40320P & \mbox{ does not exist.}
+\end{aligned}
+$$
+
+## Lenstra's method in R
+
+
+```{r, eval=FALSE}
+> ecPowModp(5, -5, 455839, c(1,1), 720)
+Big Integer ('bigz') object of length 2:
+[1] 422839 402728
+
+> ecPowModp(5, -5, 455839, c(1,1), 5040)
+Big Integer ('bigz') object of length 2:
+[1] 70028  403526
+
+> ecPowModp(5, -5, 455839, c(1,1), 40320)
+Warning in ecAddModp(b, c, modulus, pow1, pow1): 315074 is not invertible mod 455839
+Warning in inv.bigz((2 * y1), modulus): inv(x,m) returning NA as x has no inverse modulo m
+
+Big Integer ('bigz') object of length 2:
+[1] NA NA
+```
+
+Therefore $\gcd(315074,455839)=599$ is a nontrivial factor of $n$.
+
+## Why did it work?
+
+"Inside" an elliptic curve with modulus $pq$, you have two elliptic curves: one modulo $p$, and another modulo $q$. Note: $455839 = 599 \cdot 761$
+
+```{r, eval=FALSE}
+> ecPowModp(5, -5, 761, c(1,1), 40320)
+Big Integer ('bigz') object of length 2:
+[1] 464 650
+
+> ecPowModp(5, -5, 599, c(1,1), 40320)
+[1] Inf Inf
+```
+
+## Efficient Exponentiation
+
+```{r pow, echo=TRUE}
+rPower <- function(x, n)
+{
+  if(n==0) return(1)
+  x*rPower(x, n-1)
+}
+
+qPower <- function(x, n)
+{
+  if(n==0) return(1)
+  if(n %% 2 == 0)
+    return((qPower(x, n %/% 2))^2)
+  else
+    return(x*(qPower(x, n %/% 2))^2)
+}
+```
+
+>- **Programming assignment:** Implement fast powers for mod $p$ elliptic curves.
+
+# Tools for using elliptic curves in cryptography
+
+## Finding points on elliptic curves
+
+*Exercise:* In $\mathbb{Z}_7$:
+
+1. Find all the perfect squares.
+2. Find all the elements of the form $x^3 + 2$.
+3. Find all the points on the elliptic curve $y^2 = x^3 + 2$.
+
+Work in groups on [this Jamboard](https://jamboard.google.com/d/14LzeJLMqDbCaIm7HuGocNWzPWS3yGoDJ6y2K19qn9Ok/edit?usp=sharing).
+
+## Square roots mod $p$
+
+How many perfect squares are there in $U(p)$?
+
+## Theorem on square roots mod $p$ (p. 86)
+
+**Theorem.** Let $p$ be prime. In $U(p)$, $y$ has a square root if and only if $y^{(p-1)/2} \equiv 1 \pmod{p}$.
+
+In this case, if $p \equiv 3 \pmod{4}$, then
+$$
+\pm y^{(p+1)/4}
+$$
+are the square roots of $y$. (Why?)
+
+If $p \equiv 1 \pmod{4}$, square roots can be found, but it is more difficult.
+
+## How many points on an elliptic curve? {.build}
+
+Related question: How many elements of $U(p)$ have square roots? 
+
+Very roughly, $N \approx p$, where $N$ is the number of points on a mod $p$ elliptic curve.
+
+More precisely:
+
+**Hasse's Theorem.** The number of points $N$ on a mod $p$ elliptic curve satisfies the following inequality.
+$$
+\lvert N-p-1 \rvert < 2\sqrt{p}
+$$
+
+## Encoding messages in elliptic curves {.build}
+
+*Problem:* To use elliptic curve groups for cryptography, we have to be able to represent messages as points on the curves.
+
+**One Idea:** Make the message the $x$-component of a point on an elliptic curve. 
+
+*Problem with this idea:* It will work about half the time.
+
+**Better Idea:** Add some digits to the end of your message. Tweak them so you can find a point on the curve.
+
+## Example
+
+Alice wants to send the message $m = 9230923203240394234$ using a cryptosystem based on the elliptic curve $y^2 = x^3 + 7x + 9$ modulo $p = 34588345934850984359911$. 
+
+1. Show that there is no point of the form $(m, y)$ on this elliptic curve.
+2. Encode $m$ as a point on this curve by adding a digit. That is, find a point of the form $(10m+k, y)$ on this curve, for some value of $k$ between 0 and 9.
+3. What is the approximate probability that this method (adding a single digit) will fail to produce a point on the curve?
+
+## Example, part 1
+
+Alice wants to send the message $m = 9230923203240394234$ using a cryptosystem based on the elliptic curve $y^2 = x^3 + 7x + 9$ modulo $p = 34588345934850984359911$. 
+
+```{r}
+m <- as.bigz("9230923203240394234")
+p <- as.bigz("34588345934850984359911")
+powm(m^3 + 7*m+ 9, (p-1)/2, p)
+```
+
+So $m^3+7m+9$ is not a perfect square. So there can't be a point $(m,y)$ on this curve.
+
+## Example, part 2
+
+Encode $m$ as a point on this curve by adding a digit. That is, find a point of the form $(10m+k, y)$ on this curve, for some value of $k$ between 0 and 9.
+
+```{r}
+k <- 0:9
+powm((10*m+k)^3+7*(10*m+k)+9, (p-1)/2, p)
+```
+
+It looks like $k = 4$ will work.
+
+## Example, part 2, continued
+
+Instead of using $m = 9230923203240394234$, we use $10m + 4 = 92309232032403942344$. By the theorem on square roots, the corresponding $y$ is $\pm[(10m+4)^3+7(10m+4)+9]^{(p+1)/4}$.
+
+```{r}
+y <- powm((10*m+4)^3+7*(10*m+4)+9, (p+1)/4, p)
+y^2 %% p
+((10*m+4)^3+7*(10*m+4)+9) %% p
+```
+
+## How likely is this to work?
+
+3. What is the approximate probability that this method (adding a single digit) will fail to produce a point on the curve?
+
