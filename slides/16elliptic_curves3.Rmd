@@ -147,7 +147,7 @@ To solve $\alpha^x = \beta$ in $U(p)$: Choose large $N > \sqrt{p-1}$
 
 If a match is found in these two lists, $x=j+Nk$ is a solution.
 
-## Group exercise
+## Example/Exercise
 
 To solve $\alpha^x = \beta$ in $U(p)$: Choose large $N > \sqrt{p-1}$
 
@@ -156,11 +156,16 @@ To solve $\alpha^x = \beta$ in $U(p)$: Choose large $N > \sqrt{p-1}$
 
 If a match is found in these two lists, $x=j+Nk$ is a solution.
 
-> Use the Baby Step Giant Step algorithm to solve $2^x = 37$ in $U(53)$.
->
->- Show the two lists. Use $N = 10$. (Use R as necessary.)
->- Find the matches.
->- Check your answer.
+Use the Baby Step Giant Step algorithm to solve $2^x = 37$ in $U(53)$.
+
+- Show the two lists. Use $N = 10$. (Use R as necessary.)
+- Find the matches.
+- Check your answer.
+
+## Compute the two lists
+
+<iframe width='100%' height='500' src='https://rdrr.io/snippets/embed/' frameborder='0'></iframe>
+
 
 ```{r, include=FALSE, eval=FALSE}
 ## Solution
@@ -173,6 +178,10 @@ l2
 powm(2, 2+10*8, 53)
 powm(2, 10+10*2, 53)
 ```
+
+## Check your answer
+
+<iframe width='100%' height='500' src='https://rdrr.io/snippets/embed/' frameborder='0'></iframe>
 
 ## Attacking EC discrete logarithms (BSGS)
 
