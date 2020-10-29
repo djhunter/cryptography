@@ -51,6 +51,7 @@ This site provides slides, assignments, and other resources that I use in my Cod
 13. [Digital Signatures](slides/13digital_sigs.html)
 14. [Real Elliptic Curves](slides/14elliptic_curves1.html)
 15. [Mod p Elliptic Curves](slides/15elliptic_curves2.html)
+16. [Elliptic Curve Cryptography](slides/16elliptic_curves3.html)
 
 # Written Assignments
 
@@ -69,6 +70,7 @@ This site provides slides, assignments, and other resources that I use in my Cod
 13. [Digital Signatures](assignments/13sigs.html)
 14. [Real Elliptic Curves](assignments/14real_ell.html)
 15. [Mod p Elliptic Curves](assignments/15modp_ell.html)
+16. [Elliptic Curve Cryptography](assignments/16ec_crypto.html)
 
 # Programming Assignments
 
@@ -79,6 +81,7 @@ This site provides slides, assignments, and other resources that I use in my Cod
 5. [RSA tools](programming/05rsa.html)
 6. [Discrete Logarithms and Hash Functions](programming/06discloghash.html)
 7. [DSA and Real Elliptic Curves](programming/07dsa_real_ell.html)
+8. [Mod p Elliptic Curves](programming/08modp_ell.html)
 
 # Other Resources
 

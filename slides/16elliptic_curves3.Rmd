@@ -1,0 +1,250 @@
+---
+title: "Elliptic Curve Cryptography"
+date: "October 29, 2020"
+output: 
+  revealjs::revealjs_presentation:
+    fig_width: 14 
+    fig_height: 7
+    self_contained: true
+    theme: night
+    highlight: zenburn
+    css: slidesdjh.css
+    center: false
+    transition: slide
+    reveal_options:
+      controls: true
+      progress: false
+      width: 1080
+      height: 540
+---
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_chunk$set(comment = NA)
+options(width = 100)
+library(gmp)
+library(openssl)
+```
+
+# Elliptic curves review
+
+## Geometric definitions
+
+The identity $\infty$ is a point at infinity (think "up"), so the inverse of $P = (x,y)$ is $-P = (x,-y)$. 
+
+Geometric definition: To add two points $P_1$ and $P_2$:
+
+- Compute the secant line through $P_1$ and $P_2$ (or tangent, if $P_1 = P_2$).
+- Take the third intersection point of this line. This is $-P_3$. To get $P_3$, you have to reflect over the $x$-axis.
+
+Consequently, there is a more elegant way to state the addition law.
+
+**Elliptic Curve Addition Law.** If $X, Y, Z$ are the three points on the intersection of an elliptic curve with a secant line, then $X + Y + Z = \infty$. 
+
+## Real Elliptic Curves 
+
+If $P$ is any point on an elliptic curve, then $P + \infty = P = \infty + P$. Let $P_1 = (x_1,y_1)$ and $P_2 = (x_2,y_2)$ be points on the elliptic curve $y^2 = x^3 + bx +c$. 
+
+If $P_1 = P_2$ and $y_1 = 0$, then $P_1+P_2 = \infty$.
+
+Otherwise, $P_1 + P_2 = P_3 =  (x_3,y_3)$, where
+$$
+\begin{aligned}
+x_3 &= m^2 -x_1 -x_2 \\
+y_3 &= m(x_1-x_3)-y_1
+\end{aligned}
+$$
+and
+$$
+m = \left\{\begin{array}{cl}
+(y_2-y_1)/(x_2-x_1) & \mbox{if } P_1 \neq P_2 \\
+(3x_1^2+b)/(2y_1) & \mbox{if } P_1 = P_2 
+\end{array}
+\right.
+$$
+where all computations are performed in $\mathbb{R}$.
+
+## Mod $p$ Elliptic Curves 
+
+If $P$ is any point on an elliptic curve, then $P + \infty = P = \infty + P$. Let $P_1 = (x_1,y_1)$ and $P_2 = (x_2,y_2)$ be points on the elliptic curve $y^2 = x^3 + bx +c$. 
+
+If $P_1 = P_2$ and $y_1 = 0$, then $P_1+P_2 = \infty$.
+
+Otherwise, $P_1 + P_2 = P_3 =  (x_3,y_3)$, where
+$$
+\begin{aligned}
+x_3 &= m^2 -x_1 -x_2 \\
+y_3 &= m(x_1-x_3)-y_1
+\end{aligned}
+$$
+and
+$$
+m = \left\{\begin{array}{cl}
+(y_2-y_1)(x_2-x_1)^{-1} & \mbox{if } P_1 \neq P_2 \\
+(3x_1^2+b)(2y_1)^{-1} & \mbox{if } P_1 = P_2 
+\end{array}
+\right.
+$$
+where all computations are performed in $\mathbb{Z}_p$.
+
+**Question:** What goes wrong if $p = 2$?
+
+# Characteristic 2
+
+## Recall finite fields over $\mathbb{Z}_2$ 
+
+Let $p(x)$ be a degree $n$ irreducible polynomial in $\mathbb{Z}_2[x]$.
+
+- Then $\mathbb{Z}_2[x]/(p(x))$ is a field, denoted $\mbox{GF}(2^n)$.
+- $\mbox{GF}(2^n)$ has $2^n$ elements.
+- The elements of $\mbox{GF}(2^n)$ are naturally bitstrings.
+    - addition is XOR
+    - multiplication is compatible and interesting.
+- The elements of $\mbox{GF}(2^n)$ behave like polynomials under the "modulus" $p(x)$.
+- These finite fields are called *fields of characteristic 2,* because $2 = 0$.
+- No negative signs.
+
+
+## Characteristic 2 Elliptic curves 
+
+An elliptic curve $E$ over $\mbox{GF}(2^n)$ satisfies $y^2 + xy = x^3 + ax^2 + b$, where $a,b \in \mbox{GF}(2^n)$.
+
+- Identity: $P + \infty = \infty + P = P$ for all $P \in E$.
+- Inverses: If $P = (x,y)$, then $-P = (x,y) + (x, x+y)$.
+- Addition: If $P_1 = (x_1,y_1)$ and $P_2 = (x_2, y_2)$, then $P_1 + P_2 = (x_3, y_3)$, where
+$$
+\begin{align}
+m &= (y_1+y_2)(x_1+x_2)^{-1} \\
+x_3 &= m^2 + m + x_1 + x_2 + a \\
+y_3 &= m(x_1+x_3)+x_3+y_1
+\end{align}
+$$
+- Doubling: If $P = (x_1, y_1)$ and $P \neq -P$, then $2P = (x_3, y_3)$, where
+$$
+\begin{align}
+x_3 &= x^2 + bx^{-2} \\
+y_3 &= x^2 + xx_3 + yx^{-1}x_3 + x_3 
+\end{align}
+$$
+
+See [FIPS recommended curves](https://nvlpubs.nist.gov/nistpubs/FIPS/NIST.FIPS.186-4.pdf), pp. 92ff.
+
+# Discrete Logarithms
+
+## Recall discrete logarithms
+
+Given $\alpha^e$ in $U(p)$, finding $e$ is difficult.
+
+## Elliptic curve discrete logarithms
+
+Given $n\alpha$ in an elliptic curve mod $p$ group $E$, finding $n$ is difficult.
+
+## Attacking discrete logarithms (BSGS)
+
+To solve $\alpha^x = \beta$ in $U(p)$: Choose large $N > \sqrt{p-1}$
+
+1. Compute $\alpha^j$ for $j = 1, 2, \ldots, N$. (Baby step.)
+2. Compute $\beta\alpha^{-Nk}$ for $k = 1, 2, \ldots, N$. (Giant step.)
+
+If a match is found in these two lists, $x=j+Nk$ is a solution.
+
+## Group exercise
+
+To solve $\alpha^x = \beta$ in $U(p)$: Choose large $N > \sqrt{p-1}$
+
+1. Compute $\alpha^j$ for $j = 1, 2, \ldots, N$. (Baby step.)
+2. Compute $\beta\alpha^{-Nk}$ for $k = 1, 2, \ldots, N$. (Giant step.)
+
+If a match is found in these two lists, $x=j+Nk$ is a solution.
+
+> Use the Baby Step Giant Step algorithm to solve $2^x = 37$ in $U(53)$.
+>
+>- Show the two lists. Use $N = 10$. (Use R as necessary.)
+>- Find the matches.
+>- Check your answer.
+
+```{r, include=FALSE, eval=FALSE}
+## Solution
+l1 <- (2 ^ (1:10)) %% 53
+l2 <- sapply(1:10, function(i) {as.numeric((37*powm(2,-10*(i), 53)) %% 53)})
+match(l1,l2)
+intersect(l1,l2)
+l1
+l2
+powm(2, 2+10*8, 53)
+powm(2, 10+10*2, 53)
+```
+
+## Attacking EC discrete logarithms (BSGS)
+
+To solve $n\alpha = \beta$ in $E$: Choose large $N$.
+
+1. Compute $j\alpha$ for $j = 1, 2, \ldots, N$. (Baby step.)
+2. Compute $\beta-Nk\alpha$ for $k = 1, 2, \ldots, N$. (Giant step.)
+
+If a match is found in these two lists, $x=j+Nk$ is a solution.
+
+# Elliptic Curve Cryptosystems
+
+## Recall Diffie-Hellman
+
+Alice and Bob wish to create a shared secret $K$ (e.g., to make an AES key) using unencrypted communication.
+
+1. Alice and Bob agree on a choice of a large prime $p$ and a generator $\alpha \in U(p)$.
+2. Alice chooses a secret random $x \in \{1,2,\ldots, p-2\}$. Bob chooses a secret random $y \in \{1,2,\ldots,p-2\}$.
+3. Alice sends $\alpha^x$ to Bob. Bob sends $\alpha^y$ to Alice. (All computations are done in $U(p)$.)
+4. Alice calculates $K = (\alpha^y)^x$. Bob calculates $K = (\alpha^x)^y$.
+
+## EC Diffie-Hellman
+
+1. Alice and Bob agree on a public basepoint $G$ on a mod-$p$ elliptic curve $y^2=x^3+bx+c$. 
+2. Alice chooses a secret random "exponent" $N_A$, and Bob chooses a secret random "exponent" $N_B$.
+3. Alice sends $N_AG$ to Bob, and Bob sends $N_BG$ to Alice.
+4. Alice calculates $N_A(N_BG)$. Bob calculates $N_B(N_AG)$.
+
+## Recall ElGamal cryptosystem
+
+1. Bob chooses a large prime $p$ and a generator $\alpha\in U(p)$, as well as a secret exponent $a$. Bob computes $\beta = \alpha^a$ in $U(p)$, and makes the triple $(p,\alpha, \beta)$ public.
+2. Alice chooses a secret random $k$ and computes $r = \alpha^k$ in $U(p)$.
+3. To send the plaintext message $m$, Alice computes $t = \beta^km$ in $U(p)$ and sends the pair $(r,t)$ to Bob.
+
+Decryption: In $U(p)$, Bob uses the secret $a$ to compute
+$$
+tr^{-a} = \beta^km(\alpha^k)^{-a} = (\alpha^a)^km\alpha^{-ak} = m
+$$
+
+## EC ElGamal cryptosystem
+
+1. Bob chooses an elliptic curve group $E$ given by $y^2 = x^3+bx+c$ modulo $p$. He chooses a point $\alpha$ on $E$, and chooses a secret "exponent" $a$. Bob computes $\beta = a\alpha$ in $E$, and makes the triple $(E, \alpha, \beta)$ public.
+2. Alice chooses a secret random $k$ and computes $r=k\alpha$ in $E$.
+3. To send a plaintext message $m$, Alice encodes $m$ as a point $P_m$ on $E$. Alice computes $t = P_m+k\beta$ and sends the pair $(r,t)$ to Bob.
+
+Decryption: In $E$, Bob decrypts using the secret $a$ by computing $t-ar$.
+
+## Recall DSA
+
+1. Choose a $B$-bit hash function and hash your message to obtain $m$. Choose key-bit-lengths $L$ and $N$, where $N\leq B$ and $N<L$.
+2. Choose an $N$-bit prime $q$ and an $L$-bit prime $p$ such that $q \mid (p-1)$.
+3. Choose a generator $g$ in $U(p)$. Let $\alpha = g^{(p-1)/q}$ in $U(p)$. (Note: $\alpha^q = 1$ in $U(p)$.)
+4. Alice chooses $a < q-1$ and calculates $\beta = \alpha^a$. The private key is $a$, and the public key is $(p, q, \alpha, \beta)$.
+5. To sign a message $m$, Alice chooses random, secret, $k < q-1$. Then she computes $r=(\alpha^k \bmod p) \bmod q$ and $s = k^{-1}(m+ar) \bmod q$. 
+6. The signed message is $(m,r,s)$.
+
+To verify the signature, Bob does the following:
+
+1. Compute $u_1 = s^{-1}m$ and $u_2 = s^{-1}r$ in $U(q)$.
+2. Verify that $(\alpha^{u_1}\beta^{u_2} \bmod p) \bmod q$ equals $r$. 
+
+## Elliptic Curve DSA (ECDSA) 
+
+Suppose $m$ is a hashed message we want to sign. Find an elliptic curve and basepoint $G$ of order $n$ (prime), so $nG = \infty$. Alice chooses a secret integer $d_A$ and makes $Q_A=d_AG$ public. To sign:
+
+1. Choose random $k$, and compute $kG = (x,y)$ on elliptic curve.
+2. Let $r = x \bmod n$. In $U(n)$, compute $s=k^{-1}(m+rd_A)$.
+3. Signed message is $(m,r,s)$.
+
+To verify, Bob computes $u_1 = ms^{-1}$ and $u_2 = rs^{-1}$ in $U(n)$. Signature is valid is $u_1G + u_2Q_A = kG$ on the elliptic curve. 
+
+## ECDSA specs
+
+See [ANSI Standard X9.62-1998](http://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.202.2977&rep=rep1&type=pdf), pages 14-17.
+
