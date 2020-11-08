@@ -1,0 +1,270 @@
+---
+title: "Error-Control Codes"
+date: "November 10, 2020"
+output: 
+  revealjs::revealjs_presentation:
+    fig_width: 14 
+    fig_height: 7
+    self_contained: true
+    theme: night
+    highlight: zenburn
+    css: slidesdjh.css
+    center: false
+    transition: slide
+    reveal_options:
+      controls: true
+      progress: false
+      width: 1080
+      height: 540
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_chunk$set(comment = NA)
+options(width = 100)
+```
+
+
+# Coding Theory 
+
+## Codes
+
+A **code** is a method of representing data as strings (usually binary).
+
+- Compression: Can data be represented *efficiently* so memory/storage is conserved?
+- Error Control: Can data be represented *redundantly* so errors in transmission or storage can be mitigated?
+
+## Error Control Codes
+
+Adversary is noise, not eavesdropper.
+
+- Alice wants to send a message to Bob.
+- In transit, parts of the message may change randomly (noisy channel).
+- Bob receives the message. Can he tell what the original message was?
+
+## Detection vs. Correction
+
+- Error-detecting codes
+    - Can we encode a message in a way that can *detect* if it was changed in transit?
+- Error-correcting codes
+    - Can we encode a message in a way that can *correct* any changes that may have occurred in transit?
+
+## Error correction in English
+
+> Dr. Hunter, I'm not felling well tocay and I won't beable to maje it to class. Soffy.
+
+**Redundancy and Distance:** Typographical errors rarely ever obscure the meaning of English sentences, because:
+
+- The surrounding context conveys the meaning (redundancy).
+- There are no other meaningful sentences "nearby" (distance).
+
+# Repetition Codes
+
+## Repetition Code
+
+Alice wants to send the message $b_1b_2\cdots b_n$ to Bob.
+
+Instead, she chooses a number $k$ and sends the message
+$$
+\underbrace{b_1b_1\cdots b_1}_k \underbrace{b_2b_2\cdots b_2}_k \cdots \underbrace{b_nb_n\cdots b_n}_k
+$$
+
+## Repetition Code: Example
+
+Alice wants to send the message $b_1b_2\cdots b_n$ to Bob.
+
+Instead, she chooses a number $k$ and sends the message
+$$
+\underbrace{b_1b_1\cdots b_1}_k \underbrace{b_2b_2\cdots b_2}_k \cdots \underbrace{b_nb_n\cdots b_n}_k
+$$
+
+**Question.** Let $k=3$. Bob receives `000110111001`. What message did Alice (probably) send?
+
+## Code Words, Binary Codes
+
+- In a $k=3$ repetition code using the symbols `0` and `1`, the **code words** are `000` and `111`. 
+
+- A code using only the symbols `0` and `1` is called a **binary code**.
+
+## Repitition Code effectiveness?
+
+[Jamboard](https://jamboard.google.com/d/1x2lBuW10YUKnf2GL2HZM9OzSjaOdBx_1QCcaGb8j36g/edit?usp=sharing) exercise: Consider a binary repetition code with $k=3$. Alice sends a 3-bit code word (`000` or `111`) to Bob.
+
+1. Suppose Bob receives `001`. What could have happened?
+
+2. Suppose Bob receives `001` and knows that only one error has occurred. What can he conclude?
+
+3. Bob decides to decode a received word by finding the code word that matches the received word the closest. Suppose that the probability that a bit changes in transit is $p$. 
+     - Assuming that bit-flips occur independently, calcluate (in terms of p) the probabilities of no bits changing, 1 bit changing, 2 changing, and 3 changing.
+     - What is the probability that Bob's method will decode correctly?
+
+## When is a repetition code effective?
+
+```{r, echo=FALSE, fig.width=6, fig.height=5, fig.align='center'}
+library(ggplot2)
+dummy <- ggplot(data.frame(x=0), aes(x=x))
+pCorrect <- function(p) {(1-p)^3+3*p*(1-p)^2}
+dummy + stat_function(fun = pCorrect, size=2) + 
+  xlim(0,1) + 
+  ylab("Probability decoded correctly") + 
+  xlab("Probability of bit error") +
+  coord_fixed()
+```
+
+# Check Digits
+
+## ISBN Codes
+
+Prior to 2007, every published book was given a 10-digit ISBN number $a_1a_2a_3a_4a_5a_6a_7a_8a_9a_{10}$. Digits $a_1$ to $a_9$ are numeric, and digit $a_{10}$ could be numeric or `X`. The tenth digit $a_{10}$ is computed according to the formula
+$$
+a_{10} = a_1 +2a_2+3a_3+4a_4+5a_5+6a_6+7a_7+8a_8+9a_9 \bmod 11
+$$
+where `X` is used in place of 10.
+
+- What if adjacent digits are transposed?
+- What if a single digit is changed?
+
+## Parity Check Digit
+
+Alice wants to send the binary string $b_1b_2\cdots b_{n-1}$. Instead, she sends the string $b_1b_2\cdots b_{n-1}b_n$, where $b_1+b_2+\cdots+b_{n-1} = b_n$ in $\mathbb{Z}_2$.
+
+- If Bob receives `01110110`, what can he conclude?
+- If Bob receives `01110111`, what can he conclude?
+
+## Two-Dimensional Parity Check
+
+Alice wants to send the binary string $b_1b_2\cdots b_{16}$. Instead, she sends the following matrix.
+$$
+\begin{bmatrix}
+b_1 & b_2 & b_3 & b_4 & a_1 \\
+b_5 & b_6 & b_7 & b_8 & a_2 \\
+b_9 &b_{10}&b_{11}& b_{12}& a_3 \\
+b_{13} & b_{14} & b_{15} & b_{16} & a_4 \\
+c_1 & c_2 & c_3 & c_4 & d
+\end{bmatrix}
+$$
+where the $a_i$'s are parity check digits for the rows, and the $c_i$'s are parity check digits for the columns. The digit $d$ is the parity check digit for the string $c_1c_2c_3c_4$.
+
+## Parity Check Matrix: [Jamboard](https://jamboard.google.com/d/1x2lBuW10YUKnf2GL2HZM9OzSjaOdBx_1QCcaGb8j36g/edit?usp=sharing) Exercise
+
+Suppose Bob receives the following matrices. What can he conclude?
+$$
+\begin{bmatrix} 0&1&0&0&1 \\ 0&1&1&0&0 \\ 1&0&0&1&1 \\ 0&0&1&0&1 \\ 1&1&0&1&1 \end{bmatrix}
+\quad\quad
+\begin{bmatrix} 0&1&1&0&0 \\ 0&1&1&0&1 \\ 1&1&0&1&1 \\ 1&0&1&1&0 \\ 0&1&0&1& 0\end{bmatrix}
+\quad\quad
+\begin{bmatrix} 0&1&0&0&1 \\ 0&1&1&0&0 \\ 1&0&0&1&1 \\ 0&0&1&0&1 \\ 1&1&0&1& 0\end{bmatrix}
+\quad\quad
+$$
+
+# Codes and Matrices
+
+## Hamming $[7,4]$ Code
+
+Alice wants to send the binary string $b_1b_2b_3b_4$. Instead, she sends
+$$
+\begin{bmatrix} b_1 & b_2 & b_3 & b_4 \end{bmatrix}
+\begin{bmatrix}
+1&0&0&0&1&1&0 \\
+0&1&0&0&1&0&1 \\
+0&0&1&0&0&1&1 \\
+0&0&0&1&1&1&1
+\end{bmatrix}
+$$
+where the entries of the matrices are computed in $\mathbb{Z}_2$.
+
+[Jamboard Exercise.](https://jamboard.google.com/d/1x2lBuW10YUKnf2GL2HZM9OzSjaOdBx_1QCcaGb8j36g/edit?usp=sharing) How many different code words are there? Write them all down on the Jamboard.
+
+## Hamming Distance
+
+Let $u$ and $v$ be binary vectors. The **Hamming Distance** $d(u,v)$ is the number of positions in which $u$ and $v$ differ. That is, $d(u,v)$ is the number of 1's in $u \oplus v$.
+
+**Question:** What is the smallest Hamming distance between any two code words in the Hamming $[7,4]$ code?
+
+## Nearest Neighbor Decoding
+
+In **nearest neighbor decoding**, Bob assumes that the intended message is the code word that is closest to the received message, in terms of Hamming distance.
+
+**Example.** Use nearest neighbor decoding to decode the following messages, sent as Hamming $[7,4]$ code words.
+
+1. `1110011`
+2. `1010100`
+
+## Linear Codes
+
+A binary **linear code** is a binary code whose code words are formed by taking all the possible linear combinations of rows of some generating matrix. The rows of the generating matrix form a **basis** for the code.
+
+- For example, the Hamming $[7,4]$ code is a linear code.
+- The sum ($\oplus$) of two code words is another code word.
+- Linear codes are vector spaces over $\mathbb{Z}_2$.
+
+## Correction and Detection
+
+- How many errors can a Hamming $[7,4]$ code correct?
+- How many errors can a Hamming $[7,4]$ code detect?
+
+## Hadamard Matrix
+
+A **Hadamard matrix** is a square matrix consisting of only 1's and -1's, such that the dot product of any two rows is zero. (19th Century)
+
+> **Exercise.** Make up a $4\times 4$ Hadamard matrix.
+
+## Hadamard Code (Mariner 6 and 7, 1969)
+
+Let $H$ be a $32 \times 32$ Hadamard matrix with rows $r_1, r_2, \ldots, r_{32}$. The code words are $\pm r_1, \pm r_2, \ldots, \pm r_{32}$. 
+
+When a message $m$ is received, represent it as a column vector and calculate $Hm$.
+
+1. What happens if $m$ is a code word?
+2. What happens if $m$ has one error? Two errors?
+3. How many errors can be corrected?
+
+## Code rate
+
+The code rate is the number of bits of information communicated divided by the number of bits in a code word.
+
+If a binary code has $M$ code words, and the code words have length $n$, then the code rate is $\displaystyle{\frac{\log_2M}{n}}$.
+
+> **Exercise.** Compute the code rates for 
+>
+> 1. The repetition code with $k=3$.
+> 2. The Hamming $[7,4]$ code.
+> 3. The Hadamard code.
+
+# R tips and tricks
+
+## Converting numbers to binary vectors
+
+For the assignment, you probably will want to be able to convert an integer `n` to a binary vector `v` (e.g., if you want to represent all possible binary vectors of a certain length.)
+
+Notice that `intToBits` gives you 32 bits, no matter what. 
+
+```{r}
+intToBits(13)
+```
+
+## Convert to numeric
+
+You can make those numeric instead of binary, so matrix multiplication will work:
+
+```{r}
+as.numeric(intToBits(13))
+```
+
+You probably don't want all those 0's, so you can just subscript the ones you want.
+
+```{r}
+as.numeric(intToBits(13))[1:4]
+```
+
+The result is the binary vector corresponding to the binary representation of 13, with the digits reversed. You probably don't care that the digits are reversed, if your goal was just to list all possible binary vectors.
+
+## Matrices in R
+
+```{r}
+rowVec <- c(1,2,3)
+M <- matrix(c(1,1,0,2,3,4, 0,1,2,1,1,4, 3,0,0,1,3,1), nrow=3, byrow=TRUE)
+M
+rowVec %*% M
+as.vector(rowVec %*% M)
+```
