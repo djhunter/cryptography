@@ -1,0 +1,46 @@
+---
+title: "Introduction to Codes"
+output:
+  html_document:
+    toc: false
+    df_print: paged
+    theme: spacelab
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_chunk$set(comment = NA)
+```
+
+Upload to Canvas a PDF of your work for the following problems. 
+
+## Assignment: due Wednesday, 11:59 pm
+
+1. In 2007, a new ISBN-13 system was introduced. The check digit $a_{13}$ is chosen so that
+$$
+a_1 + 3a_2 + a_3 + 3a_4 + a_5 + 3a_6 + a_7 + 3a_8 + a_9 +3a_{10} + a_{11} + 3a_{12} + x_{13} = 0
+$$
+in $\mathbb{Z}_{10}$.
+
+Show (by finding an example), that it is possible to switch two adjacent digits without changing the check digit. (Of course, the adjacent digits should not be equal.)
+
+2. Compute the code rate for the Two-Dimensional Parity Check code discussed in the notes. 
+
+3. Here's an $8 \times 8$ Hadamard matrix. (See pages 379-398.)
+
+$$
+B = \begin{bmatrix} 
+1 & 1 & 1 & -1 & 1 & -1 & -1 & -1 \\ 
+1 & 1 & -1 & -1 & -1 & 1 & -1 & 1 \\ 
+1 & -1 & 1 & 1 & -1 & -1 & -1 & 1 \\ 
+1 & -1 & 1 & -1 & -1 & 1 & 1 & -1 \\ 
+1 & -1 & -1 & -1 & 1 & -1 & 1 & 1 \\ 
+1 & 1 & -1 & 1 & -1 & -1 & 1 & -1 \\ 
+1 & -1 & -1 & 1 & 1 & 1 & -1 & -1 \\ 
+1 & 1 & 1 & 1 & 1 & 1 & 1 & 1  
+\end{bmatrix}
+$$
+Correct the errors in each of the following messages, if possible.
+
+a. $\begin{bmatrix} 1 & -1 & 1 & 1 & -1 & 1 & 1 & -1 \end{bmatrix}$ 
+b. $\begin{bmatrix} -1 & -1 & -1 & -1 & -1 & -1 & 1 & 1 \end{bmatrix}$ 

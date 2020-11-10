@@ -29,7 +29,7 @@ options(width = 100)
 
 ## Codes
 
-A **code** is a method of representing data as strings (usually binary).
+A **code** is a recipe for representing data as strings (usually binary).
 
 - Compression: Can data be represented *efficiently* so memory/storage is conserved?
 - Error Control: Can data be represented *redundantly* so errors in transmission or storage can be mitigated?
@@ -95,7 +95,7 @@ $$
 2. Suppose Bob receives `001` and knows that only one error has occurred. What can he conclude?
 
 3. Bob decides to decode a received word by finding the code word that matches the received word the closest. Suppose that the probability that a bit changes in transit is $p$. 
-     - Assuming that bit-flips occur independently, calcluate (in terms of p) the probabilities of no bits changing, 1 bit changing, 2 changing, and 3 changing.
+     - Assuming that bit-flips occur independently, calculuate (in terms of p) the probabilities of no bits changing, 1 bit changing, 2 changing, and 3 changing.
      - What is the probability that Bob's method will decode correctly?
 
 ## When is a repetition code effective?
@@ -105,11 +105,24 @@ library(ggplot2)
 dummy <- ggplot(data.frame(x=0), aes(x=x))
 pCorrect <- function(p) {(1-p)^3+3*p*(1-p)^2}
 dummy + stat_function(fun = pCorrect, size=2) + 
-  xlim(0,1) + 
+  xlim(0,0.5) + 
   ylab("Probability decoded correctly") + 
   xlab("Probability of bit error") +
   coord_fixed()
 ```
+
+## Error correction and detection
+
+Consider the $k=3$ repitition code.
+
+- If we *assume* that $(\text{# of errors}) \leq 1$ in any received word, then we can always recover the word that was sent.
+    - This code **corrects** one error.
+- If we assume that $(\text{# of errors}) \leq 2$ in any received word, then we can always determine that an error has occurred.
+    - This code **detects** two errors.
+- If $(\text{# of errors}) = 3$, we won't be able to tell.
+
+You can use the code as a *corrector* (e.g., replace `001` with `000` and continue) or as a *detector* (e.g., if you get `001`, stop and retransmit.) 
+
 
 # Check Digits
 
@@ -209,7 +222,7 @@ A **Hadamard matrix** is a square matrix consisting of only 1's and -1's, such t
 
 > **Exercise.** Make up a $4\times 4$ Hadamard matrix.
 
-## Hadamard Code (Mariner 6 and 7, 1969)
+## Hadamard Code ([Mariner 6 and 7](https://mars.nasa.gov/mars-exploration/missions/mariner-6-7/), 1969)
 
 Let $H$ be a $32 \times 32$ Hadamard matrix with rows $r_1, r_2, \ldots, r_{32}$. The code words are $\pm r_1, \pm r_2, \ldots, \pm r_{32}$. 
 
@@ -231,35 +244,16 @@ If a binary code has $M$ code words, and the code words have length $n$, then th
 > 2. The Hamming $[7,4]$ code.
 > 3. The Hadamard code.
 
-# R tips and tricks
+# Matrices in R
 
-## Converting numbers to binary vectors
-
-For the assignment, you probably will want to be able to convert an integer `n` to a binary vector `v` (e.g., if you want to represent all possible binary vectors of a certain length.)
-
-Notice that `intToBits` gives you 32 bits, no matter what. 
+## Defining matrices
 
 ```{r}
-intToBits(13)
+matrix(c(1,1,0,2,3,4, 0,1,2,1,1,4, 3,0,0,1,3,1), nrow=3, byrow=TRUE)
+matrix(c(1,1,0,2,3,4, 0,1,2,1,1,4, 3,0,0,1,3,1), nrow=3, byrow=FALSE)
 ```
 
-## Convert to numeric
-
-You can make those numeric instead of binary, so matrix multiplication will work:
-
-```{r}
-as.numeric(intToBits(13))
-```
-
-You probably don't want all those 0's, so you can just subscript the ones you want.
-
-```{r}
-as.numeric(intToBits(13))[1:4]
-```
-
-The result is the binary vector corresponding to the binary representation of 13, with the digits reversed. You probably don't care that the digits are reversed, if your goal was just to list all possible binary vectors.
-
-## Matrices in R
+## Multiplying a row vector by a matrix
 
 ```{r}
 rowVec <- c(1,2,3)
@@ -268,3 +262,56 @@ M
 rowVec %*% M
 as.vector(rowVec %*% M)
 ```
+
+## Multiplying a matrix times a column vector
+
+```{r}
+colVec <- c(1,2,3,2,1,3)
+M
+M %*% colVec
+```
+
+>- **Confusing:** Are vectors in R row vectors or column vectors?
+
+## Ask the help menu
+
+```{r, include=FALSE}
+library(printr)
+```
+
+```{r}
+?"%*%"
+```
+
+```{r, include=FALSE}
+detach('package:printr', unload = TRUE)
+```
+
+## Conformable?
+
+```{r, eval=FALSE}
+> M
+     [,1] [,2] [,3] [,4] [,5] [,6]
+[1,]    1    1    0    2    3    4
+[2,]    0    1    2    1    1    4
+[3,]    3    0    0    1    3    1
+> M %*% M
+Error in M %*% M : non-conformable arguments
+> 
+```
+
+## Transpose
+
+```{r}
+M
+t(M)
+```
+
+## $MM^T$ and $M^TM$
+
+```{r}
+M %*% t(M)
+t(M) %*% M
+```
+
+
