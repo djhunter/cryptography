@@ -1,0 +1,19 @@
+---
+title: "Code Distance and Generation"
+output:
+  html_document:
+    toc: false
+    df_print: paged
+    theme: spacelab
+---
+
+## Assignment: due Sunday, 11:59 pm
+
+Add the file [`codetools1.R`](https://djhunter.github.io/cryptography/R/codetools1.R) to the `R` subdirectory of your project. 
+
+1. Implement the functions `hammingDistance` and `codeDistance` as described in the documentation. The `codeDistance` function needs to find the smallest Hamming distance between any two words in the code. We are representing code words as numeric vectors of 0's and 1's, and we are representing codes as matrices of 0's and 1's (numeric), where the rows of the matrix are the code words.
+
+2. Implement `generateCode` as specified. This function consumes a matrix representing the basis code words, and returns a matrix containing all of the possible linear combinations over $\mathbb{Z}_2$ of the basis code words, without duplicates. Notice that the provided example in the documentation uses the basis for the Hamming [7,4] code discussed in the notes. (You may assume that the basis will never contain more than 32 words.)
+
+3. Implement `isPerfect` as specified. This function consumes a matrix representing all the words in the code, and determines whether the code is perfect (i.e., whether it achieves the Hamming sphere packing bound) returning `TRUE` or `FALSE` appropriately (these are logical constants, not strings). There is a function called `choose` in R that computes binomial coefficients.
+

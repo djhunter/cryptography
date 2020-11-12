@@ -1,0 +1,267 @@
+---
+title: "Codes: Definitions and Theorems"
+date: "November 12, 2020"
+output: 
+  revealjs::revealjs_presentation:
+    fig_width: 14 
+    fig_height: 7
+    self_contained: true
+    theme: night
+    highlight: zenburn
+    css: slidesdjh.css
+    center: false
+    transition: slide
+    reveal_options:
+      controls: true
+      progress: false
+      width: 1080
+      height: 540
+---
+
+# Distance in codes
+
+## Definitions from last time
+
+- A **binary code** $C$ is a nonempty subset of $\mathbb{Z}_2^n$. The elements of $C$ are the **code words**, and $n$ is the **length** of the code (i.e., the length of the code words).
+
+- Let $u,v \in C$. The **Hamming distance** $d(u,v)$ is the number of positions in which $u$ and $v$ differ.
+
+- A **nearest neighbor** to $v \in C$ is a code word $u \in C$ such that minimizes $d(u,v)$.
+
+- The **code rate** of a binary code is $\frac{\log_2 M}{n}$, where $M$ is the number of code words and $n$ is the length of the code.
+
+## {data-background="https://ds055uzetaobb.cloudfront.net/brioche/uploads/cxSgLAgJWR-group-1.png" data-background-size="contain"}
+
+## The triangle inequality
+
+**Theorem. (Triangle inequality)** Let $u,v,w$ be code words in a binary code $C$. Then
+$$ d(u,v) \leq d(u,w) + d(w,v) $$
+
+*Proof.* (Induction on the length of $C$.) 
+
+- Suppose the length of $C$ is 1. If $u = v$, then $d(u,v)$ = 0 and the inequality holds. If $u \neq v$, then one of $d(u,w)$ or $d(w,v)$ equals 1, and the inequality holds.
+
+- Suppose as inductive hypothesis that the inequality holds for codes of length $k-1$, for some $k > 1$. Let $u, v, w$ be code words of length $k$. By inductive hypothesis, the inequality holds on the first $k-1$ bits of $u,v,w$. By the above argument, it holds on the last bit. 
+
+
+## Minimum distance theorem
+
+Let $C$ be a binary code. The **minimum distance** $d(C)$ of $C$ is the minimum of $d(v)$ for all $v\in C$.
+
+> **Theorem. (Minimum distance)** Let $C$ be a binary code.
+>
+> 1. If $d(C) \geq s+1$, then $C$ can detect $s$ errors.
+>
+> 2. If $d(C) \geq 2t+1$, then $C$ can correct $t$ errors.
+
+Proof. 1. $\checkmark$. 2. Triangle inequality.
+
+Application: Hamming $[7,4]$ code.
+
+## $(n,M,d)$ codes
+
+A binary code with length $n$, $M$ code words, and minimum distance $d$ is called an $(n,M,d)$ code.
+
+**[Jamboard](https://jamboard.google.com/d/1GIIhJqPSgI-N769vjH9Zx5ZyD_yGvVDrfV4rox5yJm4/edit?usp=sharing) Exercise.** Complete the table.
+
+Code | $n$ | $M$ | $d$ | code rate | errors detected | errors corrected 
+---- | --- | --- | --- | --- | --- | ---
+$3$-fold repetition | $3$ |  |  | | | | 
+$8$th-bit parity check | $8$ |  |  | | | |
+Hamming $[7,4]$  |  |  | | | |  |
+$32\times 32$ Hadamard |  |  | | | | | 
+
+# Theoretical limits of codes
+
+## Tradeoffs
+
+$M =$ number of code words.
+
+$n =$ length of the code words.
+
+$d =$ distance of the code (min distance between words).
+
+Tradeoffs:
+
+- Large $M$ is good, but large $n$ is bad.
+- Large $d$ is good, but generally requires larger $n$ and smaller $M$.
+
+
+## Bounds on binary $(n,M,d)$ codes
+
+>1. $M \leq 2^n$, where $M$ is the number of code words and $n$ is their length.
+>2. $M \leq 2^{n-d+1}$, where $d$ is the minimum distance between code words.
+>    - *Singleton bound* 
+>    - Delete the first $d-1$ digits from every code word; the remaining digits still have to be different in at least one place.
+>    - If $M = 2^{n-d+1}$, the code is called **maximum distance separable (MDS)**. (i.e., "$M$ acheives the Singleton bound".)
+
+## {data-background="https://i.stack.imgur.com/HfayXm.png" data-background-size="contain"}
+
+## Hamming Spheres
+
+**Definition.** An $n$-dimensional **Hamming sphere** of radius $r$ with center $c$ is the set of all vectors $v$ in $\mathbb{Z}_2^n$ such that $d(v,c) \leq r$.
+
+[Jamboard](https://jamboard.google.com/d/1GIIhJqPSgI-N769vjH9Zx5ZyD_yGvVDrfV4rox5yJm4/edit?usp=sharing) Exercise:
+
+1. Write down all the vectors in a two-dimensional Hamming sphere of radius 1 centered at `00`.
+2. Write down all the vectors in a three-dimensional Hamming sphere of radius 2 centered at `000`.
+3. How many vectors are there in a four-dimensional Hamming sphere of radius 3 centered at `0000`?
+
+## Number of elements in a Hamming sphere
+
+**Lemma.** A Hamming sphere of radius $r$ in dimension $n$ has 
+$$ \binom{n}{0} + \binom{n}{1} + \binom{n}{2} + \cdots + \binom{n}{r} $$
+elements.
+
+## {data-background="https://www.researchgate.net/profile/Beniamin_Bogosel/publication/317673771/figure/fig7/AS:667063202885633@1536051669021/Sphere-packing-examples-in-3D-for-problem-5.ppm" data-background-size="contain"}
+
+## Sphere packing
+
+- How many nonintersecting spheres can fit in a volume of size $V$?
+- (# of spheres) $\times$ (volume of sphere) $\leq$ $V$
+
+## Hamming sphere packing
+
+>- In the space $\mathbb{Z}_2^n$ of all possible code words, how many nonintersecting Hamming spheres can fit?
+>- (# of Hamming spheres) $\times$ (# of words in sphere) $\leq$ (total # of words)
+>- $H \times \left[\binom{n}{0} + \binom{n}{1} + \binom{n}{2} + \cdots + \binom{n}{r} \right] \leq 2^n$, where $r$ is the radius of the sphere.
+
+## Spheres and code distance
+
+- Suppose a code has distance $d$. 
+- Enclose each code word in a Hamming sphere of radius $t$.
+- Make $t$ as large as possible.
+- How are $t$ and $d$ related?
+
+## Hamming sphere packing bound
+
+**Theorem.** A binary $(n,M,d)$ code with $d \geq 2t+1$ satisfies
+$$ M \leq \frac{2^n}{\sum_{j=0}^t \binom{n}{j}}. $$
+
+**Definition.** A binary code that achieves the above bound is called **perfect**.
+
+That is, a perfect code is an $(n,M,d)$ code that corrects $t$ errors such that $$M = \frac{2^n}{\sum_{j=0}^t \binom{n}{j}}.$$ 
+
+Is the Hamming $(7,4)$ code perfect?
+
+# Linear Codes
+
+## {data-background="https://upload.wikimedia.org/wikipedia/commons/7/72/Vector_addition_ans_scaling.png" data-background-size="contain" data-background-color="white"}
+
+## Just-in-time linear algebra
+
+- Vector Space
+- Basis
+- Generating set/matrix of a code
+
+## Linear Codes
+
+A binary **linear code** is a binary code whose code words are formed by taking all the possible linear combinations of rows of some generating matrix.
+
+- Linear codes are vector spaces over $\mathbb{Z}_2$.
+- The rows of the generating matrix form a **basis** for the code.
+    - For example, the Hamming $[7,4]$ code is a linear code.
+- The sum ($\oplus$) of two code words is another code word.
+
+# R tips and tricks
+
+## Defining matrices
+
+```{r}
+matrix(c(1,1,0,2,3,4, 0,1,2,1,1,4, 3,0,0,1,3,1), nrow=3, byrow=TRUE)
+matrix(c(1,1,0,2,3,4, 0,1,2,1,1,4, 3,0,0,1,3,1), nrow=3, byrow=FALSE)
+```
+
+## Multiplying a row vector by a matrix
+
+```{r}
+rowVec <- c(1,2,3)
+M <- matrix(c(1,1,0,2,3,4, 0,1,2,1,1,4, 3,0,0,1,3,1), nrow=3, byrow=TRUE)
+M
+rowVec %*% M
+as.vector(rowVec %*% M)
+```
+
+## Multiplying a matrix times a column vector
+
+```{r}
+colVec <- c(1,2,3,2,1,3)
+M
+M %*% colVec
+```
+
+>- **Confusing:** Are vectors in R row vectors or column vectors?
+
+## Ask the help menu
+
+```{r, include=FALSE}
+library(printr)
+```
+
+```{r}
+?"%*%"
+```
+
+```{r, include=FALSE}
+detach('package:printr', unload = TRUE)
+```
+
+## Conformable?
+
+```{r, eval=FALSE}
+> M
+     [,1] [,2] [,3] [,4] [,5] [,6]
+[1,]    1    1    0    2    3    4
+[2,]    0    1    2    1    1    4
+[3,]    3    0    0    1    3    1
+> M %*% M
+Error in M %*% M : non-conformable arguments
+> 
+```
+
+## Transpose
+
+```{r}
+M
+t(M)
+```
+
+## $MM^T$ and $M^TM$
+
+```{r}
+M %*% t(M)
+t(M) %*% M
+```
+
+## Converting numbers to binary vectors 
+
+For the assignment, you might want to be able to convert an integer `n` to a binary vector `v` (e.g., if you want to represent all possible binary vectors of a certain length.)
+
+Notice that `intToBits` gives you 32 bits, no matter what. 
+
+```{r}
+intToBits(13)
+```
+
+Make those numeric instead of binary, so matrix multiplication will work:
+
+```{r}
+as.numeric(intToBits(13))
+```
+
+## Subscript the digits you want
+
+You probably don't want all those 0's, so you can just subscript the ones you want.
+
+```{r}
+as.numeric(intToBits(13))[1:4]
+```
+
+The result is the binary vector corresponding to the binary representation of 13, with the digits reversed. If you want them in the correct order, you can reverse the subscripts:
+
+```{r}
+as.numeric(intToBits(13))[4:1]
+```
+
+
+

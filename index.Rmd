@@ -53,6 +53,7 @@ This site provides slides, assignments, and other resources that I use in my Cod
 15. [Mod p Elliptic Curves](slides/15elliptic_curves2.html)
 16. [Elliptic Curve Cryptography](slides/16elliptic_curves3.html)
 17. [Introduction to Codes](slides/17codes1.html)
+18. [Codes: Definitions and Theorems](slides/18codes2.html)
 
 # Written Assignments
 
@@ -73,6 +74,7 @@ This site provides slides, assignments, and other resources that I use in my Cod
 15. [Mod p Elliptic Curves](assignments/15modp_ell.html)
 16. [Elliptic Curve Cryptography](assignments/16ec_crypto.html)
 17. [Codes: Introductory Examples](assignments/17introcodes.html)
+18. [Codes: Theoretical Limitations](assignments/18codelimits.html)
 
 # Programming Assignments
 
@@ -84,6 +86,7 @@ This site provides slides, assignments, and other resources that I use in my Cod
 6. [Discrete Logarithms and Hash Functions](programming/06discloghash.html)
 7. [DSA and Real Elliptic Curves](programming/07dsa_real_ell.html)
 8. [Mod p Elliptic Curves](programming/08modp_ell.html)
+9. [Code Distance and Generation](programming/09code_tools1.html)
 
 # Other Resources
 
