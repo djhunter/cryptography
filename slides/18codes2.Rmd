@@ -46,7 +46,7 @@ $$ d(u,v) \leq d(u,w) + d(w,v) $$
 
 ## Minimum distance theorem
 
-Let $C$ be a binary code. The **minimum distance** $d(C)$ of $C$ is the minimum of $d(v)$ for all $v\in C$.
+Let $C$ be a binary code. The **minimum distance** $d(C)$ of $C$ is the minimum of $d(u,v)$ over all pairs $u,v\in C$, $u\neq v$.
 
 > **Theorem. (Minimum distance)** Let $C$ be a binary code.
 >
