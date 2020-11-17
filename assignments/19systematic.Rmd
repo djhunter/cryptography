@@ -1,0 +1,43 @@
+---
+title: "Systematic Codes"
+output:
+  html_document:
+    toc: false
+    df_print: paged
+    theme: spacelab
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_chunk$set(comment = NA)
+```
+
+Upload to Canvas a PDF of your work for the following problems. 
+
+## Assignment: due Wednesday, 11:59 pm
+
+1. Use the fact that $vH^T = \mathbf{0}$ for any codeword $v$ to prove both parts of the following lemma.
+
+> **Lemma.** Let $C$ be a sytematic linear binary code, and let $H$ be its parity check matrix.
+>
+> 1. If $C$ contains a codeword of weight 1, then $H$ contains a zero column.
+> 2. If $C$ contains a codeword of weight 2, then $H$ has two identical columns.
+
+2. The following questions refer to the generating matrix `G` and message `mess` given below.
+    a. The matrix `G` is a generating matrix for a systematic linear binary code. How many codewords are there in this code?
+    b. How many errors can this code correct?
+    c. How many different syndromes are there?
+    d. Compute the parity check matrix $H$.
+    e. Bob receives the message `mess`. Find its syndrome.
+    f. Determine the coset leader of the corresponding coset, and decode the message.
+
+```{r}
+G <- matrix(c(1,0,0,0,0,1,1,1,0,1,1,0,0,1,0,
+              0,1,0,0,0,0,1,1,1,0,1,1,0,0,1,
+              0,0,1,0,0,1,1,0,1,0,1,1,1,1,0,
+              0,0,0,1,0,0,1,1,0,1,0,1,1,1,1,
+              0,0,0,0,1,1,1,0,1,1,0,0,1,0,1),
+            byrow=TRUE, nrow=5)
+mess <- c(0,0,1,0,1,1,1,1,1,1,0,0,0,0,1)
+```
+

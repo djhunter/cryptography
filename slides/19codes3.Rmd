@@ -1,0 +1,301 @@
+---
+title: "Linear Codes"
+date: "November 17, 2020"
+output: 
+  revealjs::revealjs_presentation:
+    fig_width: 14 
+    fig_height: 7
+    self_contained: true
+    theme: night
+    highlight: zenburn
+    css: slidesdjh.css
+    center: false
+    transition: slide
+    reveal_options:
+      controls: true
+      progress: false
+      width: 1080
+      height: 540
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_chunk$set(comment = NA)
+options(width = 100)
+```
+
+
+# Linear Codes
+
+## The problem with codes: decoding
+
+We decode a received word $r$ by finding the nearest neighbor. So far, we have done so by searching through all the code words and finding the one that is closest to $r$.
+
+> **Question.** Is there a better way to find the nearest neighbor? 
+
+## Linear Codes: So Far
+
+- A binary **linear code** $C$ is a nonempty subset of $\mathbb{Z}_2^n$ that is closed under addition in $\mathbb{Z}_2^n$: If $v_1, v_2 \in C$ are code words, then $v_1+v_2 \in C$.
+
+- A binary linear code is an Abelian group with identity $\mathbf{0} = \begin{bmatrix} 0&0&\cdots&0 \end{bmatrix}$.
+
+- A binary linear code is called an "$[n,k]$-code" if it is generated (as an Abelian group) by a set of linearly independent vectors $v_1, v_2, \ldots, v_k \in \mathbb{Z}_2^n$.  
+
+- Linear Algebra: A binary linear code is a vector space over the field $\mathbb{Z}_2$.
+
+- Linear Algebra: An $[n,k]$-code is a $k$-dimensional subspace of $\mathbb{Z}_2^n$.
+
+## Generating matrix
+
+If linearly independent vectors $v_1, v_2, \ldots, v_k \in \mathbb{Z}_2^n$ generate a binary linear code $C$, then the matrix
+$$
+G = \begin{bmatrix} v_1 \\ v_2 \\ \vdots \\ v_k \end{bmatrix}
+$$
+is a **generating matrix** for $C$, where the generating code words $v_i$ are written as row vectors. If $S$ is a $2^k \times k$ matrix whose rows consist of all of the elements of $\mathbb{Z}_2^k$, then the rows of $SG$ consist of all the code words in $C$.
+
+## Generating a code in R
+
+If linearly independent vectors $v_1, v_2, \ldots, v_k \in \mathbb{Z}_2^n$ generate a binary linear code $C$, then the matrix
+$$
+G = \begin{bmatrix} v_1 \\ v_2 \\ \vdots \\ v_k \end{bmatrix}
+$$
+is a **generating matrix** for $C$, where the generating code words $v_i$ are written as row vectors. If $S$ is a $2^k \times k$ matrix whose rows consist of all of the elements of $\mathbb{Z}_2^k$, then the rows of $SG$ consist of all the code words in $C$.
+
+```{r, eval=FALSE}
+  S <- t(sapply(0:(2^k-1), function(x){as.numeric(intToBits(x)[1:k])}))
+  C <- (S %*% G) %% 2
+```
+
+## Hamming generating matrix 
+
+Hamming $[7,4]$:
+$$
+G = \begin{bmatrix}
+1&0&0&0&1&1&0 \\
+0&1&0&0&1&0&1 \\
+0&0&1&0&0&1&1 \\
+0&0&0&1&1&1&1
+\end{bmatrix}
+$$
+
+## 8th-bit parity check generating matrix
+
+8th-bit parity check:
+$$ G = \begin{bmatrix}
+1&0&0&0&0&0&0&1 \\
+0&1&0&0&0&0&0&1 \\
+0&0&1&0&0&0&0&1 \\
+0&0&0&1&0&0&0&1 \\
+0&0&0&0&1&0&0&1 \\
+0&0&0&0&0&1&0&1 \\
+0&0&0&0&0&0&1&1 
+\end{bmatrix}
+$$
+
+## Hamming weight
+
+The **Hamming weight** $\mbox{wt}(v)$ of a binary vector $v$ is the number of $1$'s in $v$.
+
+Facts:
+
+- $\mbox{wt}(v) = d(v,\mathbf{0})$
+- $\mbox{wt}(v_1+v_2) = d(v_1, v_2)$
+- The minimum distance $d(C)$ of a linear binary code $C$ is the weight of its "lightest" nonzero codeword.
+    - Proof: $v_1, v_2$ minimize $d(v_1,v_2)$ iff $v_1+v_2$ is lightest.
+
+# Systematic Codes
+
+## Systematic Codes
+
+**Definition.** A linear binary code is called *systematic* if its generating matrix can be written in the form $\begin{bmatrix} I_k &  P \end{bmatrix}$, where $I_k$ is the $k\times k$ identity matrix.
+
+- In a systematic binary code, the first $k$ bits are called the *information bits* and the remaining $n-k$ bits are called the *check bits*. 
+- The above two examples (Hamming and 8th-bit parity check) are systematic.
+
+## Parity Check Matrices
+
+**Definition.** If $C$ is an $[n,k]$ linear code, then an $(n-k) \times n$ matrix $H$ is called a *parity check* matrix if it has the property that $vH^T = \mathbf{0}$ iff $v$ is a code word.
+
+Quiz: Construct a parity check matrix for the 8th-bit parity check code. (Hint: what are $n$ and $k$?)
+
+## Constructing Parity Check Matrices
+
+**Theorem.** If $C$ is a systematic $[n,k]$ binary linear code with generating matrix $G = \begin{bmatrix} I_k &  P \end{bmatrix}$, then $H = \begin{bmatrix} P^T & I_{n-k} \end{bmatrix}$ is a parity check matrix for $C$.
+
+Example: Hamming $[7,4]$:
+$$
+G = \begin{bmatrix}
+1&0&0&0&1&1&0 \\
+0&1&0&0&1&0&1 \\
+0&0&1&0&0&1&1 \\
+0&0&0&1&1&1&1
+\end{bmatrix} \quad \quad
+H = \begin{bmatrix}
+1&1&0&1&1&0&0 \\
+1&0&1&1&0&1&0 \\
+0&1&1&1&0&0&1
+\end{bmatrix}
+$$
+
+## Constructing Parity Check Matrices
+
+**Theorem.** If $C$ is a systematic $[n,k]$ binary linear code with generating matrix $G = \begin{bmatrix} I_k &  P \end{bmatrix}$, then $H = \begin{bmatrix} P^T & I_{n-k} \end{bmatrix}$ is a parity check matrix for $C$.
+
+Proof. Let $v_i$ be one of the rows of the generator matrix $C$. Then
+$$
+v_i = \begin{bmatrix} 0 & \cdots & 0 & 1 & 0 & \cdots 0 & p_{i1} & p_{i2} & \cdots & p_{i\,n-k} \end{bmatrix}
+$$
+and the $j$th column of $H^T$ looks like
+$$
+\begin{bmatrix} p_{1j} & p_{2j} & \cdots & p_{kj} & 0 & \cdots & 0 & 1 & 0 & \cdots 0 \end{bmatrix}^T
+$$
+so the dot product of these two vectors will be $p_{ij} + p_{ij} = 0$. So $v_i H^T = \mathbf{0}$. Now use linearity.
+
+# Cosets and Syndromes
+
+## Coset of a vector 
+
+**Definition.** Let $C$ be an $[n,k]$ code, and let $r \in \mathbb{Z}_2^n$. The **coset** of $C$ in $\mathbb{Z}_2^n$ represented by $r$ is the set $r + C = \{r+v \mid v \in C\}$ of all vectors that can be formed by adding codewords to $r$.
+
+Quiz: What is the coset represented by a codeword?
+
+## {data-background="https://img1.looper.com/img/gallery/why-the-villain-of-the-incredibles-wasnt-actually-syndrome/intro-1601561572.jpg" data-background-size="contain"}
+
+## Syndrome of a vector
+
+**Definition.** Suppose that $r$ is a vector in $\mathbb{Z}_2^n$, and $C$ is an $[n,k]$ code with parity check matrix $H$. The vector $rH^T$ is called the **syndrome** of $r$.
+
+Quiz: What is the syndrome of a codeword?
+
+## Example
+
+[Jamboard Exercise](https://jamboard.google.com/d/16DOZhwJara-sq0LqhMdDpIGtwkqc3eHFpU7WqrqgFXA/edit?usp=sharing): Let $C$ be the $[4,2]$ code with generator matrix
+$$
+G = \begin{bmatrix} 1 & 0 & 1 & 1 \\ 0 & 1 & 1 & 0 \end{bmatrix}
+$$
+
+1. Construct the parity check matrix $H$.
+
+2. List all of the cosets of $C$ in $\mathbb{Z}_2^4$.
+
+3. Compute all the syndromes of the 16 vectors in $\mathbb{Z}_2^4$. Find a shortcut.
+
+## Facts about cosets
+
+- Cosets form a **partition** of $\mathbb{Z}_2^n$.
+
+- If $r_1$ and $r_2$ are in the same coset, then, for some $c\in C$, $r_1 + c = r_2$, so $r_1+r_2$ is a codeword.
+
+- Two vectors have the same syndrome iff they are in the same coset.
+     - Proof: $(v+c)R^T = vR^T + cR^T = vR^T$
+     
+Quiz: In an $[n,k]$ linear binary code,
+
+- How big are the cosets?
+- How many cosets are there?
+- How many syndromes are there?
+
+## Coset Decoding (impractical)
+
+A coset representative of minimal weight is called a **coset leader**.
+
+To decode a received message $r \in \mathbb{Z}_2^n$,
+
+1. Compute the coset $r + C$. (Difficulty: large)
+2. Find the coset leader $c_0$ of $r + C$.
+3. The nearest neighbor codeword to $r$ is $r+c_0$.
+
+## Syndrome Decoding
+
+
+To decode a received message $r \in \mathbb{Z}_2^n$,
+
+1. Compute its syndrome $rH^T$.
+2. Find the coset leader $c_0$ with the same syndrome.
+3. The nearest neighbor codeword to $r$ is $r+c_0$.
+
+## Coset leader syndrome table:
+
+[Jamboard Exercise](https://jamboard.google.com/d/16DOZhwJara-sq0LqhMdDpIGtwkqc3eHFpU7WqrqgFXA/edit?usp=sharing): For the code with generator matrix
+$$
+G = \begin{bmatrix} 1 & 0 & 1 & 1 \\ 0 & 1 & 1 & 0 \end{bmatrix}
+$$
+
+1. Make a table of coset leaders indexed by their syndromes.
+2. Use the table to decode the received message `0111`.
+
+## Cosets in R
+
+Just adding won't do what you want:
+
+```{r}
+C <- matrix(c(0, 1, 0, 1, 0, 0, 1, 1, 0, 1, 1, 0, 0, 1, 0, 1), nrow= 4, byrow=FALSE)
+C
+(c(1,0,0,0) + C) %% 2
+```
+
+## Option 1: Transpose twice
+
+```{r}
+C <- matrix(c(0, 1, 0, 1, 0, 0, 1, 1, 0, 1, 1, 0, 0, 1, 0, 1), nrow= 4, byrow=FALSE)
+C
+t(c(1,0,0,0) + t(C)) %% 2
+```
+
+## Option 2: Make conformable vector
+
+```{r}
+C <- matrix(c(0, 1, 0, 1, 0, 0, 1, 1, 0, 1, 1, 0, 0, 1, 0, 1), nrow= 4, byrow=FALSE)
+C
+(rep(c(1,0,0,0), each=4) + C) %% 2
+```
+
+
+# Hamming Codes
+
+## Hamming Codes 
+
+For any $m \geq 1$, there is a Hamming code with $n = 2^m-1$ and $k = 2^m-1-m$.
+
+The columns of the parity check matrix $H$ consist of all possible binary vectors of length $m$, with the weight 1 vectors at the end.
+
+```{r}
+m <- 3
+powersOf2 <- 2^(0:(m-1))
+hamH <- sapply(c(setdiff(1:(2^m-1), powersOf2), powersOf2), 
+       function(x){as.numeric(intToBits(x)[1:m])})
+hamH
+```
+
+Given the parity check matrix $H = \begin{bmatrix} P^T & I_{n-k} \end{bmatrix}$, it is easy to write down the generating matrix $G = \begin{bmatrix} I_k &  P \end{bmatrix}$.
+
+## Hamming Generator from Hamming Parity Check
+
+Given the parity check matrix $H = \begin{bmatrix} P^T & I_{n-k} \end{bmatrix}$, it is easy to write down the generating matrix $G = \begin{bmatrix} I_k &  P \end{bmatrix}$.
+
+```{r}
+generatorMatrix <- function(H) {
+  k <- ncol(H)-nrow(H)
+  n <- ncol(H)
+  return(cbind(diag(k),t(H[1:(n-k),1:k])))
+}
+generatorMatrix(hamH)
+```
+
+## Minimum distance of Hamming codes
+
+**Lemma.** Let $C$ be a systematic linear binary code, and let $H$ be its parity check matrix.
+
+1. If $C$ contains a codeword of weight 1, then $H$ contains a zero column.
+2. If $C$ contains a codeword of weight 2, then $H$ has two identical columns.
+
+
+- Proof: Exercise.
+- Corollary: The minimum distance of a Hamming code is 3, and they're perfect.
+
+## Hamming Syndrome Decoding 
+
+The nonzero syndromes are the columns of the parity check matrix $H$. (why?)
+
+For nearest neighbor decoding, the column of the syndrome is the location of the error. (why?)
+
