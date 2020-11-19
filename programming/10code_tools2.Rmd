@@ -11,7 +11,7 @@ output:
 
 Add the file [`codetools2.R`](https://djhunter.github.io/cryptography/R/codetools2.R) to the `R` subdirectory of your project. 
 
-1. Implement the functions `generatorMatrix` and `parityCheckMatrix` as described in the documentation. The first returns the generator matrix given a parity check matrix. The second consumes the generator matrix and returns the generator matrix. The correspondence is described [in the notes](../slides/18codes2.html#/constructing-parity-check-matrices).
+1. Implement the functions `generatorMatrix` and `parityCheckMatrix` as described in the documentation. The first returns the generator matrix given a parity check matrix. The second consumes the generator matrix and returns the generator matrix. The correspondence is described [in the notes](../slides/19codes3.html#/constructing-parity-check-matrices).
 
 2. Implement `syndrome` as specified. This function computes the syndrome of vector in $\mathbb{Z}_2^n$ given a parity check matrix, and returns the result **as a character string** of "1"'s and "0"'s. (It needs to return a character string because we are going to use this value as a list label. See `cosetLeaderSyndromeTable`.)
 
