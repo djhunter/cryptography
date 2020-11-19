@@ -55,6 +55,7 @@ This site provides slides, assignments, and other resources that I use in my Cod
 17. [Introduction to Codes](slides/17codes1.html)
 18. [Codes: Definitions and Theorems](slides/18codes2.html)
 19. [Linear Codes](slides/19codes3.html)
+20. [Cyclic Codes](slides/20codes4.html)
 
 # Written Assignments
 
@@ -77,6 +78,7 @@ This site provides slides, assignments, and other resources that I use in my Cod
 17. [Codes: Introductory Examples](assignments/17introcodes.html)
 18. [Codes: Theoretical Limitations](assignments/18codelimits.html)
 19. [Systematic Codes](assignments/19systematic.html)
+20. [Cyclic Codes](assignments/20cyclic.html)
 
 # Programming Assignments
 
@@ -89,6 +91,7 @@ This site provides slides, assignments, and other resources that I use in my Cod
 7. [DSA and Real Elliptic Curves](programming/07dsa_real_ell.html)
 8. [Mod p Elliptic Curves](programming/08modp_ell.html)
 9. [Code Distance and Generation](programming/09code_tools1.html)
+10. [Systematic Codes](programming/10code_tools2.html)
 
 # Other Resources
 

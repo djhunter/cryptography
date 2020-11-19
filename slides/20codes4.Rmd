@@ -1,0 +1,238 @@
+---
+title: "Cyclic Codes"
+date: "November 19, 2020"
+output: 
+  revealjs::revealjs_presentation:
+    fig_width: 14 
+    fig_height: 7
+    self_contained: true
+    theme: night
+    highlight: zenburn
+    css: slidesdjh.css
+    center: false
+    transition: slide
+    reveal_options:
+      controls: true
+      progress: false
+      width: 1080
+      height: 540
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_chunk$set(comment = NA)
+options(width = 100)
+```
+
+# Golay Codes
+
+## {data-background="https://upload.wikimedia.org/wikipedia/commons/thumb/6/60/Voyager_spacecraft_model.png/1280px-Voyager_spacecraft_model.png" data-background-size="contain"}
+
+## Golay $[24,12]$-code (Voyager I, II, 1979)
+
+The Golay code $G_{24}$ has the following generator matrix.
+
+```{r, results='hide'}
+golay24 <- matrix(c(1,0,0,0,0,0,0,0,0,0,0,0,1,1,1,0,1,1,1,0,0,0,1,0,
+                    0,1,0,0,0,0,0,0,0,0,0,0,1,0,1,1,0,1,1,1,0,0,0,1,
+                    0,0,1,0,0,0,0,0,0,0,0,0,1,1,0,1,1,0,1,1,1,0,0,0,
+                    0,0,0,1,0,0,0,0,0,0,0,0,1,0,1,0,1,1,0,1,1,1,0,0,
+                    0,0,0,0,1,0,0,0,0,0,0,0,1,0,0,1,0,1,1,0,1,1,1,0,
+                    0,0,0,0,0,1,0,0,0,0,0,0,1,0,0,0,1,0,1,1,0,1,1,1,
+                    0,0,0,0,0,0,1,0,0,0,0,0,1,1,0,0,0,1,0,1,1,0,1,1,
+                    0,0,0,0,0,0,0,1,0,0,0,0,1,1,1,0,0,0,1,0,1,1,0,1,
+                    0,0,0,0,0,0,0,0,1,0,0,0,1,1,1,1,0,0,0,1,0,1,1,0,
+                    0,0,0,0,0,0,0,0,0,1,0,0,1,0,1,1,1,0,0,0,1,0,1,1,
+                    0,0,0,0,0,0,0,0,0,0,1,0,1,1,0,1,1,1,0,0,0,1,0,1,
+                    0,0,0,0,0,0,0,0,0,0,0,1,0,1,1,1,1,1,1,1,1,1,1,1),
+                  byrow=TRUE, nrow=12)
+```
+
+## Decoding options
+
+In order of speed (slow to fast):
+
+- Search for nearest neighbor.
+- Compute coset of received word $r$, then use coset leader.
+- Compute syndrome of received word $r$, then use table.
+
+## Coset Leader Syndrome lookup table 
+
+```{r, eval=FALSE}
+cosetLeaderSyndromeTable <- function(G) {
+  n <- ncol(G)
+  k <- nrow(G)
+  C <- generateCode(G) # TODO (or done)
+  H <- parityCheckMatrix(G) # TODO
+  Z2n <- t(sapply(0:(2^n-1), function(x){as.numeric(intToBits(x)[1:n])}))
+  allsynd <- sapply(1:2^n, function(x) {syndrome(Z2n[x,],H)}) # TODO (syndrome)
+  uniqueReps <- which(!duplicated(allsynd))
+  syndromes <- allsynd[uniqueReps]
+  cosetLeaders <- lapply(uniqueReps, function(x) {cosetLeader(Z2n[x,],C)} ) # TODO (cosetLeader)
+  names(cosetLeaders) <- syndromes
+  return(cosetLeaders)
+}
+```
+
+## Golay lookup table
+
+```{r}
+load("golay24table.RData") # made using cosetLeaderSyndromeTable
+gT$`010100001111`
+gT[["010100001111"]]
+head(gT,10) # first 10 entries
+```
+
+
+## Golay $[24,12]$ decoding shortcut
+
+The Golay code is *self-dual*, meaning its generator matrix can function as a parity check matrix.
+
+Bob receives $r = c+e$. He computes the syndrome $s = rG^T$. (Note: this is a different way of computing the syndrome.)
+
+>1. If $\mbox{wt}(s) \leq 3$, then $e = [s \,\,\, \mathbf{0}]$.
+>2. Let $B$ be such that $G = [I \, B]$. If $\mbox{wt}(sB)\leq 3$, then $e = [\mathbf{0}\,\,\, sB]$
+>3. Let $c_{13}, c_{14}, \ldots, c_{24}$ be the columns of $B$. If $\mbox{wt}(s+c_j^T) \leq 2$ for some $j$, then $e = [s+c_j^T \,\,\, \mathbf{0}] +u_j$, where $u_j$ has a 1 in the $j$th position and 0's elsewhere.
+>4. Let $b_1, b_2, \ldots, b_{12}$ be the columns of $B^T$. If $\mbox{wt}(sB+b_j^T) \leq 2$ for some $j$, then $e = [\mathbf{0} \,\,\, sB+b_j^T] + u_j$. 
+
+## Golay $[24,12]$ decoding shortcut example 
+
+Bob receives $m = c+e$. He computes the "syndrome" $s = rG^T$. 
+
+```{r}
+mess <- c(1,1,1,0,0,0,1,0,1,0,0,0,0,1,0,1,0,0,0,0,1,0,1,1)
+s <- (mess %*% t(golay24) ) %% 2
+s
+```
+
+*1.* If $\mbox{wt}(s) \leq 3$, then $e = [s \,\,\, \mathbf{0}]$.
+
+## Golay $[24,12]$ decoding shortcut example 
+
+*2.* Let $B$ be such that $G = [I \, B]$. If $\mbox{wt}(sB)\leq 3$, then $e = [\mathbf{0}\,\,\, sB]$
+
+```{r}
+B <- golay24[,13:24]
+sB <- (s %*% B) %% 2
+sB
+```
+
+## Golay $[24,12]$ decoding shortcut example {.smaller}
+
+*3.* Let $c_{13}, c_{14}, \ldots, c_{24}$ be the columns of $B$. If $\mbox{wt}(s+c_j^T) \leq 2$, then $e = [s+c_j^T \,\,\, \mathbf{0}] +u_j$, where $u_j$ has a 1 in the $j$th position and 0's elsewhere.
+
+```{r}
+sapply(1:12, function(j) {(s + B[,j]) %% 2})
+```
+
+So $j = 18$, and $e = \scriptsize{\begin{bmatrix} 0 &0 &0 &0 &0 &0 &0 &1 &0 &0 &0 &0 &0 &0 & 0 &0 &0 &1 &0 &0 &0 \end{bmatrix}}$.
+
+# Cyclic Codes
+
+## More structure $\Rightarrow$ Faster decoding
+
+- For a general code, finding the nearest neighbor of a length $n$ code word is *NP-complete.*
+- Linear codes allow for syndrome decoding, which is faster than searching for the nearest neighbor.
+- The Golay codes have additional constraints allowing for faster decoding.
+- Other codes with more algebraic structure also have faster decoding algorithms.
+
+## Cyclic codes
+
+**Definition.** A code is **cyclic** if it is closed under cyclic shift:
+$$
+(c_1, c_2, \ldots, c_{n-1}, c_n) \in C \Rightarrow (c_n, c_1, c_2, \ldots, c_{n-1}) \in C
+$$
+
+Examples: 8th bit parity check, $k$-fold repetition code
+
+[Jamboard]() Exercise: For each given code word, find the smallest cyclic linear code containing the code word.
+
+1. $\begin{bmatrix} 1 & 0 &  0 & 1 \end{bmatrix}$
+
+2. $\begin{bmatrix} 1 & 1 & 0 & 0 & 1 & 0 & 1 \end{bmatrix}$
+
+## Code words and polynomials
+
+Let's start indexing at zero.
+
+- A bit string $(c_0, c_1, \ldots, c_{n-1})$ corresponds to a polynomial $c_0 +c_1x + \cdots + c_{n-1}x^{n-1}$.
+- Adding polynomials corresponds to adding bit strings in $\mathbb{Z}_2^n$.
+- How about shifting?
+
+## Quotient rings
+
+>- Recall that the ring $\mathbb{Z}_2[x]/(x^n+1)$ consists of all polynomials in $x$ under the "mod" relation that $x^n + 1 = 0$, i.e., $x^n = 1$.
+>- The elements of $\mathbb{Z}_2[x]/(x^n+1)$ are the polynomials $c_0 +c_1x + \cdots + c_{n-1}x^{n-1}$, which correspond to the $2^n$ bit strings of length $n$.
+- Notice: 
+$$ \scriptsize
+\begin{align}
+x(c_0 +c_1x + \cdots + c_{n-1}x^{n-1}) &= c_0x +c_1x^2 + \cdots + c_{n-2}x^{n-1} + c_{n-1}x^{n} \\ &= c_0x +c_1x^2 + \cdots + c_{n-2}x^{n-1} + c_{n-1} \\ &= c_{n-1} + c_0x +c_1x^2 + \cdots + c_{n-2}x^{n-1} 
+\end{align}
+$$
+- So *multiplication by $x$ is the same as shifting.*
+
+## Cyclic Codes are Ideals
+
+**Definition.** A cyclic linear code (i.e., a **cyclic code**) of length $n$ is a subset of $\mathbb{Z}_2[x]/(x^n+1)$ that is closed under addition and closed under multiplication by $x$.
+
+- (By the distributive property, closure under multiplication by $x$ is the same as closure under multiplication by any polynomial.)
+- In algebra, subsets of rings with these closure properties are called **ideals**.
+
+## Fact from Algebra
+
+**Fact:** Every ideal $C$ of $\mathbb{Z}_2[x]/(x^n+1)$ has the form
+$$
+C = \{p(x)g(x) \mid p(x) \in \mathbb{Z}_2[x]/(x^n+1) \}
+$$
+for some *generating polynomial* $g(x)$ (which is the polynomial of least degree in $C$).
+
+- In this case, we write $C = \langle g(x) \rangle$, the ideal generated by $g(x)$.
+- [Jamboard]() Exercise, continued: Find the generating polynomials for these two cyclic codes.
+
+## More Algebra Facts
+
+- If $\gcd(g(x), x^n + 1) = 1$, then $\langle g(x) \rangle$ is the whole ring (all the bit strings).
+- The factors of $x^n + 1$, and their products, generate all the codes.
+- Example: Investigate factors of $x^7 + 1$.
+
+## Tool: Macaulay2
+
+```
+i1 : R = ZZ/2[x]
+o1 = R
+o1 : PolynomialRing
+
+i2 : factor(x^7+1)
+              3           3    2
+o2 = (x + 1)(x  + x + 1)(x  + x  + 1)
+o2 : Expression of class Product
+```
+
+Online version: http://web.macaulay2.com/
+
+## Characterization of Cyclic Codes
+
+>- **Theorem.** There is a one-to-one correspondence between the divisors of $x^n + 1$ and the cyclic codes of length $n$.
+>- **Theorem.** If $g(x)$ is a divisor of $x^n + 1$ of degree $r$, then the code words of $\langle g(x) \rangle$ are uniquely determined by products of the form $g(x)p(x)$, where $p(x)$ is a polynomial of degree less than $n-r$.
+>- **Corollary.** If $g(x)$ is a divisor of $x^n + 1$ of degree $r$, then $\langle g(x) \rangle$ is an $[n, n-r]$ cyclic code.
+>    - The smaller the polynomial, the bigger the code.
+
+## Parity check polynomials {.build}
+
+Let $C = \langle g(x) \rangle$ be a cyclic code. If $m(x)$ is a polynomial satisfying $m(x)g(x) = x^n+1$, then $m(x)$ is called a **parity check polynomial.** 
+
+>- **Theorem.** If $m(x)$ is a parity check polynomial and $p(x)$ is a message, then
+$m(x)p(x) = 0$ in $\mathbb{Z}_2[x]/(x^n+1)$
+if and only if $p(x)$ is a codeword.
+
+## Cyclic Code Examples
+
+Over $\mathbb{Z}_2$, $x^7+1 = (x+1)(x^3+x+1)(x^3+x^2+1)$.
+
+| $p(x)$ | $[n,k]$ | Code |
+| ------ | ------- | ---- |
+| $x+1$  | $[7,6]$  | parity check |
+| $x^3 + x + 1$ or $x^3 + x^2 + 1$ | $[7,4]$ | Hamming |
+| $(x+1)(x^3 + x + 1)$ or $(x+1)(x^3 + x^2 + 1)$ | $[7,3]$ | Hamming dual |
+| $(x^3 + x + 1)(x^3 + x^2 + 1) = x^6+x^5+x^4+x^3+x^2+x+1$ | $[7,1]$ | repetition |
+
