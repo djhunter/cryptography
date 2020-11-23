@@ -217,7 +217,7 @@ Online version: http://web.macaulay2.com/
 >- **Corollary.** If $g(x)$ is a divisor of $x^n + 1$ of degree $r$, then $\langle g(x) \rangle$ is an $[n, n-r]$ cyclic code.
 >    - The smaller the polynomial, the bigger the code.
 
-## Parity check polynomials {.build}
+## Parity check polynomials 
 
 Let $C = \langle g(x) \rangle$ be a cyclic code. If $m(x)$ is a polynomial satisfying $m(x)g(x) = x^n+1$, then $m(x)$ is called a **parity check polynomial.** 
 
@@ -229,7 +229,7 @@ if and only if $p(x)$ is a codeword.
 
 Over $\mathbb{Z}_2$, $x^7+1 = (x+1)(x^3+x+1)(x^3+x^2+1)$.
 
-| $p(x)$ | $[n,k]$ | Code |
+| $g(x)$ | $[n,k]$ | Code |
 | ------ | ------- | ---- |
 | $x+1$  | $[7,6]$  | parity check |
 | $x^3 + x + 1$ or $x^3 + x^2 + 1$ | $[7,4]$ | Hamming |
