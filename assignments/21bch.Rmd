@@ -1,0 +1,29 @@
+---
+title: "BCH Codes"
+output:
+  html_document:
+    toc: false
+    df_print: paged
+    theme: spacelab
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_chunk$set(comment = NA)
+```
+
+Upload to Canvas a PDF of your work for the following problems. 
+
+## Assignment: due Wednesday 12/2, 11:59 pm
+
+1. Use [Macaulay2](http://web.macaulay2.com/) for the following.
+    a. Factor $x^{15}+1$ over $\mathbb{Z}_2$.
+    b. For each factor $f_i(x)$ that you found in part (a), factor $f_i(x)$ over $\text{GF}(16)$. Write each factor in the form $(x+\alpha^j)$, where $\alpha$ is a primitive 15th root of unity.
+
+2. Find generators for $[15,5]$ and $[15,10]$ BCH codes as follows.
+    a. Find a polynomial $p(x)$ that generates a $[15,5]$ code in $\mathbb{Z}_2/(x^{15} + 1)$ with designed distance 7. Show that this code has the required designed distance by showing the factorization of $p(x)$ over $\text{GF}(16)$. 
+    b. Find a polynomial $p(x)$ that generates a $[15,10]$ code in $\mathbb{Z}_2/(x^{15} + 1)$ with designed distance 4. Show that this code has the required designed distance by showing the factorization of $p(x)$ over $\text{GF}(16)$. 
+
+3. Use your package functions to answer the following.
+    a. Does the matrix `G` in Problem #1 of assignment 19 generate the code you found in #2a? Prove or disprove.
+    b. Construct a generating matrix for the code you found in #2b. Generate the code, and find the (actual) minimum distance of the code.

@@ -1,0 +1,255 @@
+---
+title: "BCH Codes"
+date: "December 1, 2020"
+output: 
+  revealjs::revealjs_presentation:
+    fig_width: 14 
+    fig_height: 7
+    self_contained: true
+    theme: night
+    highlight: zenburn
+    css: slidesdjh.css
+    center: false
+    transition: slide
+    reveal_options:
+      controls: true
+      progress: false
+      width: 1080
+      height: 540
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_chunk$set(comment = NA)
+options(width = 100)
+```
+
+# Recall: Cyclic codes
+
+## Cyclic Code Definitions
+
+ **Definition.** A code is **cyclic** if it is closed under cyclic shift:
+$$
+(c_1, c_2, \ldots, c_{n-1}, c_n) \in C \Rightarrow (c_n, c_1, c_2, \ldots, c_{n-1}) \in C
+$$
+
+**Definition.** A cyclic linear code (i.e., a **cyclic code**) of length $n$ is a subset of $\mathbb{Z}_2[x]/(x^n+1)$ that is closed under addition and closed under multiplication by $x$. (A cyclic code is an *ideal* of $\mathbb{Z}_2[x]/(x^n+1)$.)
+
+## Cyclic Code Facts
+
+>- There is a one-to-one correspondence between the divisors of $x^n + 1$ and the cyclic codes of length $n$.
+>- If $p(x)$ is a divisor of $x^n + 1$ of degree $r$, then the code words of $\langle p(x) \rangle$ are uniquely determined by products of the form $p(x)q(x)$, where $q(x)$ is a polynomial of degree less than $n-r$.
+>- If $p(x)$ is a divisor of $x^n + 1$ of degree $r$, then $\langle p(x) \rangle$ is a $[n, n-r]$ cyclic code.
+>- Let $\langle g(x) \rangle$ be the principal ideal corresponding to a cyclic code $C$. If $m(x)$ is a polynomial satisfying $m(x)g(x) = x^n+1$, then $m(x)$ is called a **parity check polynomial.** If $m(x)$ is a parity check polynomial and $p(x)$ is a message, then $m(x)p(x) = 0$ in $\mathbb{Z}_2[x]/(x^n+1)$ if and only if $p(x)$ is a codeword.
+
+## Cyclic Code Examples
+
+Over $\mathbb{Z}_2$, $x^7+1 = (x+1)(x^3+x+1)(x^3+x^2+1)$.
+
+| $p(x)$ | $[n,k]$ | Code |
+| ------ | ------- | ---- |
+| $x+1$  | $[7,6]$  | parity check |
+| $x^3 + x + 1$ or $x^3 + x^2 + 1$ | $[7,4]$ | Hamming |
+| $(x+1)(x^3 + x + 1)$ or $(x+1)(x^3 + x^2 + 1)$ | $[7,3]$ | Hamming dual |
+| $(x^3 + x + 1)(x^3 + x^2 + 1) = x^6+x^5+x^4+x^3+x^2+x+1$ | $[7,1]$ | repetition |
+
+# BCH Codes
+
+## Codes with additional structure
+
+- Cyclic codes have additional structure (they are ideals), which makes them easy to construct and check for errors.
+- BCH codes are cyclic codes over other  *Galois Fields*, whose structure will allow us to construct codes with a specified minimum distance.
+
+## Review: Finite Fields
+
+- If $p(x)$ is an irreducible polynomial of degree $n$ in $\mathbb{Z}_2[x]$, then $\mathbb{Z}_2[x]/(p(x))$ is a field with $2^n$ elements, called $\mbox{GF}(2^n)$.
+- We think of the elements of $\mbox{GF}(2^n)$ as polynomials, under the modulus relation $p(x) = 0$.
+- Equivalently, we can think of $\mbox{GF}(2^n)$ as a field containing $\mathbb{Z}_2$ and an element $\alpha$, such that $p(\alpha) = 0$. We say that $\mbox{GF}(2^n)$ is an *extension field* of $\mathbb{Z}_2$. **Notation:** $\mbox{GF}(2^n) = \mathbb{Z}_2(\alpha)$
+    - Analogy: $\mathbb{C}$ is an extension field of $\mathbb{R}$, containing $i$, a root of $x^2 + 1$.
+    - $\mathbb{C} = \mathbb{R}(i)$
+
+## Roots of polynomials
+
+$\mbox{GF}(2^n)$ is a field containing $\mathbb{Z}_2$ and an element $\alpha$, such that $p(\alpha) = 0$. We say that $\mbox{GF}(2^n)$ is an *extension field* of $\mathbb{Z}_2$.
+
+Example: $\mbox{GF(4)} = \mathbb{Z}_2[x]/(x^2+x+1)$
+
+- Suppose $\alpha$ is a root of $x^2+x+1$.
+- Then $\alpha^2 + \alpha + 1 = 0$.
+- The powers of alpha are
+    - $\alpha^1 = \alpha$
+    - $\alpha^2 = \alpha + 1$
+    - $\alpha^3 = \alpha^2 + \alpha = 1$
+    
+## Exploration: Powers of a root
+
+1. Over $\mathbb{Z}_2$, let $\alpha$ be a root of $x^3 + x + 1$. Compute all the powers of $\alpha$, simplifying when possible. How many are there?
+
+2. Over $\mathbb{Z}_2$, let $\alpha$ be a root of $x^3 + x^2 + x + 1$. Compute all the powers of $\alpha$, simplifying when possible. How many are there?
+
+Work in pairs on [this Jamboard](https://jamboard.google.com/d/1O4ZggWr4JU6R3d0ZkUl7ZPOWYrubq4VtuiKEugERT2k/edit?usp=sharing).
+
+## Primitive roots of unity
+
+**Facts:** $\mbox{GF}(2^n)$ contains an element $\alpha$ such that:
+
+- $\alpha^{2^n-1} = 1$. ($\alpha$ is a $(2^n-1)$th *root of unity*)
+- Every nonzero element of $\mbox{GF}(2^n)$ is a power of $\alpha$. ($\alpha$ is *primitive*)
+- $\alpha$ is a root of a polynomial of degree $n$. (a *primitive polynomial*)
+
+Examples: $\mbox{GF(4)}$, $\mbox{GF(8)}$
+
+[List of primitive polynomials](https://www.jjj.de/mathdata/all-primpoly.txt)
+
+## Factoring $x^7 + 1$ over $\mathbb{Z}_2$
+
+```
+i1 : R = ZZ/2[x]
+
+o1 = R
+
+o1 : PolynomialRing
+
+i2 : factor(x^7+1)
+
+              3           3    2
+o2 = (x + 1)(x  + x + 1)(x  + x  + 1)
+
+o2 : Expression of class Product
+
+```
+
+## Factoring $x^7 + 1$ over $\mbox{GF}(8)$
+
+```
+i1 : R = GF(8)[x]
+
+o1 = R
+
+o1 : PolynomialRing
+
+i2 : factor(x^7+1)
+
+                         2                  2           2               2
+o2 = (x + 1)(x + a)(x + a )(x + a + 1)(x + a  + a)(x + a  + a + 1)(x + a  + 1)
+
+o2 : Expression of class Product
+```
+
+## Which primitive polynomial is [Macaulay2](http://web.macaulay2.com/) using?
+
+```
+i1 : F = GF(8)
+o1 = F
+o1 : GaloisField
+
+i2 : ambient F
+        ZZ
+        --[a]
+         2
+o2 = ----------
+      3
+     a  + a + 1
+o2 : QuotientRing
+
+i3 : apply(1..7, i -> a^i)
+          2          2       2           2
+o3 = (a, a , a + 1, a  + a, a  + a + 1, a  + 1, 1)
+o3 : Sequence
+```
+
+## Splitting $x^n + 1$ 
+
+**Fact:** Let $\alpha$ be a primitive $n$th root of unity in some extension field of $\mathbb{Z}_2$. Then 
+
+$$x^n + 1 = (x+1)(x+\alpha)(x+\alpha^2)\cdots(x+\alpha^{n-1})$$
+
+So a divisor $g(x)$ of $x^n+1$ (and therefore a cyclic code $\langle g(x) \rangle$) determines a set of powers of $\alpha$ that are zeroes of $g(x)$.
+
+- **Jargon:** $x^n+1$ *splits* over $\mathbb{Z}_2(\alpha)$.
+- Analogy: All real polynomials split over $\mathbb{C} = \mathbb{R}(i)$.
+
+## [Jamboard](https://jamboard.google.com/d/10fobOw7AIuHjnBauArd5gg7sh8rkQOUoLT6f3ZtjNfg/edit?usp=sharing) Exercise
+
+Let $C=\langle g(x)\rangle$ be a cyclic code in $\mathbb{Z}_2[x]/(x^{13}+1) = \mathbb{Z}(\alpha)$, where $\alpha$ is a primitive $13$th root of unity. Suppose that $g(\alpha^4) = g(\alpha^5) = 0$.
+
+1. Let $p(x)$ be the parity check polynomial such that $g(x)p(x) = x^n + 1$. Use the fact that $x^{13}+1$ splits over $\mathbb{Z}_2(\alpha)$ to explain why $p(\alpha^4) \neq 0 \neq p(\alpha^5)$.
+
+2. Suppose that, for some $k$, the polynomial $m(x) = x^k$ is a code word of weight 1. Show that this leads to a contradition.
+
+3. Suppose that, for some $j,k$, the polynomial $m(x) = x^j+ x^k$ is a code word of weight 2. Show that this leads to a contradition.
+
+4. Explain why the minimum distance of $C$ is at least 3.
+
+## BCH Bound Theorem over $\mathbb{Z}_2$
+
+**Theorem.** Let $C = \langle g(x) \rangle$ be a cyclic code in $\mathbb{Z}_2[x]/(x^n+1)$, for $n$ odd. Let $\alpha$ be a primitive $n$th root of unity, and suppose that for some integers $l$ and $\delta$, $$g(\alpha^l) = g(\alpha^{l+1}) = \cdots = g(\alpha^{l+\delta})=0.$$  Then the minimum distance of $C$ is at least $\delta + 2$.
+
+## BCH Code of designed distance $d$
+
+Let $\alpha$ be a primitive $n$th root of unity.
+
+- Factor $x^n+1$ over $\mathbb{Z}_2$: $x^n+1 = f_1(x)f_2(x)\cdots f_r(x)$.
+- Write each factor $f_i(x)$ as a product of $(x + \alpha^j)$'s.
+- Choose $g(x)$ to be a product of factors $f_i(x)$ containing $\delta+1$ consecutive $(x+\alpha^j)$'s.
+- By the theorem, $\langle g(x) \rangle$ will have distance at least $\delta + 2$.
+
+## Examples
+
+Macaulay2 tells us that over $\mathbb{Z}_2$,
+
+$$x^7+1 = (x+1)(x^3+x^2+1)(x^3+x+1)$$
+
+Furthermore, over $\text{GF}(8)$, 
+
+$$
+\begin{align}
+x^3+x^2+1 &= (x + \alpha^3)(x+\alpha^5)(x+\alpha^6) \\
+x^3+x+1 &= (x+\alpha)(x+\alpha^2)(x+\alpha^4)
+\end{align}
+$$
+
+[Jamboard](https://jamboard.google.com/d/1MgaL6FJttrZNq1ZHGNfC2i6-H8gWYCNtz9RaxlmIdT0/edit?usp=sharing) exercise. In $\mathbb{Z}_2[x]/(x^7+1)$,
+
+1. Find a generator for a code of designed distance 3.
+2. Find a generator for a code of designed distance 4.
+3. Find a generator for a code of designed distance 7.
+
+## BCH Decoding
+
+- Error-detection of BCH codes is easy, because they are cyclic codes.
+- BCH codes have [good error-correcting decoding algorithms](https://infoscience.epfl.ch/record/33884/files/HongV95.pdf).
+- To illustrate, we'll see how to correct a single error.
+
+## Correcting 1 error of a BCH code
+
+Let $\langle g(x) \rangle$ be a BCH code in $\mathbb{Z}_2[x]/(x^n+1)$ of designed distance $d \geq 3$, so $g(\alpha^l) = g(\alpha^{l+1})=0$ for some $l$ and for a primitive $n$th root of unity $\alpha$.  
+
+Let $r(x) = m(x) + e(x)$, where $m(x)$ is a code word and $e(x)$ is an error vector.
+
+1. Compute $s = r(\alpha^l)$. If $s = 0$, there is no error, or there is more than one error. (why?) 
+2. If $s\neq 0$, compute $s^{-1} r(\alpha^{l+1})$. This will be a power of $\alpha$ (why?), and the power (minus 1) gives the location of the error.
+
+## Why it works
+
+Let $\langle g(x) \rangle$ be a BCH code in $\mathbb{Z}_2[x]/(x^n+1)$ of designed distance $d \geq 3$, so $g(\alpha^l) = g(\alpha^{l+1})=0$ for some $l$ and for a primitive $n$th root of unity $\alpha$.  Let $r(x) = m(x) + e(x)$, where $m(x)$ is a code word and $e(x)$ is an error vector.
+
+1. Compute $s = r(\alpha^l)$. If $s = 0$, there is no error, or there is more than one error. 
+
+\begin{align}
+s &= r(\alpha^l) \\
+  &= m(\alpha^l) + e(\alpha^l) \\
+  &= 0 + e(\alpha^l) && \mbox{ since } m(x) \in \langle g(x) \rangle
+\end{align}
+
+## Why it works
+
+2. If $s\neq 0$, compute $s^{-1} r(\alpha^{l+1})$. This will be a power of $\alpha$, and the power (minus 1) gives the location of the error. 
+
+Suppose there is one error, so $e(x) = x^k$ for some $k$.
+
+\begin{align}
+s^{-1}r(\alpha^{l+1}) &= (e(\alpha^l))^{-1}e(\alpha^{l+1}) && \mbox{ by part 1} \\
+&= ((\alpha^l)^k)^{-1}(\alpha^{l+1})^k \\
+&= \alpha^k && \mbox{ properties of exponents}
+\end{align}
