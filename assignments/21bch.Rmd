@@ -25,5 +25,5 @@ Upload to Canvas a PDF of your work for the following problems.
     b. Find a polynomial $p(x)$ that generates a $[15,10]$ code in $\mathbb{Z}_2/(x^{15} + 1)$ with designed distance 4. Show that this code has the required designed distance by showing the factorization of $p(x)$ over $\text{GF}(16)$. 
 
 3. Use your package functions to answer the following.
-    a. Does the matrix `G` in Problem #1 of assignment 19 generate the code you found in #2a? Prove or disprove.
+    a. Does the matrix `G` in Problem #2 of assignment 19 generate the code you found in #2a? Prove or disprove.
     b. Construct a generating matrix for the code you found in #2b. Generate the code, and find the (actual) minimum distance of the code.
