@@ -1,0 +1,16 @@
+---
+title: "Matrix Tools for Codes"
+output:
+  html_document:
+    toc: false
+    df_print: paged
+    theme: spacelab
+---
+
+## Assignment: due Monday, 11/30, 11:59 pm
+
+Add the file [`codetools3.R`](https://djhunter.github.io/cryptography/R/codetools3.R) to the `R` subdirectory of your project. This file contains code for the functions `randBinVector` and `randInvMatrix`, as well as skeletons for two functions for you to implement, described below.
+
+1. Implement the function `cyclicCodeGenMat` as described in the documentation, which has two parameters, `g` and `n`. The parameter `g` represents a polynomial $g(x)$ in $\mathbb{Z}_2[x]/(x^n+1)$: the entries of the `g` are the exponents of the nonzero terms of $g(x)$. The function should return a generating matrix for the cyclic code $\langle g(x) \rangle$. This matrix need not be systematic. When converting a polynomial to a bitstring, the lower degree terms go first (e.g., see p. 427).
+
+2. Implement `randPermMatrix` as specified, which will generate a random $n \times n$ permutation matrix. You can look at the code for `randInvMatrix` to get an idea of how to do this. The function should perform `numswaps` random row swaps on an $n\times n$ identity matrix.

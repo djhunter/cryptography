@@ -3,8 +3,8 @@
 <head>
   <meta charset="utf-8">
   <meta name="generator" content="pandoc">
-  <meta name="dcterms.date" content="2020-12-01" />
-  <title>BCH Codes</title>
+  <meta name="dcterms.date" content="2020-12-03" />
+  <title>Reed-Solomon Codes</title>
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
@@ -1083,6 +1083,70 @@ visibility: hidden; }
 </style>
 
 
+<style type="text/css">
+code.sourceCode > span { display: inline-block; line-height: 1.25; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode { white-space: pre; position: relative; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+code.sourceCode { white-space: pre-wrap; }
+code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  { color: #cccccc; background-color: #303030; }
+@media screen {
+code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ffcfaf; } /* Alert */
+code span.an { color: #7f9f7f; font-weight: bold; } /* Annotation */
+code span.at { } /* Attribute */
+code span.bn { color: #dca3a3; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #f0dfaf; } /* ControlFlow */
+code span.ch { color: #dca3a3; } /* Char */
+code span.cn { color: #dca3a3; font-weight: bold; } /* Constant */
+code span.co { color: #7f9f7f; } /* Comment */
+code span.cv { color: #7f9f7f; font-weight: bold; } /* CommentVar */
+code span.do { color: #7f9f7f; } /* Documentation */
+code span.dt { color: #dfdfbf; } /* DataType */
+code span.dv { color: #dcdccc; } /* DecVal */
+code span.er { color: #c3bf9f; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #c0bed1; } /* Float */
+code span.fu { color: #efef8f; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #7f9f7f; font-weight: bold; } /* Information */
+code span.kw { color: #f0dfaf; } /* Keyword */
+code span.op { color: #f0efd0; } /* Operator */
+code span.ot { color: #efef8f; } /* Other */
+code span.pp { color: #ffcfaf; font-weight: bold; } /* Preprocessor */
+code span.sc { color: #dca3a3; } /* SpecialChar */
+code span.ss { color: #cc9393; } /* SpecialString */
+code span.st { color: #cc9393; } /* String */
+code span.va { } /* Variable */
+code span.vs { color: #cc9393; } /* VerbatimString */
+code span.wa { color: #7f9f7f; font-weight: bold; } /* Warning */
+</style>
 
 <style type="text/css">
 @font-face {
@@ -1801,202 +1865,135 @@ document.getElementsByTagName('head')[0].appendChild(style);
     <div class="slides">
 
 <section>
-    <h1 class="title">BCH Codes</h1>
-    <h3 class="date">December 1, 2020</h3>
+    <h1 class="title">Reed-Solomon Codes</h1>
+    <h3 class="date">December 3, 2020</h3>
 </section>
 
-<section><section id="recall-cyclic-codes" class="title-slide slide level1"><h1>Recall: Cyclic codes</h1></section><section id="cyclic-code-definitions" class="slide level2">
-<h2>Cyclic Code Definitions</h2>
-<p><strong>Definition.</strong> A code is <strong>cyclic</strong> if it is closed under cyclic shift: <span class="math display">\[
-(c_1, c_2, \ldots, c_{n-1}, c_n) \in C \Rightarrow (c_n, c_1, c_2, \ldots, c_{n-1}) \in C
-\]</span></p>
-<p><strong>Definition.</strong> A cyclic linear code (i.e., a <strong>cyclic code</strong>) of length <span class="math inline">\(n\)</span> is a subset of <span class="math inline">\(\mathbb{Z}_2[x]/(x^n+1)\)</span> that is closed under addition and closed under multiplication by <span class="math inline">\(x\)</span>. (A cyclic code is an <em>ideal</em> of <span class="math inline">\(\mathbb{Z}_2[x]/(x^n+1)\)</span>.)</p>
-</section><section id="cyclic-code-facts" class="slide level2">
-<h2>Cyclic Code Facts</h2>
+<section><section id="equivalence-of-codes" class="title-slide slide level1"><h1>Equivalence of Codes</h1></section><section id="equality" class="slide level2">
+<h2>Equality</h2>
 <ul>
-<li class="fragment">There is a one-to-one correspondence between the divisors of <span class="math inline">\(x^n + 1\)</span> and the cyclic codes of length <span class="math inline">\(n\)</span>.</li>
-<li class="fragment">If <span class="math inline">\(p(x)\)</span> is a divisor of <span class="math inline">\(x^n + 1\)</span> of degree <span class="math inline">\(r\)</span>, then the code words of <span class="math inline">\(\langle p(x) \rangle\)</span> are uniquely determined by products of the form <span class="math inline">\(p(x)q(x)\)</span>, where <span class="math inline">\(q(x)\)</span> is a polynomial of degree less than <span class="math inline">\(n-r\)</span>.</li>
-<li class="fragment">If <span class="math inline">\(p(x)\)</span> is a divisor of <span class="math inline">\(x^n + 1\)</span> of degree <span class="math inline">\(r\)</span>, then <span class="math inline">\(\langle p(x) \rangle\)</span> is a <span class="math inline">\([n, n-r]\)</span> cyclic code.</li>
-<li class="fragment">Let <span class="math inline">\(\langle g(x) \rangle\)</span> be the principal ideal corresponding to a cyclic code <span class="math inline">\(C\)</span>. If <span class="math inline">\(m(x)\)</span> is a polynomial satisfying <span class="math inline">\(m(x)g(x) = x^n+1\)</span>, then <span class="math inline">\(m(x)\)</span> is called a <strong>parity check polynomial.</strong> If <span class="math inline">\(m(x)\)</span> is a parity check polynomial and <span class="math inline">\(p(x)\)</span> is a message, then <span class="math inline">\(m(x)p(x) = 0\)</span> in <span class="math inline">\(\mathbb{Z}_2[x]/(x^n+1)\)</span> if and only if <span class="math inline">\(p(x)\)</span> is a codeword.</li>
+<li>Two codes are <em>equal</em> if they contain the same code words.</li>
+<li>Example: <code>G</code> of Assignment #19 and <span class="math inline">\(\langle x^{10}+x^8+x^5+x^4+x^2+x+1 \rangle\)</span></li>
 </ul>
-</section><section id="cyclic-code-examples" class="slide level2">
-<h2>Cyclic Code Examples</h2>
-<p>Over <span class="math inline">\(\mathbb{Z}_2\)</span>, <span class="math inline">\(x^7+1 = (x+1)(x^3+x+1)(x^3+x^2+1)\)</span>.</p>
-<table>
-<thead>
-<tr class="header">
-<th><span class="math inline">\(p(x)\)</span></th>
-<th><span class="math inline">\([n,k]\)</span></th>
-<th>Code</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td><span class="math inline">\(x+1\)</span></td>
-<td><span class="math inline">\([7,6]\)</span></td>
-<td>parity check</td>
-</tr>
-<tr class="even">
-<td><span class="math inline">\(x^3 + x + 1\)</span> or <span class="math inline">\(x^3 + x^2 + 1\)</span></td>
-<td><span class="math inline">\([7,4]\)</span></td>
-<td>Hamming</td>
-</tr>
-<tr class="odd">
-<td><span class="math inline">\((x+1)(x^3 + x + 1)\)</span> or <span class="math inline">\((x+1)(x^3 + x^2 + 1)\)</span></td>
-<td><span class="math inline">\([7,3]\)</span></td>
-<td>Hamming dual</td>
-</tr>
-<tr class="even">
-<td><span class="math inline">\((x^3 + x + 1)(x^3 + x^2 + 1) = x^6+x^5+x^4+x^3+x^2+x+1\)</span></td>
-<td><span class="math inline">\([7,1]\)</span></td>
-<td>repetition</td>
-</tr>
-</tbody>
-</table>
+</section><section id="permutation-equivalence" class="slide level2">
+<h2>Permutation Equivalence</h2>
+<ul>
+<li>Two codes are <em>permutation equivalent</em> if they are equal after permuting the coordinates of one of them.</li>
+<li>In other words, the code words (as matrices) have the same columns, except ordered differently.</li>
+<li>Permutation equivalent codes have the same distance properties, but possibly not the same algebraic properties.</li>
+</ul>
+</section><section id="example-hamming-73" class="slide level2">
+<h2>Example: Hamming <span class="math inline">\([7,3]\)</span></h2>
+<p>Systematic generating matrix:</p>
+<pre><code>gnrtCd&gt; generateCode(matrix(c(1,0,0,0,1,1,0,
+gnrtCd+                       0,1,0,0,1,0,1,
+gnrtCd+                       0,0,1,0,0,1,1,
+gnrtCd+                       0,0,0,1,1,1,1), nrow=4, byrow=TRUE))
+      [,1] [,2] [,3] [,4] [,5] [,6] [,7]
+ [1,]    0    0    0    0    0    0    0
+ [2,]    1    0    0    0    1    1    0
+ [3,]    0    1    0    0    1    0    1
+ [4,]    1    1    0    0    0    1    1
+ [5,]    0    0    1    0    0    1    1
+ [6,]    1    0    1    0    1    0    1
+ [7,]    0    1    1    0    1    1    0
+ [8,]    1    1    1    0    0    0    0
+ [9,]    0    0    0    1    1    1    1
+[10,]    1    0    0    1    0    0    1
+[11,]    0    1    0    1    0    1    0
+[12,]    1    1    0    1    1    0    0
+[13,]    0    0    1    1    1    0    0
+[14,]    1    0    1    1    0    1    0
+[15,]    0    1    1    1    0    0    1
+[16,]    1    1    1    1    1    1    1</code></pre>
+</section><section id="hamming-73-as-cyclic-code" class="slide level2">
+<h2>Hamming <span class="math inline">\([7,3]\)</span> as cyclic code</h2>
+<p>Not quite the same code:</p>
+<pre><code>&gt; generateCode(cyclicCodeGenMat(c(3,1,0), 7))
+      [,1] [,2] [,3] [,4] [,5] [,6] [,7]
+ [1,]    0    0    0    0    0    0    0
+ [2,]    1    1    0    1    0    0    0
+ [3,]    0    1    1    0    1    0    0
+ [4,]    1    0    1    1    1    0    0
+ [5,]    0    0    1    1    0    1    0
+ [6,]    1    1    1    0    0    1    0
+ [7,]    0    1    0    1    1    1    0
+ [8,]    1    0    0    0    1    1    0
+ [9,]    0    0    0    1    1    0    1
+[10,]    1    1    0    0    1    0    1
+[11,]    0    1    1    1    0    0    1
+[12,]    1    0    1    0    0    0    1
+[13,]    0    0    1    0    1    1    1
+[14,]    1    1    1    1    1    1    1
+[15,]    0    1    0    0    0    1    1
+[16,]    1    0    0    1    0    1    1</code></pre>
+</section><section id="permutation-matrix" class="slide level2">
+<h2>Permutation matrix</h2>
+<p>We want to start with the identity matrix and swap rows 3 and 4 and also rows 5 and 6:</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1"></a>M &lt;-<span class="st"> </span><span class="kw">diag</span>(<span class="dv">7</span>) <span class="co"># identity</span></span>
+<span id="cb3-2"><a href="#cb3-2"></a>M[, <span class="kw">c</span>(<span class="dv">3</span>,<span class="dv">4</span>)] &lt;-<span class="st"> </span>M[, <span class="kw">c</span>(<span class="dv">4</span>,<span class="dv">3</span>)] <span class="co"># swap columns 3 and 4</span></span>
+<span id="cb3-3"><a href="#cb3-3"></a>M[, <span class="kw">c</span>(<span class="dv">5</span>,<span class="dv">6</span>)] &lt;-<span class="st"> </span>M[, <span class="kw">c</span>(<span class="dv">6</span>,<span class="dv">5</span>)] <span class="co"># swap columns 5 and 6</span></span>
+<span id="cb3-4"><a href="#cb3-4"></a>M</span></code></pre></div>
+<pre><code>     [,1] [,2] [,3] [,4] [,5] [,6] [,7]
+[1,]    1    0    0    0    0    0    0
+[2,]    0    1    0    0    0    0    0
+[3,]    0    0    0    1    0    0    0
+[4,]    0    0    1    0    0    0    0
+[5,]    0    0    0    0    0    1    0
+[6,]    0    0    0    0    1    0    0
+[7,]    0    0    0    0    0    0    1</code></pre>
+</section><section id="permutation-equivalent-code" class="slide level2">
+<h2>Permutation equivalent code</h2>
+<p>Permute the code (or the generating matrix), and the codes match.</p>
+<pre><code>generateCode(cyclicCodeGenMat(c(3,1,0), 7) %*% M)
+      [,1] [,2] [,3] [,4] [,5] [,6] [,7]
+ [1,]    0    0    0    0    0    0    0
+ [2,]    1    1    1    0    0    0    0
+ [3,]    0    1    0    1    0    1    0
+ [4,]    1    0    1    1    0    1    0
+ [5,]    0    0    1    1    1    0    0
+ [6,]    1    1    0    1    1    0    0
+ [7,]    0    1    1    0    1    1    0
+ [8,]    1    0    0    0    1    1    0
+ [9,]    0    0    1    0    0    1    1
+[10,]    1    1    0    0    0    1    1
+[11,]    0    1    1    1    0    0    1
+[12,]    1    0    0    1    0    0    1
+[13,]    0    0    0    1    1    1    1
+[14,]    1    1    1    1    1    1    1
+[15,]    0    1    0    0    1    0    1
+[16,]    1    0    1    0    1    0    1</code></pre>
+</section><section id="permute-columns-by-multiplying-by-m-on-right" class="slide level2">
+<h2>Permute columns by multiplying by <span class="math inline">\(M\)</span> on right</h2>
+<pre><code>&gt; M
+     [,1] [,2] [,3] [,4] [,5] [,6] [,7]
+[1,]    1    0    0    0    0    0    0
+[2,]    0    1    0    0    0    0    0
+[3,]    0    0    0    1    0    0    0
+[4,]    0    0    1    0    0    0    0
+[5,]    0    0    0    0    0    1    0
+[6,]    0    0    0    0    1    0    0
+[7,]    0    0    0    0    0    0    1
+&gt; cyclicCodeGenMat(c(3,1,0), 7)
+     [,1] [,2] [,3] [,4] [,5] [,6] [,7]
+[1,]    1    1    0    1    0    0    0
+[2,]    0    1    1    0    1    0    0
+[3,]    0    0    1    1    0    1    0
+[4,]    0    0    0    1    1    0    1
+&gt; cyclicCodeGenMat(c(3,1,0), 7) %*% M
+     [,1] [,2] [,3] [,4] [,5] [,6] [,7]
+[1,]    1    1    1    0    0    0    0
+[2,]    0    1    0    1    0    1    0
+[3,]    0    0    1    1    1    0    0
+[4,]    0    0    1    0    0    1    1</code></pre>
 </section></section>
-<section><section id="bch-codes" class="title-slide slide level1"><h1>BCH Codes</h1></section><section id="codes-with-additional-structure" class="slide level2">
-<h2>Codes with additional structure</h2>
+<section><section id="cyclic-codes-so-far" class="title-slide slide level1"><h1>Cyclic Codes so far</h1></section><section id="recall-cyclic-codes-bch-codes" class="slide level2">
+<h2>Recall Cyclic codes, BCH codes</h2>
 <ul>
-<li>Cyclic codes have additional structure (they are ideals), which makes them easy to construct and check for errors.</li>
-<li>BCH codes are cyclic codes over other <em>Galois Fields</em>, whose structure will allow us to construct codes with a specified minimum distance.</li>
+<li>The code words of a cyclic code are all multiples of a generating polynomial, under the modulus <span class="math inline">\(x^n+1 = 0\)</span>.</li>
+<li>The generating polynomial of a BCH code contains factors (in a splitting field) of the form <span class="math inline">\((x-\alpha^i), (x-\alpha^{i+1}), \ldots (x-\alpha^{i+\delta})\)</span>, where <span class="math inline">\(\alpha\)</span> is a primitive <span class="math inline">\(n\)</span>th root of unity.</li>
+<li>Such a code is guaranteed to have minimum distance at least <span class="math inline">\(\delta + 2\)</span> (i.e., “designed distance”).</li>
 </ul>
-</section><section id="review-finite-fields" class="slide level2">
-<h2>Review: Finite Fields</h2>
-<ul>
-<li>If <span class="math inline">\(p(x)\)</span> is an irreducible polynomial of degree <span class="math inline">\(n\)</span> in <span class="math inline">\(\mathbb{Z}_2[x]\)</span>, then <span class="math inline">\(\mathbb{Z}_2[x]/(p(x))\)</span> is a field with <span class="math inline">\(2^n\)</span> elements, called <span class="math inline">\(\mbox{GF}(2^n)\)</span>.</li>
-<li>We think of the elements of <span class="math inline">\(\mbox{GF}(2^n)\)</span> as polynomials, under the modulus relation <span class="math inline">\(p(x) = 0\)</span>.</li>
-<li>Equivalently, we can think of <span class="math inline">\(\mbox{GF}(2^n)\)</span> as a field containing <span class="math inline">\(\mathbb{Z}_2\)</span> and an element <span class="math inline">\(\alpha\)</span>, such that <span class="math inline">\(p(\alpha) = 0\)</span>. We say that <span class="math inline">\(\mbox{GF}(2^n)\)</span> is an <em>extension field</em> of <span class="math inline">\(\mathbb{Z}_2\)</span>. <strong>Notation:</strong> <span class="math inline">\(\mbox{GF}(2^n) = \mathbb{Z}_2(\alpha)\)</span>
-<ul>
-<li>Analogy: <span class="math inline">\(\mathbb{C}\)</span> is an extension field of <span class="math inline">\(\mathbb{R}\)</span>, containing <span class="math inline">\(i\)</span>, a root of <span class="math inline">\(x^2 + 1\)</span>.</li>
-<li><span class="math inline">\(\mathbb{C} = \mathbb{R}(i)\)</span></li>
-</ul></li>
-</ul>
-</section><section id="roots-of-polynomials" class="slide level2">
-<h2>Roots of polynomials</h2>
-<p><span class="math inline">\(\mbox{GF}(2^n)\)</span> is a field containing <span class="math inline">\(\mathbb{Z}_2\)</span> and an element <span class="math inline">\(\alpha\)</span>, such that <span class="math inline">\(p(\alpha) = 0\)</span>. We say that <span class="math inline">\(\mbox{GF}(2^n)\)</span> is an <em>extension field</em> of <span class="math inline">\(\mathbb{Z}_2\)</span>.</p>
-<p>Example: <span class="math inline">\(\mbox{GF(4)} = \mathbb{Z}_2[x]/(x^2+x+1)\)</span></p>
-<ul>
-<li>Suppose <span class="math inline">\(\alpha\)</span> is a root of <span class="math inline">\(x^2+x+1\)</span>.</li>
-<li>Then <span class="math inline">\(\alpha^2 + \alpha + 1 = 0\)</span>.</li>
-<li>The powers of alpha are
-<ul>
-<li><span class="math inline">\(\alpha^1 = \alpha\)</span></li>
-<li><span class="math inline">\(\alpha^2 = \alpha + 1\)</span></li>
-<li><span class="math inline">\(\alpha^3 = \alpha^2 + \alpha = 1\)</span></li>
-</ul></li>
-</ul>
-</section><section id="exploration-powers-of-a-root" class="slide level2">
-<h2>Exploration: Powers of a root</h2>
-<ol type="1">
-<li><p>Over <span class="math inline">\(\mathbb{Z}_2\)</span>, let <span class="math inline">\(\alpha\)</span> be a root of <span class="math inline">\(x^3 + x + 1\)</span>. Compute all the powers of <span class="math inline">\(\alpha\)</span>, simplifying when possible. How many are there?</p></li>
-<li><p>Over <span class="math inline">\(\mathbb{Z}_2\)</span>, let <span class="math inline">\(\alpha\)</span> be a root of <span class="math inline">\(x^3 + x^2 + x + 1\)</span>. Compute all the powers of <span class="math inline">\(\alpha\)</span>, simplifying when possible. How many are there?</p></li>
-</ol>
-<p>Work in pairs on <a href="https://jamboard.google.com/d/1O4ZggWr4JU6R3d0ZkUl7ZPOWYrubq4VtuiKEugERT2k/edit?usp=sharing">this Jamboard</a>.</p>
-</section><section id="primitive-roots-of-unity" class="slide level2">
-<h2>Primitive roots of unity</h2>
-<p><strong>Facts:</strong> <span class="math inline">\(\mbox{GF}(2^n)\)</span> contains an element <span class="math inline">\(\alpha\)</span> such that:</p>
-<ul>
-<li><span class="math inline">\(\alpha^{2^n-1} = 1\)</span>. (<span class="math inline">\(\alpha\)</span> is a <span class="math inline">\((2^n-1)\)</span>th <em>root of unity</em>)</li>
-<li>Every nonzero element of <span class="math inline">\(\mbox{GF}(2^n)\)</span> is a power of <span class="math inline">\(\alpha\)</span>. (<span class="math inline">\(\alpha\)</span> is <em>primitive</em>)</li>
-<li><span class="math inline">\(\alpha\)</span> is a root of a polynomial of degree <span class="math inline">\(n\)</span>. (a <em>primitive polynomial</em>)</li>
-</ul>
-<p>Examples: <span class="math inline">\(\mbox{GF(4)}\)</span>, <span class="math inline">\(\mbox{GF(8)}\)</span></p>
-<p><a href="https://www.jjj.de/mathdata/all-primpoly.txt">List of primitive polynomials</a></p>
-</section><section id="factoring-x7-1-over-mathbbz_2" class="slide level2">
-<h2>Factoring <span class="math inline">\(x^7 + 1\)</span> over <span class="math inline">\(\mathbb{Z}_2\)</span></h2>
-<pre><code>i1 : R = ZZ/2[x]
-
-o1 = R
-
-o1 : PolynomialRing
-
-i2 : factor(x^7+1)
-
-              3           3    2
-o2 = (x + 1)(x  + x + 1)(x  + x  + 1)
-
-o2 : Expression of class Product
-</code></pre>
-</section><section id="factoring-x7-1-over-mboxgf8" class="slide level2">
-<h2>Factoring <span class="math inline">\(x^7 + 1\)</span> over <span class="math inline">\(\mbox{GF}(8)\)</span></h2>
-<pre><code>i1 : R = GF(8)[x]
-
-o1 = R
-
-o1 : PolynomialRing
-
-i2 : factor(x^7+1)
-
-                         2                  2           2               2
-o2 = (x + 1)(x + a)(x + a )(x + a + 1)(x + a  + a)(x + a  + a + 1)(x + a  + 1)
-
-o2 : Expression of class Product</code></pre>
-</section><section id="which-primitive-polynomial-is-macaulay2-using" class="slide level2">
-<h2>Which primitive polynomial is <a href="http://web.macaulay2.com/">Macaulay2</a> using?</h2>
-<pre><code>i1 : F = GF(8)
-o1 = F
-o1 : GaloisField
-
-i2 : ambient F
-        ZZ
-        --[a]
-         2
-o2 = ----------
-      3
-     a  + a + 1
-o2 : QuotientRing
-
-i3 : apply(1..7, i -&gt; a^i)
-          2          2       2           2
-o3 = (a, a , a + 1, a  + a, a  + a + 1, a  + 1, 1)
-o3 : Sequence</code></pre>
-</section><section id="splitting-xn-1" class="slide level2">
-<h2>Splitting <span class="math inline">\(x^n + 1\)</span></h2>
-<p><strong>Fact:</strong> Let <span class="math inline">\(\alpha\)</span> be a primitive <span class="math inline">\(n\)</span>th root of unity in some extension field of <span class="math inline">\(\mathbb{Z}_2\)</span>. Then</p>
-<p><span class="math display">\[x^n + 1 = (x+1)(x+\alpha)(x+\alpha^2)\cdots(x+\alpha^{n-1})\]</span></p>
-<p>So a divisor <span class="math inline">\(g(x)\)</span> of <span class="math inline">\(x^n+1\)</span> (and therefore a cyclic code <span class="math inline">\(\langle g(x) \rangle\)</span>) determines a set of powers of <span class="math inline">\(\alpha\)</span> that are zeroes of <span class="math inline">\(g(x)\)</span>.</p>
-<ul>
-<li><strong>Jargon:</strong> <span class="math inline">\(x^n+1\)</span> <em>splits</em> over <span class="math inline">\(\mathbb{Z}_2(\alpha)\)</span>.</li>
-<li>Analogy: All real polynomials split over <span class="math inline">\(\mathbb{C} = \mathbb{R}(i)\)</span>.</li>
-</ul>
-</section><section id="jamboard-exercise" class="slide level2">
-<h2><a href="https://jamboard.google.com/d/10fobOw7AIuHjnBauArd5gg7sh8rkQOUoLT6f3ZtjNfg/edit?usp=sharing">Jamboard</a> Exercise</h2>
-<p>Let <span class="math inline">\(C=\langle g(x)\rangle\)</span> be a cyclic code in <span class="math inline">\(\mathbb{Z}_2[x]/(x^{13}+1) = \mathbb{Z}(\alpha)\)</span>, where <span class="math inline">\(\alpha\)</span> is a primitive <span class="math inline">\(13\)</span>th root of unity. Suppose that <span class="math inline">\(g(\alpha^4) = g(\alpha^5) = 0\)</span>.</p>
-<ol type="1">
-<li><p>Let <span class="math inline">\(p(x)\)</span> be the parity check polynomial such that <span class="math inline">\(g(x)p(x) = x^n + 1\)</span>. Use the fact that <span class="math inline">\(x^{13}+1\)</span> splits over <span class="math inline">\(\mathbb{Z}_2(\alpha)\)</span> to explain why <span class="math inline">\(p(\alpha^4) \neq 0 \neq p(\alpha^5)\)</span>.</p></li>
-<li><p>Suppose that, for some <span class="math inline">\(k\)</span>, the polynomial <span class="math inline">\(m(x) = x^k\)</span> is a code word of weight 1. Show that this leads to a contradition.</p></li>
-<li><p>Suppose that, for some <span class="math inline">\(j,k\)</span>, the polynomial <span class="math inline">\(m(x) = x^j+ x^k\)</span> is a code word of weight 2. Show that this leads to a contradition.</p></li>
-<li><p>Explain why the minimum distance of <span class="math inline">\(C\)</span> is at least 3.</p></li>
-</ol>
-</section><section id="bch-bound-theorem-over-mathbbz_2" class="slide level2">
-<h2>BCH Bound Theorem over <span class="math inline">\(\mathbb{Z}_2\)</span></h2>
-<p><strong>Theorem.</strong> Let <span class="math inline">\(C = \langle g(x) \rangle\)</span> be a cyclic code in <span class="math inline">\(\mathbb{Z}_2[x]/(x^n+1)\)</span>, for <span class="math inline">\(n\)</span> odd. Let <span class="math inline">\(\alpha\)</span> be a primitive <span class="math inline">\(n\)</span>th root of unity, and suppose that for some integers <span class="math inline">\(l\)</span> and <span class="math inline">\(\delta\)</span>, <span class="math display">\[g(\alpha^l) = g(\alpha^{l+1}) = \cdots = g(\alpha^{l+\delta})=0.\]</span> Then the minimum distance of <span class="math inline">\(C\)</span> is at least <span class="math inline">\(\delta + 2\)</span>.</p>
-</section><section id="bch-code-of-designed-distance-d" class="slide level2">
-<h2>BCH Code of designed distance <span class="math inline">\(d\)</span></h2>
-<p>Let <span class="math inline">\(\alpha\)</span> be a primitive <span class="math inline">\(n\)</span>th root of unity.</p>
-<ul>
-<li>Factor <span class="math inline">\(x^n+1\)</span> over <span class="math inline">\(\mathbb{Z}_2\)</span>: <span class="math inline">\(x^n+1 = f_1(x)f_2(x)\cdots f_r(x)\)</span>.</li>
-<li>Write each factor <span class="math inline">\(f_i(x)\)</span> as a product of <span class="math inline">\((x + \alpha^j)\)</span>’s.</li>
-<li>Choose <span class="math inline">\(g(x)\)</span> to be a product of factors <span class="math inline">\(f_i(x)\)</span> containing <span class="math inline">\(\delta+1\)</span> consecutive <span class="math inline">\((x+\alpha^j)\)</span>’s.</li>
-<li>By the theorem, <span class="math inline">\(\langle g(x) \rangle\)</span> will have distance at least <span class="math inline">\(\delta + 2\)</span>.</li>
-</ul>
-</section><section id="examples" class="slide level2">
-<h2>Examples</h2>
-<p>Macaulay2 tells us that over <span class="math inline">\(\mathbb{Z}_2\)</span>,</p>
-<p><span class="math display">\[x^7+1 = (x+1)(x^3+x^2+1)(x^3+x+1)\]</span></p>
-<p>Furthermore, over <span class="math inline">\(\text{GF}(8)\)</span>,</p>
-<p><span class="math display">\[
-\begin{align}
-x^3+x^2+1 &amp;= (x + \alpha^3)(x+\alpha^5)(x+\alpha^6) \\
-x^3+x+1 &amp;= (x+\alpha)(x+\alpha^2)(x+\alpha^4)
-\end{align}
-\]</span></p>
-<p><a href="https://jamboard.google.com/d/1MgaL6FJttrZNq1ZHGNfC2i6-H8gWYCNtz9RaxlmIdT0/edit?usp=sharing">Jamboard</a> exercise. In <span class="math inline">\(\mathbb{Z}_2[x]/(x^7+1)\)</span>,</p>
-<ol type="1">
-<li>Find a generator for a code of designed distance 3.</li>
-<li>Find a generator for a code of designed distance 4.</li>
-<li>Find a generator for a code of designed distance 7.</li>
-</ol>
 </section><section id="bch-decoding" class="slide level2">
 <h2>BCH Decoding</h2>
 <ul>
@@ -2034,6 +2031,170 @@ s^{-1}r(\alpha^{l+1}) &amp;= (e(\alpha^l))^{-1}e(\alpha^{l+1}) &amp;&amp; \mbox{
 &amp;= ((\alpha^l)^k)^{-1}(\alpha^{l+1})^k \\
 &amp;= \alpha^k &amp;&amp; \mbox{ properties of exponents}
 \end{align}\]</span></p>
+<p>(See also pp. 438-439.)</p>
+</section><section id="bch-error-correction-exercise" class="slide level2">
+<h2>BCH Error Correction <a href="https://jamboard.google.com/d/1g_67Zxk30YU1d9LZqxlG6ur9YYG8ky4rl9N7vEK6h0A/edit?usp=sharing">Exercise</a></h2>
+<p>Recall that <span class="math inline">\(x^3+x^2+1 = (x + \alpha^3)(x+\alpha^5)(x+\alpha^6)\)</span> generates a <span class="math inline">\([7, 4, 3]\)</span> code in <span class="math inline">\(\mathbb{Z}_2[x]/(x^7+1)\)</span>. Here <span class="math inline">\(\text{GF}(8) = \mathbb{Z}_2[x]/(x^3+x+1) = \mathbb{Z}_2(\alpha)\)</span>. Decode <span class="math inline">\(x^6 + x^4 +x\)</span>, if possible. Use <a href="http://web.macaulay2.com">Macaulay2</a> appropriately.</p>
+<pre><code>i1 : F = GF(8)
+o1 = F
+o1 : GaloisField
+
+i2 : ambient F
+        ZZ
+        --[a]
+         2
+o2 = ----------
+      3
+     a  + a + 1
+o2 : QuotientRing
+
+i3 : apply(1..7, i -&gt; a^i)
+          2          2       2           2
+o3 = (a, a , a + 1, a  + a, a  + a + 1, a  + 1, 1)
+o3 : Sequence</code></pre>
+</section></section>
+<section><section id="reed-solomon-codes" class="title-slide slide level1"><h1>Reed-Solomon Codes</h1></section><section id="section" class="slide level2" data-background="https://solarsystem.nasa.gov/system/resources/detail_files/2304_mgs_1280.jpg" data-background-size="contain">
+<h2></h2>
+</section><section id="reed-solomon-codes-and-mars" class="slide level2">
+<h2>Reed-Solomon Codes and Mars</h2>
+<p>The Mars Global Surveyor (MGS) was launched in 1996 and retired in 2007. According to <a href="https://onlinelibrary.wiley.com/doi/abs/10.1002/sat.871">this journal article</a> by a JPL scientist,</p>
+<blockquote>
+<p>The MGS downlink to Earth incorporates a 25 W travelling wave tube amplifier and a gimballed, 1:5 m high-gain antenna with a transmit gain of 39:1 dBic. Forward error correction coding options include a <span class="math inline">\((255, 223)\)</span> Reed-Solomon code concatenated with either a <span class="math inline">\((7, \frac{1}{2})\)</span> or <span class="math inline">\((15, \frac{1}{6})\)</span> convolutional code.</p>
+</blockquote>
+</section><section id="codes-over-other-fields" class="slide level2">
+<h2>Codes over other fields</h2>
+<ul>
+<li>So far, we have been working with codes over <span class="math inline">\(\mathbb{Z}_2\)</span>.</li>
+<li>We can also consider codes over other finite fields.</li>
+<li><em>Hamming distance</em> between two code words is still the <em>number of positions where the words differ</em>.</li>
+<li>For linear codes, the weight (= number of nonzero entries) of the lightest code word is still the minimum distance of the code.</li>
+</ul>
+</section><section id="bch-bound-theorem-over-mathbbz_2" class="slide level2">
+<h2>BCH Bound Theorem over <span class="math inline">\(\mathbb{Z}_2\)</span></h2>
+<p>Recall,</p>
+<p><strong>Theorem.</strong> Let <span class="math inline">\(C = \langle g(x) \rangle\)</span> be a cyclic code in <span class="math inline">\(\mathbb{Z}_2[x]/(x^n+1)\)</span>, for <span class="math inline">\(n\)</span> odd. Let <span class="math inline">\(\alpha\)</span> be a primitive <span class="math inline">\(n\)</span>th root of unity, and suppose that for some integers <span class="math inline">\(l\)</span> and <span class="math inline">\(\delta\)</span>, <span class="math display">\[g(\alpha^l) = g(\alpha^{l+1}) = \cdots = g(\alpha^{l+\delta})=0.\]</span> Then the minimum distance of <span class="math inline">\(C\)</span> is at least <span class="math inline">\(\delta + 2\)</span>.</p>
+</section><section id="bch-bound-theorem-over-any-field-f" class="slide level2">
+<h2>BCH Bound Theorem over any field <span class="math inline">\(F\)</span></h2>
+<p>The BCH Bound Theorem generalizes to other finite fields.</p>
+<p><strong>Theorem.</strong> Let <span class="math inline">\(C = \langle g(x) \rangle\)</span> be a cyclic code in <span class="math inline">\(F[x]/(x^n-1)\)</span>, where <span class="math inline">\(F\)</span> has <span class="math inline">\(q=p^m\)</span> elements. Assume <span class="math inline">\(p \nmid n\)</span>. Let <span class="math inline">\(\alpha\)</span> be a primitive <span class="math inline">\(n\)</span>th root of unity, and suppose that for some integers <span class="math inline">\(l\)</span> and <span class="math inline">\(\delta\)</span>, <span class="math display">\[g(\alpha^l) = g(\alpha^{l+1}) = \cdots = g(\alpha^{l+\delta})=0.\]</span> Then the minimum distance of <span class="math inline">\(C\)</span> is at least <span class="math inline">\(\delta + 2\)</span>.</p>
+</section><section id="reed-solomon-codes-1" class="slide level2">
+<h2>Reed-Solomon Codes</h2>
+<p><strong>Fact:</strong> Suppose <span class="math inline">\(F\)</span> is finite field with <span class="math inline">\(q\)</span> elements. If <span class="math inline">\(n = q-1\)</span>, then <span class="math inline">\(F\)</span> contains a primitive <span class="math inline">\(n\)</span>th root of unity <span class="math inline">\(\alpha\)</span>.</p>
+<p>So we can construct a code in <span class="math inline">\(F[x]/(x^n-1)\)</span> using a generating polynomial of the following form.</p>
+<p><span class="math display">\[
+g(x) = (x-\alpha)(x-\alpha^2)\cdots(x-\alpha^{d-1})
+\]</span></p>
+<p>and then the theorem tells us the minimum distance of <span class="math inline">\(\langle g(x) \rangle\)</span> is at least <span class="math inline">\(d\)</span>.</p>
+<p>Such <span class="math inline">\(\langle g(x) \rangle\)</span> is called a <em>Reed-Solomon code</em>.</p>
+</section><section id="reed-solomon-optimality" class="slide level2">
+<h2>Reed-Solomon optimality</h2>
+<ul>
+<li>A code in <span class="math inline">\(F[x]/(x^n-1)\)</span> with generating polynomial <span class="math display">\[
+g(x) = (x-\alpha)(x-\alpha^2)\cdots(x-\alpha^{d-1})
+\]</span> has minimum distance at least <span class="math inline">\(d\)</span>. But <span class="math inline">\(g(x)\)</span> has only <span class="math inline">\(d\)</span> nonzero terms. So the minimum distance <em>equals</em> <span class="math inline">\(d\)</span>.</li>
+<li>If <span class="math inline">\(|F|=q\)</span>, then there are <span class="math inline">\(q^{n-(d-1)}\)</span> code words, since <span class="math inline">\(g(x)\)</span> has degree <span class="math inline">\(d-1\)</span>.</li>
+<li>But <span class="math inline">\(q^{n-d+1}\)</span> is the Singleton bound. So these codes are <em>Maximum Distance Separable</em> (MDS).</li>
+</ul>
+</section><section id="reed-solomon-example-f-mathbbz_7" class="slide level2">
+<h2>Reed-Solomon Example: <span class="math inline">\(F = \mathbb{Z}_7\)</span></h2>
+<p>Consider <span class="math inline">\(F = \mathbb{Z}_7\)</span>. A Reed-Solomon code is an ideal of <span class="math inline">\(\mathbb{Z}_7[x]/(x^6-1)\)</span>.</p>
+<p>We need a primitive 6th root of unity in <span class="math inline">\(\mathbb{Z}_7\)</span>.</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1"></a><span class="kw">outer</span>(<span class="dv">1</span><span class="op">:</span><span class="dv">6</span>, <span class="dv">1</span><span class="op">:</span><span class="dv">6</span>, <span class="cf">function</span>(x,y) {(x<span class="op">^</span>y) <span class="op">%%</span><span class="st"> </span><span class="dv">7</span>})</span></code></pre></div>
+<pre><code>     [,1] [,2] [,3] [,4] [,5] [,6]
+[1,]    1    1    1    1    1    1
+[2,]    2    4    1    2    4    1
+[3,]    3    2    6    4    5    1
+[4,]    4    2    1    4    2    1
+[5,]    5    4    6    2    3    1
+[6,]    6    1    6    1    6    1</code></pre>
+</section><section id="reed-solomon-example-f-mathbbz_7-1" class="slide level2 build">
+<h2>Reed-Solomon Example: <span class="math inline">\(F = \mathbb{Z}_7\)</span></h2>
+<p>Consider <span class="math inline">\(F = \mathbb{Z}_7\)</span>. A Reed-Solomon code is an ideal of <span class="math inline">\(\mathbb{Z}_7[x]/(x^6-1)\)</span>.</p>
+<p>Let <span class="math inline">\(\alpha = 3\)</span> be our primitive 6th root of unity in <span class="math inline">\(\mathbb{Z}_7\)</span>.</p>
+<p>A distance 4 code is generated by <span class="math inline">\(g(x) = (x-3)(x-3^2)(x-3^3) = x^3+3x^2+x+6\)</span>.</p>
+<p>The dimension of this code is <span class="math inline">\(k = n - \deg(g(x)) = 6-3 = 3\)</span>. Therefore a generating matrix is:</p>
+<p><span class="math display">\[
+G = \begin{bmatrix} 6 &amp; 1 &amp; 3 &amp; 1 &amp; 0 &amp; 0 \\
+0 &amp; 6 &amp; 1 &amp; 3 &amp; 1 &amp; 0  \\
+0 &amp; 0 &amp; 6 &amp; 1 &amp; 3 &amp; 1  
+\end{bmatrix}
+\]</span></p>
+<p>The number of code words is <span class="math inline">\(7^3 = 343\)</span>.</p>
+</section><section id="reed-solomon-example-f-textgf8" class="slide level2">
+<h2>Reed-Solomon Example: <span class="math inline">\(F = \text{GF}(8)\)</span></h2>
+<ul>
+<li>Recall that <span class="math inline">\(\alpha\)</span> is a primitive 7th root of unity satisfying <span class="math inline">\(\alpha^3+\alpha+1 = 0\)</span></li>
+<li><span class="math inline">\(\text{GF}(8) = \{0, 1, \alpha, \alpha^2, \ldots, \alpha^6\}\)</span></li>
+<li>A Reed-Solomon code is an ideal of <span class="math inline">\(\text{GF}(8)[x]/(x^7+1)\)</span>.</li>
+<li>A Reed-Solomon code can be generated by <span class="math inline">\(g(x) = (x+\alpha)(x+\alpha^2) \stackrel{?}{=} x^2 + \alpha^4x + \alpha^3\)</span>.</li>
+</ul>
+</section><section id="reed-solomon-example-f-textgf8-1" class="slide level2">
+<h2>Reed-Solomon Example: <span class="math inline">\(F = \text{GF}(8)\)</span></h2>
+<p><a href="https://jamboard.google.com/d/13LkM9xzzWSoTHn6aISwcov9_7_7n10isGQWDpCn5_Hc/edit?usp=sharing">Exercise</a>. Let <span class="math inline">\(g(x) = x^2 + \alpha^4x + \alpha^3\)</span> be the generator for a Reed-Solomon code in <span class="math inline">\(\text{GF}(8)[x]/(x^7+1)\)</span>.</p>
+<ol type="1">
+<li>What is the minimum distance of <span class="math inline">\(\langle g(x) \rangle\)</span>?</li>
+<li>What is the length of this code?</li>
+<li>What is the dimension of this code?</li>
+<li>Write down a generating matrix for this code.</li>
+<li>Find a code word that’s not in your generating matrix.</li>
+<li>How many code words are there in <span class="math inline">\(\langle g(x) \rangle\)</span>?</li>
+</ol>
+</section><section id="correcting-1-error-of-a-reed-solomon-code" class="slide level2">
+<h2>Correcting 1 error of a Reed-Solomon code</h2>
+<p>Let <span class="math inline">\(\langle g(x) \rangle\)</span> be a Reed-Solomon code in <span class="math inline">\(F[x]/(x^n-1)\)</span> of distance <span class="math inline">\(d \geq 3\)</span>, so <span class="math inline">\(g(\alpha) = g(\alpha^{2})=0\)</span> for a primitive <span class="math inline">\(n\)</span>th root of unity <span class="math inline">\(\alpha\)</span>, where <span class="math inline">\(n+1\)</span> is the size of <span class="math inline">\(F\)</span>.</p>
+<p>Let <span class="math inline">\(r(x) = m(x) + e(x)\)</span>, where <span class="math inline">\(m(x)\)</span> is a code word and <span class="math inline">\(e(x)\)</span> is an error vector.</p>
+<ol type="1">
+<li>Compute <span class="math inline">\(s = r(\alpha)\)</span>. If <span class="math inline">\(s = 0\)</span>, there is no error, or there is more than one error.</li>
+<li>If <span class="math inline">\(s \neq 0\)</span>, compute <span class="math inline">\(s^{-1} r(\alpha^{2})\)</span>. This will have the form <span class="math inline">\(\alpha^k\)</span>, and error will be in the <span class="math inline">\(x^k\)</span> term.</li>
+<li>The error vector is <span class="math inline">\(e(x) = s\alpha^{-k}x^k\)</span> (why?), so the decoded word is <span class="math inline">\(r(x) - e(x)\)</span>.</li>
+</ol>
+</section><section id="example" class="slide level2 smaller">
+<h2>Example</h2>
+<p>For the code <span class="math inline">\(\langle x^2 + \alpha^4x + \alpha^3 \rangle\)</span> in <span class="math inline">\(\text{GF}(8)[x]/(x^7+1)\)</span>, decode the received word <span class="math display">\[
+r(x) = x^6 + \alpha^3x^4 + \alpha^2x^3 + \alpha^4x^2 + \alpha^6 x + \alpha^6
+\]</span></p>
+<pre><code>i1 : R = GF(8)[x]
+o1 = R
+o1 : PolynomialRing
+
+i2 : r = x^6 + a^3*x^4 + a^2*x^3 + a^4*x^2 + a^6*x + a^6
+      6           4    2 3     2      2     2          2
+o2 = x  + (a + 1)x  + a x  + (a  + a)x  + (a  + 1)x + a  + 1
+o2 : R
+
+i3 : s = sub(r, x=&gt;a)
+o3 = a
+o3 : GF 8</code></pre>
+<p>So <span class="math inline">\(s = \alpha\)</span>. Continuing, we get <span class="math inline">\(s^{-1} r(\alpha^{2}) = \alpha^3\)</span>, so the error is in the <span class="math inline">\(x^3\)</span> term. The error vector is <span class="math inline">\(e(x) = s\alpha^{-3}x^3 = \alpha^{-2}x^3 = \alpha^5x^3\)</span>. The decoded word is <span class="math inline">\(r(x)+e(x) = x^6 + \alpha^3x^4 + \alpha^3x^3 + \alpha^4x^2 + \alpha^6 x + \alpha^6\)</span>.</p>
+</section><section id="textgf2m-and-bit-strings" class="slide level2">
+<h2><span class="math inline">\(\text{GF}(2^m)\)</span> and bit strings</h2>
+<p>Recall that the elements of <span class="math inline">\(\text{GF}(2^m)\)</span> can be regarded as bit strings. For example,</p>
+<pre><code>i1 : F = GF(8)
+o1 = F
+o1 : GaloisField
+
+
+i3 : apply(1..7, i -&gt; a^i)
+          2          2       2           2
+o3 = (a, a , a + 1, a  + a, a  + a + 1, a  + 1, 1)
+o3 : Sequence</code></pre>
+<p>We can identify these with 010, 001, 110, 011, 111, 101, 100, and along with 000 we get all the 3-digit bit strings.</p>
+</section><section id="mars-global-surveyor-code" class="slide level2">
+<h2>Mars Global Surveyor Code</h2>
+<p>The MGS used a <span class="math inline">\((255, 233)\)</span> Reed-Solomon code.</p>
+<ul>
+<li>What is <span class="math inline">\(F\)</span>?</li>
+<li>What is the generator?</li>
+<li>What is the minimum distance? How many errors can be corrected?</li>
+</ul>
+</section><section id="good-for-finding-corrupted-bytes" class="slide level2">
+<h2>Good for finding corrupted <em>Bytes</em></h2>
+<ul>
+<li>An element of <span class="math inline">\(\text{GF}(2^8)\)</span> is an 8-bit string, i.e., a byte.</li>
+<li>A Reed-Solomon code over <span class="math inline">\(\text{GF}(256)\)</span> can correct corrupted <em>bytes</em>.</li>
+<li>If errors occur in consecutive bits (e. g., a scratch on a CD or a solar flare), this is a good thing.</li>
+<li>Not so good if errors are randomly distributed.</li>
+</ul>
 </section></section>
     </div>
   </div>

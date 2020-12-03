@@ -1,0 +1,395 @@
+---
+title: "Reed-Solomon Codes"
+date: "December 3, 2020"
+output: 
+  revealjs::revealjs_presentation:
+    fig_width: 14 
+    fig_height: 7
+    self_contained: true
+    theme: night
+    highlight: zenburn
+    css: slidesdjh.css
+    center: false
+    transition: slide
+    reveal_options:
+      controls: true
+      progress: false
+      width: 1080
+      height: 540
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_chunk$set(comment = NA)
+options(width = 100)
+```
+
+# Equivalence of Codes
+
+## Equality
+
+- Two codes are *equal* if they contain the same code words.
+- Example: `G` of Assignment #19 and $\langle x^{10}+x^8+x^5+x^4+x^2+x+1 \rangle$
+
+## Permutation Equivalence
+
+- Two codes are *permutation equivalent* if they are equal after permuting the coordinates of one of them.
+- In other words, the code words (as matrices) have the same columns, except ordered differently.
+- Permutation equivalent codes have the same distance properties, but possibly not the same algebraic properties.
+
+## Example: Hamming $[7,3]$
+
+Systematic generating matrix:
+
+```
+gnrtCd> generateCode(matrix(c(1,0,0,0,1,1,0,
+gnrtCd+                       0,1,0,0,1,0,1,
+gnrtCd+                       0,0,1,0,0,1,1,
+gnrtCd+                       0,0,0,1,1,1,1), nrow=4, byrow=TRUE))
+      [,1] [,2] [,3] [,4] [,5] [,6] [,7]
+ [1,]    0    0    0    0    0    0    0
+ [2,]    1    0    0    0    1    1    0
+ [3,]    0    1    0    0    1    0    1
+ [4,]    1    1    0    0    0    1    1
+ [5,]    0    0    1    0    0    1    1
+ [6,]    1    0    1    0    1    0    1
+ [7,]    0    1    1    0    1    1    0
+ [8,]    1    1    1    0    0    0    0
+ [9,]    0    0    0    1    1    1    1
+[10,]    1    0    0    1    0    0    1
+[11,]    0    1    0    1    0    1    0
+[12,]    1    1    0    1    1    0    0
+[13,]    0    0    1    1    1    0    0
+[14,]    1    0    1    1    0    1    0
+[15,]    0    1    1    1    0    0    1
+[16,]    1    1    1    1    1    1    1
+```
+
+## Hamming $[7,3]$ as cyclic code
+
+Not quite the same code:
+
+```
+> generateCode(cyclicCodeGenMat(c(3,1,0), 7))
+      [,1] [,2] [,3] [,4] [,5] [,6] [,7]
+ [1,]    0    0    0    0    0    0    0
+ [2,]    1    1    0    1    0    0    0
+ [3,]    0    1    1    0    1    0    0
+ [4,]    1    0    1    1    1    0    0
+ [5,]    0    0    1    1    0    1    0
+ [6,]    1    1    1    0    0    1    0
+ [7,]    0    1    0    1    1    1    0
+ [8,]    1    0    0    0    1    1    0
+ [9,]    0    0    0    1    1    0    1
+[10,]    1    1    0    0    1    0    1
+[11,]    0    1    1    1    0    0    1
+[12,]    1    0    1    0    0    0    1
+[13,]    0    0    1    0    1    1    1
+[14,]    1    1    1    1    1    1    1
+[15,]    0    1    0    0    0    1    1
+[16,]    1    0    0    1    0    1    1
+```
+
+## Permutation matrix
+
+We want to start with the identity matrix and swap rows 3 and 4 and also rows 5 and 6:
+
+```{r}
+M <- diag(7) # identity
+M[, c(3,4)] <- M[, c(4,3)] # swap columns 3 and 4
+M[, c(5,6)] <- M[, c(6,5)] # swap columns 5 and 6
+M
+```
+
+## Permutation equivalent code
+
+Permute the code (or the generating matrix), and the codes match.
+
+```
+generateCode(cyclicCodeGenMat(c(3,1,0), 7) %*% M)
+      [,1] [,2] [,3] [,4] [,5] [,6] [,7]
+ [1,]    0    0    0    0    0    0    0
+ [2,]    1    1    1    0    0    0    0
+ [3,]    0    1    0    1    0    1    0
+ [4,]    1    0    1    1    0    1    0
+ [5,]    0    0    1    1    1    0    0
+ [6,]    1    1    0    1    1    0    0
+ [7,]    0    1    1    0    1    1    0
+ [8,]    1    0    0    0    1    1    0
+ [9,]    0    0    1    0    0    1    1
+[10,]    1    1    0    0    0    1    1
+[11,]    0    1    1    1    0    0    1
+[12,]    1    0    0    1    0    0    1
+[13,]    0    0    0    1    1    1    1
+[14,]    1    1    1    1    1    1    1
+[15,]    0    1    0    0    1    0    1
+[16,]    1    0    1    0    1    0    1
+```
+
+## Permute columns by multiplying by $M$ on right
+
+```
+> M
+     [,1] [,2] [,3] [,4] [,5] [,6] [,7]
+[1,]    1    0    0    0    0    0    0
+[2,]    0    1    0    0    0    0    0
+[3,]    0    0    0    1    0    0    0
+[4,]    0    0    1    0    0    0    0
+[5,]    0    0    0    0    0    1    0
+[6,]    0    0    0    0    1    0    0
+[7,]    0    0    0    0    0    0    1
+> cyclicCodeGenMat(c(3,1,0), 7)
+     [,1] [,2] [,3] [,4] [,5] [,6] [,7]
+[1,]    1    1    0    1    0    0    0
+[2,]    0    1    1    0    1    0    0
+[3,]    0    0    1    1    0    1    0
+[4,]    0    0    0    1    1    0    1
+> cyclicCodeGenMat(c(3,1,0), 7) %*% M
+     [,1] [,2] [,3] [,4] [,5] [,6] [,7]
+[1,]    1    1    1    0    0    0    0
+[2,]    0    1    0    1    0    1    0
+[3,]    0    0    1    1    1    0    0
+[4,]    0    0    1    0    0    1    1
+```
+
+# Cyclic Codes so far
+
+## Recall Cyclic codes, BCH codes
+
+- The code words of a cyclic code are all multiples of a generating polynomial, under the modulus $x^n+1 = 0$.
+- The generating polynomial of a BCH code contains factors (in a splitting field) of the form $(x-\alpha^i), (x-\alpha^{i+1}), \ldots (x-\alpha^{i+\delta})$, where $\alpha$ is a primitive $n$th root of unity.
+- Such a code is guaranteed to have minimum distance at least $\delta + 2$ (i.e., "designed distance").
+
+## BCH Decoding
+
+- Error-detection of BCH codes is easy, because they are cyclic codes.
+- BCH codes have [good error-correcting decoding algorithms](https://infoscience.epfl.ch/record/33884/files/HongV95.pdf).
+- To illustrate, we'll see how to correct a single error.
+
+## Correcting 1 error of a BCH code
+
+Let $\langle g(x) \rangle$ be a BCH code in $\mathbb{Z}_2[x]/(x^n+1)$ of designed distance $d \geq 3$, so $g(\alpha^l) = g(\alpha^{l+1})=0$ for some $l$ and for a primitive $n$th root of unity $\alpha$.  
+
+Let $r(x) = m(x) + e(x)$, where $m(x)$ is a code word and $e(x)$ is an error vector.
+
+1. Compute $s = r(\alpha^l)$. If $s = 0$, there is no error, or there is more than one error. (why?) 
+2. If $s\neq 0$, compute $s^{-1} r(\alpha^{l+1})$. This will be a power of $\alpha$ (why?), and the power (plus 1) gives the location of the error.
+
+## Why it works
+
+Let $\langle g(x) \rangle$ be a BCH code in $\mathbb{Z}_2[x]/(x^n+1)$ of designed distance $d \geq 3$, so $g(\alpha^l) = g(\alpha^{l+1})=0$ for some $l$ and for a primitive $n$th root of unity $\alpha$.  Let $r(x) = m(x) + e(x)$, where $m(x)$ is a code word and $e(x)$ is an error vector.
+
+1. Compute $s = r(\alpha^l)$. If $s = 0$, there is no error, or there is more than one error. 
+
+\begin{align}
+s &= r(\alpha^l) \\
+  &= m(\alpha^l) + e(\alpha^l) \\
+  &= 0 + e(\alpha^l) && \mbox{ since } m(x) \in \langle g(x) \rangle
+\end{align}
+
+## Why it works
+
+2. If $s\neq 0$, compute $s^{-1} r(\alpha^{l+1})$. This will be a power of $\alpha$, and the power (plus 1) gives the location of the error. 
+
+Suppose there is one error, so $e(x) = x^k$ for some $k$.
+
+\begin{align}
+s^{-1}r(\alpha^{l+1}) &= (e(\alpha^l))^{-1}e(\alpha^{l+1}) && \mbox{ by part 1} \\
+&= ((\alpha^l)^k)^{-1}(\alpha^{l+1})^k \\
+&= \alpha^k && \mbox{ properties of exponents}
+\end{align}
+
+(See also pp. 438-439.)
+
+## BCH Error Correction [Exercise](https://jamboard.google.com/d/1g_67Zxk30YU1d9LZqxlG6ur9YYG8ky4rl9N7vEK6h0A/edit?usp=sharing)
+
+Recall that $x^3+x^2+1 = (x + \alpha^3)(x+\alpha^5)(x+\alpha^6)$ generates a $[7, 4, 3]$ code in $\mathbb{Z}_2[x]/(x^7+1)$. Here $\text{GF}(8) = \mathbb{Z}_2[x]/(x^3+x+1) = \mathbb{Z}_2(\alpha)$.  Decode $x^6 + x^4 +x$, if possible. Use [Macaulay2](http://web.macaulay2.com) appropriately. 
+
+```
+i1 : F = GF(8)
+o1 = F
+o1 : GaloisField
+
+i2 : ambient F
+        ZZ
+        --[a]
+         2
+o2 = ----------
+      3
+     a  + a + 1
+o2 : QuotientRing
+
+i3 : apply(1..7, i -> a^i)
+          2          2       2           2
+o3 = (a, a , a + 1, a  + a, a  + a + 1, a  + 1, 1)
+o3 : Sequence
+```
+
+# Reed-Solomon Codes
+
+## {data-background="https://solarsystem.nasa.gov/system/resources/detail_files/2304_mgs_1280.jpg" data-background-size="contain"}
+
+## Reed-Solomon Codes and Mars
+
+The Mars Global Surveyor (MGS) was launched in 1996 and retired in 2007. According to [this journal article](https://onlinelibrary.wiley.com/doi/abs/10.1002/sat.871) by a JPL scientist,
+
+> The MGS downlink to Earth incorporates a 25 W travelling wave tube amplifier and a gimballed, 1:5 m high-gain antenna with a transmit gain of 39:1 dBic. Forward error correction coding options include a $(255, 223)$ Reed-Solomon code concatenated with either a $(7, \frac{1}{2})$ or $(15, \frac{1}{6})$ convolutional code.
+
+## Codes over other fields
+
+- So far, we have been working with codes over $\mathbb{Z}_2$.
+- We can also consider codes over other finite fields.
+- *Hamming distance* between two code words is still the *number of positions where the words differ*.
+- For linear codes, the weight (= number of nonzero entries) of the lightest code word is still the minimum distance of the code.
+
+## BCH Bound Theorem over $\mathbb{Z}_2$
+
+Recall,
+
+**Theorem.** Let $C = \langle g(x) \rangle$ be a cyclic code in $\mathbb{Z}_2[x]/(x^n+1)$, for $n$ odd. Let $\alpha$ be a primitive $n$th root of unity, and suppose that for some integers $l$ and $\delta$, $$g(\alpha^l) = g(\alpha^{l+1}) = \cdots = g(\alpha^{l+\delta})=0.$$  Then the minimum distance of $C$ is at least $\delta + 2$.
+
+## BCH Bound Theorem over any field $F$
+
+The BCH Bound Theorem generalizes to other finite fields.
+
+**Theorem.** Let $C = \langle g(x) \rangle$ be a cyclic code in $F[x]/(x^n-1)$, where $F$ has $q=p^m$ elements. Assume $p \nmid n$. Let $\alpha$ be a primitive $n$th root of unity, and suppose that for some integers $l$ and $\delta$, $$g(\alpha^l) = g(\alpha^{l+1}) = \cdots = g(\alpha^{l+\delta})=0.$$  Then the minimum distance of $C$ is at least $\delta + 2$.
+
+## Reed-Solomon Codes
+
+**Fact:** Suppose $F$ is finite field with $q$ elements. If $n = q-1$, then $F$ contains a primitive $n$th root of unity $\alpha$.
+
+So we can construct a code in $F[x]/(x^n-1)$ using a generating polynomial of the following form.
+
+$$
+g(x) = (x-\alpha)(x-\alpha^2)\cdots(x-\alpha^{d-1})
+$$
+
+and then the theorem tells us the minimum distance of $\langle g(x) \rangle$ is at least $d$.
+
+Such $\langle g(x) \rangle$ is called a *Reed-Solomon code*.
+
+## Reed-Solomon optimality
+
+- A code in $F[x]/(x^n-1)$ with generating polynomial
+$$
+g(x) = (x-\alpha)(x-\alpha^2)\cdots(x-\alpha^{d-1})
+$$
+has minimum distance at least $d$. But $g(x)$ has only $d$ nonzero terms. So the minimum distance *equals* $d$.
+- If $|F|=q$, then there are $q^{n-(d-1)}$ code words, since $g(x)$ has degree $d-1$.
+- But $q^{n-d+1}$ is the Singleton bound. So these codes are *Maximum Distance Separable* (MDS).
+
+## Reed-Solomon Example: $F = \mathbb{Z}_7$
+
+Consider $F = \mathbb{Z}_7$. A Reed-Solomon code is an ideal of $\mathbb{Z}_7[x]/(x^6-1)$.
+
+We need a primitive 6th root of unity in $\mathbb{Z}_7$.
+
+```{r}
+outer(1:6, 1:6, function(x,y) {(x^y) %% 7})
+```
+
+## Reed-Solomon Example: $F = \mathbb{Z}_7$ {.build}
+
+Consider $F = \mathbb{Z}_7$. A Reed-Solomon code is an ideal of $\mathbb{Z}_7[x]/(x^6-1)$.
+
+Let $\alpha = 3$ be our primitive 6th root of unity in $\mathbb{Z}_7$.
+
+A distance 4 code is generated by $g(x) = (x-3)(x-3^2)(x-3^3) = x^3+3x^2+x+6$.
+
+The dimension of this code is $k = n - \deg(g(x)) = 6-3 = 3$. Therefore a generating matrix is:
+
+$$
+G = \begin{bmatrix} 6 & 1 & 3 & 1 & 0 & 0 \\
+0 & 6 & 1 & 3 & 1 & 0  \\
+0 & 0 & 6 & 1 & 3 & 1  
+\end{bmatrix}
+$$
+
+The number of code words is $7^3 = 343$.
+
+## Reed-Solomon Example: $F = \text{GF}(8)$
+
+- Recall that $\alpha$ is a primitive 7th root of unity satisfying $\alpha^3+\alpha+1 = 0$
+- $\text{GF}(8) = \{0, 1, \alpha, \alpha^2, \ldots, \alpha^6\}$ 
+- A Reed-Solomon code is an ideal of $\text{GF}(8)[x]/(x^7+1)$. 
+- A Reed-Solomon code can be generated by $g(x) = (x+\alpha)(x+\alpha^2) \stackrel{?}{=} x^2 + \alpha^4x + \alpha^3$.
+
+## Reed-Solomon Example: $F = \text{GF}(8)$
+
+[Exercise](https://jamboard.google.com/d/13LkM9xzzWSoTHn6aISwcov9_7_7n10isGQWDpCn5_Hc/edit?usp=sharing). Let $g(x) = x^2 + \alpha^4x + \alpha^3$ be the generator for a Reed-Solomon code in $\text{GF}(8)[x]/(x^7+1)$. 
+
+1. What is the minimum distance of $\langle g(x) \rangle$?
+2. What is the length of this code?
+3. What is the dimension of this code?
+4. Write down a generating matrix for this code.
+5. Find a code word that's not in your generating matrix.
+6. How many code words are there in $\langle g(x) \rangle$?
+
+## Correcting 1 error of a Reed-Solomon code
+
+Let $\langle g(x) \rangle$ be a Reed-Solomon code in $F[x]/(x^n-1)$ of distance $d \geq 3$, so $g(\alpha) = g(\alpha^{2})=0$ for a primitive $n$th root of unity $\alpha$, where $n+1$ is the size of $F$.  
+
+Let $r(x) = m(x) + e(x)$, where $m(x)$ is a code word and $e(x)$ is an error vector.
+
+1. Compute $s = r(\alpha)$. If $s = 0$, there is no error, or there is more than one error.
+2. If $s \neq 0$, compute $s^{-1} r(\alpha^{2})$. This will have the form $\alpha^k$, and error will be in the $x^k$ term.
+3. The error vector is $e(x) = s\alpha^{-k}x^k$ (why?), so the decoded word is $r(x) - e(x)$.
+
+## Example {.smaller}
+
+For the code $\langle x^2 + \alpha^4x + \alpha^3 \rangle$ in $\text{GF}(8)[x]/(x^7+1)$, decode the received word
+$$
+r(x) = x^6 + \alpha^3x^4 + \alpha^2x^3 + \alpha^4x^2 + \alpha^6 x + \alpha^6
+$$
+
+```
+i1 : R = GF(8)[x]
+o1 = R
+o1 : PolynomialRing
+
+i2 : r = x^6 + a^3*x^4 + a^2*x^3 + a^4*x^2 + a^6*x + a^6
+      6           4    2 3     2      2     2          2
+o2 = x  + (a + 1)x  + a x  + (a  + a)x  + (a  + 1)x + a  + 1
+o2 : R
+
+i3 : s = sub(r, x=>a)
+o3 = a
+o3 : GF 8
+```
+
+So $s = \alpha$. Continuing, we get  $s^{-1} r(\alpha^{2}) = \alpha^3$, so the error is in the $x^3$ term. The error vector is $e(x) = s\alpha^{-3}x^3 = \alpha^{-2}x^3 = \alpha^5x^3$. The decoded word is $r(x)+e(x) = x^6 + \alpha^3x^4 + \alpha^3x^3 + \alpha^4x^2 + \alpha^6 x + \alpha^6$.
+
+## $\text{GF}(2^m)$ and bit strings
+
+Recall that the elements of $\text{GF}(2^m)$ can be regarded as bit strings. For example,
+
+```
+i1 : F = GF(8)
+o1 = F
+o1 : GaloisField
+
+
+i3 : apply(1..7, i -> a^i)
+          2          2       2           2
+o3 = (a, a , a + 1, a  + a, a  + a + 1, a  + 1, 1)
+o3 : Sequence
+```
+
+We can identify these with 010, 001, 110, 011, 111, 101, 100, and along with 000 we get all the 3-digit bit strings.
+
+
+## Mars Global Surveyor Code
+
+The MGS used a $(255, 233)$ Reed-Solomon code.
+
+- What is $F$?
+- What is the generator?
+- What is the minimum distance? How many errors can be corrected?
+
+## Good for finding corrupted *Bytes*
+
+- An element of $\text{GF}(2^8)$ is an 8-bit string, i.e., a byte.
+- A Reed-Solomon code over $\text{GF}(256)$ can correct corrupted *bytes*.
+- If errors occur in consecutive bits (e. g.,  a scratch on a CD or a solar flare), this is a good thing.
+- Not so good if errors are randomly distributed.
+

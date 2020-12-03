@@ -1,0 +1,29 @@
+---
+title: "Reed-Solomon Codes"
+output:
+  html_document:
+    toc: false
+    df_print: paged
+    theme: spacelab
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_chunk$set(comment = NA)
+```
+
+Upload to Canvas a PDF of your work for the following problems. 
+
+## Assignment: due Monday 12/7, 11:59 pm
+
+*Use [Macaulay2](http://web.macaulay2.com/) for any needed calculations.*
+
+1. The polynomial $g(x) = x^4 + x^3 + 1$ generates an $[n,k,d]$ BCH code in $\mathbb{Z}_2[x]/(x^{15}+1)$. Determine the length $n$, the dimension $k$, and the minimum distance $d$, and give reasons for your answers.
+
+2. Consider the BCH code of Problem #1. Use the method on pp. 438-439 (or the special case given in the slides) to correct the error in the received word $r(x) = x^{14}+x^{13}+x^{10}+x^9+x^7+x^5+x+1$. Give the error vector, along with the corrected code word.
+
+3. Let $\alpha$ be a primitive 15th root of unity in $\text{GF}(16)$. Find a generating polynomial for the distance 7 Reed-Solomon code in $\text{GF}(16)[x]/(x^{15}+1)$. Write your polynomial as the sum of terms of the form $\alpha^jx^k$, and give a generator matrix for the code whose nonzero entries all have the form $\alpha^j$.
+
+4. Consider the code of Problem #3. Use the method on pp. 438-439 (or the special case given in the slides) to correct the error in the following received word. 
+$$r(x) = \alpha^{3}x^{14}+\alpha^{13}x^{13}+\alpha^{2}x^{12}+x^{11}+\alpha^{5}x^{10}+\alpha^{11}x^{9}+\alpha^{9}x^{8}+\alpha^{3}x^{6}+\alpha^{11}x^{5}+x^{4}+\alpha^{9}x^{3}+\alpha^{3}x^{2}+\alpha^{8}x+\alpha^{7}$$
+Give the error vector, along with the corrected code word.
