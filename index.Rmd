@@ -82,7 +82,7 @@ This site provides slides, assignments, and other resources that I use in my Cod
 19. [Systematic Codes](assignments/19systematic.html)
 20. [Cyclic Codes](assignments/20cyclic.html)
 21. [BCH Codes](assignments/21bch.html)
-22. [Reed-Solomon Codes Codes](assignments/22reedsolomon.html)
+22. [Reed-Solomon Codes](assignments/22reedsolomon.html)
 
 # Programming Assignments
 
