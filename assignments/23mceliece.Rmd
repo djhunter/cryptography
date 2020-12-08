@@ -1,0 +1,43 @@
+---
+title: "The McEliece Cryptosytem"
+output:
+  html_document:
+    toc: false
+    df_print: paged
+    theme: spacelab
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_chunk$set(comment = NA)
+```
+
+Upload to Canvas a PDF of your work for the following problems. You will definitely want to type this one. A text listing of your R commands and output will suffice. If you want to be fancy, you can use RMarkdown.
+
+## Assignment: due Wednesday, 11:59 pm
+
+The Golay code $G_{24}$ is a linear $[24,12]$ code that can correct $t=3$ errors. The following lines of code will load the generating matrix `golay24` and coset leader syndrome table `gT` into your local R environment.
+
+```{r, eval=FALSE}
+golay24 <- matrix(c(1,0,0,0,0,0,0,0,0,0,0,0,1,1,1,0,1,1,1,0,0,0,1,0,
+                    0,1,0,0,0,0,0,0,0,0,0,0,1,0,1,1,0,1,1,1,0,0,0,1,
+                    0,0,1,0,0,0,0,0,0,0,0,0,1,1,0,1,1,0,1,1,1,0,0,0,
+                    0,0,0,1,0,0,0,0,0,0,0,0,1,0,1,0,1,1,0,1,1,1,0,0,
+                    0,0,0,0,1,0,0,0,0,0,0,0,1,0,0,1,0,1,1,0,1,1,1,0,
+                    0,0,0,0,0,1,0,0,0,0,0,0,1,0,0,0,1,0,1,1,0,1,1,1,
+                    0,0,0,0,0,0,1,0,0,0,0,0,1,1,0,0,0,1,0,1,1,0,1,1,
+                    0,0,0,0,0,0,0,1,0,0,0,0,1,1,1,0,0,0,1,0,1,1,0,1,
+                    0,0,0,0,0,0,0,0,1,0,0,0,1,1,1,1,0,0,0,1,0,1,1,0,
+                    0,0,0,0,0,0,0,0,0,1,0,0,1,0,1,1,1,0,0,0,1,0,1,1,
+                    0,0,0,0,0,0,0,0,0,0,1,0,1,1,0,1,1,1,0,0,0,1,0,1,
+                    0,0,0,0,0,0,0,0,0,0,0,1,0,1,1,1,1,1,1,1,1,1,1,1),
+                  byrow=TRUE, nrow=12)
+load(url("http://math.westmont.edu/data/golay24table.RData"))
+gT[["001101011010"]] # example: use a syndrome to look up the coset leader
+```
+
+1. Use your package functions `randInvMatrix` and `randPermMatrix` to make Bob's choice of appropriately-sized $S$ and $P$, respectively. Use at least 200 operations when you randomize. **Tip:** Set the random number seed using `set.seed` so you will be able to reproduce your work. Give $S$, $P$, and also the public key $G_1$ that Bob publishes.
+
+2. Alice wishes to send the 12-bit message `101010101010`. Use your `randBinVector` function to create an appropriately-sized and weighted random error vector $e$, and compute the binary vector $y$ that Alice sends. 
+
+3. Show how Bob can decrypt the message by computing $y_1$, computing its syndrome, using the coset leader syndrome table `gT` to obtain the code word $x_1$, and then applying $S^{-1}$ to the information bits to recover Alice's original 12-bit message.
