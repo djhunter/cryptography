@@ -44,7 +44,7 @@ Instead, she sends the message:
 oaupcrejcvwugtpcogkutcodnkpiuetcodngt
 ```
 
->  **Discuss.** Eve observes this communication, and figures out their encryption scheme. The next message sent is `tqhnqn`. What is the decrypted message? What is Alice and Bob's scheme?
+>  **Discuss.** Eve observes this communication, and figures out their encryption scheme. The next message sent is `qnffqi`. What is the decrypted message? What is Alice and Bob's scheme?
 
 ## ~~What you need~~ What you will learn
 
@@ -73,7 +73,7 @@ oaupcrejcvwugtpcogkutcodnkpiuetcodngt
 - Data transmission
 - Cryptographic coding (i.e., cryptography)
 
-[Syllabus](../tex/macs124f20.pdf) (PDF)
+[Syllabus](../syllabus/macs124hunterF22.pdf) (PDF)
 
 # Assumptions and Terminology 
 
@@ -86,8 +86,8 @@ oaupcrejcvwugtpcogkutcodnkpiuetcodngt
 
 ## Terminology 
 
->- **Plaintext:** The message that Alice would like to send to Bob. (`roflol`)
->- **Ciphertext:** The encrypted message that Alice sends (`tqhnqn`)
+>- **Plaintext:** The message that Alice would like to send to Bob. (`olddog`)
+>- **Ciphertext:** The encrypted message that Alice sends (`qnffqi`)
 >- **Key:** A piece of information, which, combined with the method, allows a ciphertext to be decrypted.
 
 ## Example: A shift cipher
@@ -95,8 +95,8 @@ oaupcrejcvwugtpcogkutcodnkpiuetcodngt
 > *Example.* The method described above is called a **shift cipher**
 > (or Caesar cipher). 
 
-- Plaintext: `roflol`
-- Ciphertext: `tqhnqn`
+- Plaintext: `olddog`
+- Ciphertext: `qnffqi`
 - Key: `2` (how much to shift)
 
 **Question:** How do you encrypt the plaintext `fuzzy`?
@@ -130,30 +130,11 @@ In other words, when you do arithmetic modulo $n$, it doesn't matter which equiv
 
 ## Group Exercise: Modular arithmetic
 
-Join the *voice channel* for your group. Use the *Jamboard* (link on `#macs-124`).
-
-```{r, echo=FALSE}
-library(knitr)
-roster <- c("Sam", "Wesley", "Andrew", "Winston", "Michael", "Logan", "Christian", "Caleb", "James", "Joe", "Emily", "Giselle", "Nathan")
-set.seed(8312020) 
-n <- length(roster)
-ngps <- 3
-maxingp <- ceiling(n/ngps)
-# just make random groups
-groups <- matrix(c(roster[sample(n)], 
-                   rep("",(maxingp - (n %% maxingp)) %% maxingp)), 
-                 ncol=maxingp, byrow=FALSE)
-rownames(groups) <- paste0("Group #", 1:nrow(groups))
-kable(t(groups))
-```
-
 Compute each expression modulo 7, without using technology.
 
 1. $(32 + 76)(144 - 7000) \bmod 7$
 
 2. $23^{100} \bmod 7$
-
-Return to the *Seminar Room* when you finish.
 
 ## Modular arithmetic in R
 

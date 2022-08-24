@@ -32,77 +32,85 @@ meta() %>%
   )
 ```
 
-This site provides slides, assignments, and other resources that I use in my Codes and Encryption class (MA/CS-124, Westmont College, 2016-2020).
+This site provides slides, assignments, and other resources that I use in my Codes and Encryption class (MA/CS-124, Westmont College).
 
 # Slides 
 
 1. [Introduction: Cryptography and Coding Theory](slides/01intro_crypto.html) 
-2. [Affine Ciphers and the GCD](slides/02affine_ciphers.html) 
-3. [Substitution and Vigenère Ciphers](slides/03vigenere_ciphers.html)
-4. [Attacks on Vigenère Ciphers](slides/04vigenere_attacks.html)
-5. [Matrices and the Hill Cipher](slides/05matrix_hill.html)
-6. [Linear Feedback Shift Registers](slides/06lfsr.html)
-7. [Data Encryption Standard (DES); Finite Fields](slides/07desaes1.html)
-8. [Advanced Encryption Standard (AES)](slides/08desaes2.html)
-9. [RSA Public Key Encryption](slides/09rsa1.html)
-10. [Attacks on RSA and Primality Testing](slides/10rsa2.html)
-11. [Discrete Logarithms, Diffie-Hellman, ElGamal](slides/11discrete_logs.html)
-12. [Hash Functions](slides/12hash_functions.html)
-13. [Digital Signatures](slides/13digital_sigs.html)
-14. [Real Elliptic Curves](slides/14elliptic_curves1.html)
-15. [Mod p Elliptic Curves](slides/15elliptic_curves2.html)
-16. [Elliptic Curve Cryptography](slides/16elliptic_curves3.html)
-17. [Introduction to Codes](slides/17codes1.html)
-18. [Codes: Definitions and Theorems](slides/18codes2.html)
-19. [Linear Codes](slides/19codes3.html)
-20. [Cyclic Codes](slides/20codes4.html)
-21. [Fields and BCH Codes](slides/21codes5.html)
-22. [Reed Solomon Codes](slides/22codes6.html)
-23. [Codes and Encryption](slides/23codes7.html)
+
+---
+# 2. [Affine Ciphers and the GCD](slides/02affine_ciphers.html) 
+# 3. [Substitution and Vigenère Ciphers](slides/03vigenere_ciphers.html)
+# 4. [Attacks on Vigenère Ciphers](slides/04vigenere_attacks.html)
+# 5. [Matrices and the Hill Cipher](slides/05matrix_hill.html)
+# 6. [Linear Feedback Shift Registers](slides/06lfsr.html)
+# 7. [Data Encryption Standard (DES); Finite Fields](slides/07desaes1.html)
+# 8. [Advanced Encryption Standard (AES)](slides/08desaes2.html)
+# 9. [RSA Public Key Encryption](slides/09rsa1.html)
+# 10. [Attacks on RSA and Primality Testing](slides/10rsa2.html)
+# 11. [Discrete Logarithms, Diffie-Hellman, ElGamal](slides/11discrete_logs.html)
+# 12. [Hash Functions](slides/12hash_functions.html)
+# 13. [Digital Signatures](slides/13digital_sigs.html)
+# 14. [Real Elliptic Curves](slides/14elliptic_curves1.html)
+# 15. [Mod p Elliptic Curves](slides/15elliptic_curves2.html)
+# 16. [Elliptic Curve Cryptography](slides/16elliptic_curves3.html)
+# 17. [Introduction to Codes](slides/17codes1.html)
+# 18. [Codes: Definitions and Theorems](slides/18codes2.html)
+# 19. [Linear Codes](slides/19codes3.html)
+# 20. [Cyclic Codes](slides/20codes4.html)
+# 21. [Fields and BCH Codes](slides/21codes5.html)
+# 22. [Reed Solomon Codes](slides/22codes6.html)
+# 23. [Codes and Encryption](slides/23codes7.html)
+---
 
 # Written Assignments
 
 1. [Modular arithmetic](assignments/01modding.html)
-2. [Shift ciphers and affine ciphers](assignments/02shiftaffine.html)
-3. [Substitution and Vigenère Ciphers](assignments/03subciphers.html)
-4. [Properties of Vigenère Ciphers](assignments/04vigenere.html)
-5. [Matrices and the Hill Cipher](assignments/05mathill.html)
-6. [Matrices and LFSR's](assignments/06matlfsr.html)
-7. [Meet-in-the-middle; Finite Fields](assignments/07mitmff.html)
-8. [AES and Modes of Operation](assignments/08aesmodes.html)
-9. [Some RSA Calculations](assignments/09rsacalc.html)
-10. [Prime Numbers and RSA](assignments/10primes.html)
-11. [Discrete Logarithms](assignments/11dlogs.html)
-12. [Hash Functions and the Birthday Theorem](assignments/12hash.html)
-13. [Digital Signatures](assignments/13sigs.html)
-14. [Real Elliptic Curves](assignments/14real_ell.html)
-15. [Mod p Elliptic Curves](assignments/15modp_ell.html)
-16. [Elliptic Curve Cryptography](assignments/16ec_crypto.html)
-17. [Codes: Introductory Examples](assignments/17introcodes.html)
-18. [Codes: Theoretical Limitations](assignments/18codelimits.html)
-19. [Systematic Codes](assignments/19systematic.html)
-20. [Cyclic Codes](assignments/20cyclic.html)
-21. [BCH Codes](assignments/21bch.html)
-22. [Reed-Solomon Codes](assignments/22reedsolomon.html)
-23. [The McEliece Cryptosystem](assignments/23mceliece.html)
+
+---
+# 2. [Shift ciphers and affine ciphers](assignments/02shiftaffine.html)
+# 3. [Substitution and Vigenère Ciphers](assignments/03subciphers.html)
+# 4. [Properties of Vigenère Ciphers](assignments/04vigenere.html)
+# 5. [Matrices and the Hill Cipher](assignments/05mathill.html)
+# 6. [Matrices and LFSR's](assignments/06matlfsr.html)
+# 7. [Meet-in-the-middle; Finite Fields](assignments/07mitmff.html)
+# 8. [AES and Modes of Operation](assignments/08aesmodes.html)
+# 9. [Some RSA Calculations](assignments/09rsacalc.html)
+# 10. [Prime Numbers and RSA](assignments/10primes.html)
+# 11. [Discrete Logarithms](assignments/11dlogs.html)
+# 12. [Hash Functions and the Birthday Theorem](assignments/12hash.html)
+# 13. [Digital Signatures](assignments/13sigs.html)
+# 14. [Real Elliptic Curves](assignments/14real_ell.html)
+# 15. [Mod p Elliptic Curves](assignments/15modp_ell.html)
+# 16. [Elliptic Curve Cryptography](assignments/16ec_crypto.html)
+# 17. [Codes: Introductory Examples](assignments/17introcodes.html)
+# 18. [Codes: Theoretical Limitations](assignments/18codelimits.html)
+# 19. [Systematic Codes](assignments/19systematic.html)
+# 20. [Cyclic Codes](assignments/20cyclic.html)
+# 21. [BCH Codes](assignments/21bch.html)
+# 22. [Reed-Solomon Codes](assignments/22reedsolomon.html)
+# 23. [The McEliece Cryptosystem](assignments/23mceliece.html)
+---
 
 # Programming Assignments
 
-1. [Getting started with R packages](programming/01affine.html)
-2. [Tools for Breaking a Vigenère Cipher](programming/02vigbreak.html)
-3. [OTP and LFSR tools](programming/03mathillotp.html)
-4. [GF(256) and AES](programming/04gf256aes.html)
-5. [RSA tools](programming/05rsa.html)
-6. [Discrete Logarithms and Hash Functions](programming/06discloghash.html)
-7. [DSA and Real Elliptic Curves](programming/07dsa_real_ell.html)
-8. [Mod p Elliptic Curves](programming/08modp_ell.html)
-9. [Code Distance and Generation](programming/09code_tools1.html)
-10. [Systematic Codes](programming/10code_tools2.html)
-11. [Matrix Tools for Codes](programming/11code_tools3.html)
+---
+# 1. [Getting started with R packages](programming/01affine.html)
+# 2. [Tools for Breaking a Vigenère Cipher](programming/02vigbreak.html)
+# 3. [OTP and LFSR tools](programming/03mathillotp.html)
+# 4. [GF(256) and AES](programming/04gf256aes.html)
+# 5. [RSA tools](programming/05rsa.html)
+# 6. [Discrete Logarithms and Hash Functions](programming/06discloghash.html)
+# 7. [DSA and Real Elliptic Curves](programming/07dsa_real_ell.html)
+# 8. [Mod p Elliptic Curves](programming/08modp_ell.html)
+# 9. [Code Distance and Generation](programming/09code_tools1.html)
+# 10. [Systematic Codes](programming/10code_tools2.html)
+# 11. [Matrix Tools for Codes](programming/11code_tools3.html)
+---
 
 # Other Resources
 
-- [Syllabus](tex/macs124f20.pdf) (PDF)
+- [Syllabus](syllabus/macs124hunterF22.pdf) (PDF)
 
 All of the pages and slides on this site were authored in RMarkdown. The source code is available on GitHub: https://github.com/djhunter/cryptography
 
