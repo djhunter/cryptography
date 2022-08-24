@@ -1,0 +1,312 @@
+% Options for packages loaded elsewhere
+\PassOptionsToPackage{unicode}{hyperref}
+\PassOptionsToPackage{hyphens}{url}
+%
+\documentclass[
+  twoside]{article}
+\usepackage{amsmath,amssymb}
+\usepackage{lmodern}
+\usepackage{iftex}
+\ifPDFTeX
+  \usepackage[T1]{fontenc}
+  \usepackage[utf8]{inputenc}
+  \usepackage{textcomp} % provide euro and other symbols
+\else % if luatex or xetex
+  \usepackage{unicode-math}
+  \defaultfontfeatures{Scale=MatchLowercase}
+  \defaultfontfeatures[\rmfamily]{Ligatures=TeX,Scale=1}
+\fi
+% Use upquote if available, for straight quotes in verbatim environments
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+\IfFileExists{microtype.sty}{% use microtype if available
+  \usepackage[]{microtype}
+  \UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
+}{}
+\makeatletter
+\@ifundefined{KOMAClassName}{% if non-KOMA class
+  \IfFileExists{parskip.sty}{%
+    \usepackage{parskip}
+  }{% else
+    \setlength{\parindent}{0pt}
+    \setlength{\parskip}{6pt plus 2pt minus 1pt}}
+}{% if KOMA class
+  \KOMAoptions{parskip=half}}
+\makeatother
+\usepackage{xcolor}
+\usepackage[left=0.5in, right=0.5in, top=0.8in, bottom=0.4in]{geometry}
+\usepackage{graphicx}
+\makeatletter
+\def\maxwidth{\ifdim\Gin@nat@width>\linewidth\linewidth\else\Gin@nat@width\fi}
+\def\maxheight{\ifdim\Gin@nat@height>\textheight\textheight\else\Gin@nat@height\fi}
+\makeatother
+% Scale images if necessary, so that they will not overflow the page
+% margins by default, and it is still possible to overwrite the defaults
+% using explicit options in \includegraphics[width, height, ...]{}
+\setkeys{Gin}{width=\maxwidth,height=\maxheight,keepaspectratio}
+% Set default figure placement to htbp
+\makeatletter
+\def\fps@figure{htbp}
+\makeatother
+\setlength{\emergencystretch}{3em} % prevent overfull lines
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+\setcounter{secnumdepth}{-\maxdimen} % remove section numbering
+\usepackage[charter]{mathdesign}
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+\lhead{MA/CS-124, Hunter, Fall 2022}
+\rhead{Syllabus, Page \thepage}
+\cfoot{}
+\setlength{\headsep}{0.2in}
+
+\usepackage{enumitem}
+
+\setenumerate{leftmargin=*}
+
+\newcommand{\vect}[1]{\mathbf{#1}} % vectors in bold face
+
+%\newcommand{\vect}[1]{\mathbf{#1}\,} % vectors in bold face (need thin
+                                     % space after)
+%\newcommand{\vect}[1]{\vec{#1}} %vectors as arrows
+
+\providecommand{\norm}[1]{\left\lvert#1\right\rvert} % norms as single lines
+%\providecommand{\norm}[1]{\left\lVert#1\right\rVert} % norms as double lines
+
+% bold or blackboard bold!?
+\newcommand{\NN}{\mathbb{N}}
+%\newcommand{\RR}{\mathbf{R}}
+\newcommand{\RR}{\mathbb{R}}
+
+% some useful abbreviations
+\newcommand{\vx}{\vect{x}}
+\newcommand{\vy}{\vect{y}}
+\newcommand{\vz}{\vect{z}}
+\newcommand{\vu}{\vect{u}}
+\newcommand{\vv}{\vect{v}}
+\newcommand{\vw}{\vect{w}}
+\newcommand{\va}{\vect{a}}
+\newcommand{\vb}{\vect{b}}
+\newcommand{\vc}{\vect{c}}
+\newcommand{\ve}{\vect{e}}
+\newcommand{\vf}{\vect{f}}
+\newcommand{\vF}{\vect{F}}
+\newcommand{\vg}{\vect{g}}
+\newcommand{\vh}{\vect{h}}
+\newcommand{\vl}{\vect{l}}
+\newcommand{\vm}{\vect{m}}
+\newcommand{\vn}{\vect{n}}
+\newcommand{\vp}{\vect{p}}
+\newcommand{\vr}{\vect{r}}
+\newcommand{\vs}{\vect{s}}
+\newcommand{\vi}{\vect{i}}
+\newcommand{\vj}{\vect{j}}
+\newcommand{\vk}{\vect{k}}
+\newcommand{\vzero}{\vect{0}}
+% lower-case greek letters are handled differently: poor man's bold macro
+%\newcommand{\vphi}{\pmb{\phi}}
+
+\newcommand{\malename}{Westley} % recurring male name
+\newcommand{\femalename}{Buttercup} % recurring female name
+\usepackage{booktabs}
+\usepackage{longtable}
+\usepackage{array}
+\usepackage{multirow}
+\usepackage{wrapfig}
+\usepackage{float}
+\usepackage{colortbl}
+\usepackage{pdflscape}
+\usepackage{tabu}
+\usepackage{threeparttable}
+\usepackage{threeparttablex}
+\usepackage[normalem]{ulem}
+\usepackage{makecell}
+\usepackage{xcolor}
+\ifLuaTeX
+  \usepackage{selnolig}  % disable illegal ligatures
+\fi
+\IfFileExists{bookmark.sty}{\usepackage{bookmark}}{\usepackage{hyperref}}
+\IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
+\urlstyle{same} % disable monospaced font for URLs
+\hypersetup{
+  hidelinks,
+  pdfcreator={LaTeX via pandoc}}
+
+\author{}
+\date{\vspace{-2.5em}}
+
+\begin{document}
+
+\hypertarget{codes-and-encryption-macs-124-westmont-college-fall-2022}{%
+\section{Codes and Encryption (MA/CS-124) Westmont College, Fall
+2022}\label{codes-and-encryption-macs-124-westmont-college-fall-2022}}
+
+\hypertarget{what-is-this-course-about}{%
+\subsection{What is this course
+about?}\label{what-is-this-course-about}}
+
+Modern applications of computing demand that the storage and
+transmission of data be secure and reliable. Cryptography is the study
+of techniques for protecting data from adversaries, while coding theory
+deals with representing data robustly in digital form. This course
+provides an introduction to these related fields. Topics include basic
+number theory and modern algebra, classical and modern cryptosystems,
+discrete logarithms, hash functions, digital signatures, elliptic
+curves, and error-correcting codes.
+
+We will approach these topics from a mathematical, yet applied,
+perspective. We will focus on the general mathematical principles that
+govern the ways that information is stored and transmitted securely. We
+will not dwell too heavily on the technicalities of specific protocols
+and implementations. Rather, we strive to understand the concepts that
+underlie the technology, so that you will be prepared to view current
+and future implementations as scientists and engineers, not as
+technicians.
+
+\hypertarget{is-there-a-textbook}{%
+\subsection{Is there a textbook?}\label{is-there-a-textbook}}
+
+We will cover most of the content of \emph{Introduction to Cryptography
+with Coding Theory}, by Trappe and Washington, 2nd Edition. If you have
+your own computer, install R and RStudio on it
+(\url{https://www.rstudio.com}). We will be using Canvas, so you might
+want to install the app. It will also be convienent to have an app on
+your phone that can scan documents to PDF.
+
+\hypertarget{what-is-the-coursework-and-how-is-it-graded}{%
+\subsection{What is the coursework and how is it
+graded?}\label{what-is-the-coursework-and-how-is-it-graded}}
+
+You should expect a \textbf{written assignment} due the night before
+every class meeting. You will submit them on Canvas as PDFs, which you
+can create by scanning your written work using a scanning app. If you
+prefer, you can typeset these assignments using LaTeX or a word
+processor. Over the course of the semester, you will develop an
+\textbf{R package} containing a library of functions for solving
+problems in cryptography and coding theory. Typically, I will give you a
+template including function prototypes, ROxygen comments, and test cases
+that your functions should satisfy. You will submit successive versions
+of this package as \texttt{tar.gz} files on Canvas. There will be two
+written midterm \textbf{exams}, and a cumulative \textbf{final exam} on
+the scheduled date. The following table shows how these assessments are
+weighted to determine your final grade.
+
+\begin{tabular}[t]{ll}
+\toprule
+Written Assignments & 25\%\\
+R Course Package & 15\%\\
+Midterms & 20\% each\\
+Final Exam & 20\%\\
+\bottomrule
+\end{tabular}
+
+\hypertarget{what-other-policies-should-students-be-aware-of}{%
+\subsection{What other policies should students be aware
+of?}\label{what-other-policies-should-students-be-aware-of}}
+
+If you miss a significant number of classes, you will almost definitely
+do poorly in this class. If you miss more than four classes without a
+valid excuse, I reserve the right to terminate you from the course with
+a failing grade. Work missed (including tests) without a valid excuse
+will receive a zero.
+
+I expect you to check your email on a regular basis. If you use a
+non-Westmont email account, please forward your Westmont email to your
+preferred account. I'll send out notices on Canvas, so make sure you
+receive Canvas notifications in your email.
+
+Learning communities function best when students have academic
+integrity. Cheating is primarily an offense against your classmates
+because it undermines our learning community. Therefore, dishonesty of
+any kind may result in loss of credit for the work involved and the
+filing of a report with the Provost's Office. Major or repeated
+infractions may result in dismissal from the course with a failing
+grade. Be familiar with the College's plagiarism policy, found at
+\url{https://www.westmont.edu/office-provost/academic-program/academic-integrity-policy}.
+
+In particular, providing someone with an electronic copy of your work is
+a breach of the academic integrity policy. Do not email, post online, or
+otherwise disseminate any of the work that you do in this class. If you
+keep your work on a repository, make sure it is private. You may work
+with others on the assignments, but make sure that you write or type up
+your own answers yourself. You are on your honor that the work you hand
+in represents your own understanding.
+
+\hypertarget{other-information}{%
+\subsection{Other Information}\label{other-information}}
+
+\begin{description} 
+
+\item[Professor:] David J. Hunter, Ph.D.
+  (\verb!dhunter@westmont.edu!). Student hours are in Winter Hall 303 
+  from 1:30--4pm on Tuesdays and Thursdays.
+
+ \item[Tentative Schedule:] The following schedule is a rough first approximation of the topics in \textit{Trappe} that we plan to cover; it is subject to revision at the instructor's discretion. Chapter 3 (Basic Number Theory) will be covered throughout the course when the relevant topics arise.
+  \begin{itemize}
+      \item Chapter 2: Classical Cryptosystems
+      \item Chapters 4--5: DES and AES
+      \item Chapter 6: The RSA Algorithm
+   \begin{quote}
+    \textit{Midterm \#1}     (through Chapter 6)
+   \end{quote}
+      \item Chapter 7: Discrete Logarithms
+      \item Chapter 8: Hash Functions
+      \item Chapter 9: Digital Signatures
+      \item Chapter 16: Elliptic Curves
+   \begin{quote}
+    \textit{Midterm \#2}     (through Chapter 16)
+   \end{quote}
+      \item Chapter 18: Error Correcting Codes
+   \begin{quote}
+    \textit{Final Exam}     (cumulative, with an emphasis on Chapter 18)
+   \end{quote}
+  \end{itemize}
+
+\item[Accommodations for Students with Disabilities:] Students who have been diagnosed with a disability (learning, physical or psychological) are strongly encouraged to contact the Disability Services office as early as possible to discuss appropriate accommodations for this course. Formal accommodations will only be granted for students whose disabilities have been verified by the Disability Services office.  These accommodations may be necessary to ensure your equal access to this course.  Please contact Sheri Noble, Director of Disability Services (310A Voskuyl Library, 565-6186, \href{mailto:snoble@westmont.edu}{\tt snoble@westmont.edu}) or visit \url{https://www.westmont.edu/disability-services} for more information.
+
+\item[Program and Institutional Learning Outcomes:] The
+         mathematics department at Westmont College has formulated the
+         following learning outcomes for all of its classes. (PLO's)
+\begin{enumerate}[noitemsep]
+\item Core Knowledge: Students will demonstrate knowledge of the
+                  main concepts, skills, and facts of the discipline of
+                  mathematics.
+\item Communication: Students will be able to communicate mathematical ideas
+     following the standard conventions of writing or speaking in the
+     discipline.
+\item Creativity: Students will demonstrate the ability to formulate and make
+     progress toward solving non-routine problems.
+\item Christian Connection: Students will incorporate their mathematical skills
+     and knowledge into their thinking about their vocations as followers of
+     Christ.
+         \end{enumerate}
+         In addition, the faculty of Westmont College have established common
+         learning outcomes for all courses at the institution
+         (ILO's). These outcomes are summarized as follows:
+(1) Christian Understanding, Practices, and Affections,
+(2) Global Awareness and Diversity,
+(3) Critical Thinking,
+(4) Quantitative Literacy,
+(5) Written Communication,
+(6) Oral Communication, and
+(7) Information Literacy.
+
+\item[Course Learning Outcomes:] The above outcomes are reflected in the
+     particular learning outcomes for this course.
+     After taking this course, you should be able
+     to:
+    \begin{itemize}
+        \item Demonstrate understanding of the theoretical basis for cryptography and coding theory.
+             (PLO 1, ILOs 3,4)
+        \item Write and evaluate mathematical arguments according to the
+             standards of the discipline. (PLO 2,
+              ILOs 3,5)
+        \item Construct solutions to novel problems,
+               demonstrating perseverance in the face of open-ended or
+               partially-defined contexts. (PLO 3, ILO 3)
+        \item Consider the ethical implications of the subject matter. (PLO 4, ILO 1)
+    \end{itemize}
+These outcomes will be assessed by written assignments, programming assignments, and written exams, as described above.
+
+\end{description}
+
+\end{document}
