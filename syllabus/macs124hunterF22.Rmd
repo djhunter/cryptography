@@ -20,7 +20,7 @@ library(kableExtra)
 
 Modern applications of computing demand that the storage and transmission of data be secure and reliable. Cryptography is the study of techniques for protecting data from adversaries, while coding theory deals with representing data robustly in digital form. This course provides an introduction to these related fields. Topics include basic number theory and modern algebra, classical and modern cryptosystems, discrete logarithms, hash functions, digital signatures, elliptic curves, and error-correcting codes.
 
-We will approach these topics from a mathematical, yet applied, perspective. We will focus on the general mathematical principles that govern the ways that information is stored and transmitted securely. We will not dwell too heavily on the technicalities of specific protocols and implementations. Rather, we strive to understand the concepts that underlie the technology, so that you will be prepared to view current and future implementations as scientists and engineers, not as technicians.
+We will approach these topics from an applied mathematical perspective, focusing on the general principles that govern the ways that information is stored and transmitted securely. We will not dwell too heavily on the technicalities of specific protocols and implementations. Rather, we strive to understand the concepts that underlie the technology, so that you will be prepared to view current and future implementations as scientists and engineers, not as technicians.
 
 ## Is there a textbook?
 
