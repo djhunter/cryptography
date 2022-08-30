@@ -136,6 +136,10 @@ Compute each expression modulo 7, without using technology.
 
 2. $23^{100} \bmod 7$
 
+. . .
+
+(Take a look at this problem in RStudio.)
+
 ## Modular arithmetic in R
 
 What goes wrong here? 
