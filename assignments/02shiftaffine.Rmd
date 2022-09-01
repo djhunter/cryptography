@@ -9,13 +9,11 @@ output:
 
 Upload to Canvas a PDF scan of your written work to problems 1--5. If you would prefer to type, that's fine, just export to PDF and upload a PDF. The notation "[T]" refers to our textbook: *Introduction to Cryptography with Coding Theory* by Trappe and Washington.
 
- 1. Suppose that an [official English Scrabble word](http://scrabble.hasbro.com/en-us/tools#dictionary) was encrypted using a shift cipher resulting in the ciphertext `vaxxk`. What are the possible keys? 
+ 1. Use your `affineCipher` function to encode the plaintext `tragic` and the plaintext `places`, using the key $\alpha=13$ and $\beta=7$. What do you notice? What number-theoretic properties of $\alpha$ and/or $\beta$ make them a bad choice for a key?
  
- 2. Use your `affineCipher` function to encode the plaintext `tragic` and the plaintext `places`, using the key $\alpha=13$ and $\beta=7$. What do you notice? What is it about these values that make them a bad choice for a key?
+ 2. Suppose that an affine cipher $x \stackrel{s}{\longmapsto} \alpha x + \beta$ encrypts the plaintext `ab` to the ciphertext `rw`. Find the key $\alpha$ and $\beta$. Use the "chosen plaintext" attack on [T] page 16, and show your work.
  
- 3. Suppose that an affine cipher $x \stackrel{s}{\longmapsto} \alpha x + \beta$ encrypts the plaintext `ab` to the ciphertext `rw`. Find the key $\alpha$ and $\beta$. Use the "chosen plaintext" attack on [T] page 16, and show your work.
+ 3. Suppose that an affine cipher encrypts the plaintext `mississippi` to the ciphertext `ldxxdxxdeed`. Find the key using the method described in the "known plaintext" attack on pp. 15-16 of [T]. Show your work.
  
- 4. Suppose that an affine cipher encrypts the plaintext `mississippi` to the ciphertext `ldxxdxxdeed`. Find the key using the method described in the "known plaintext" attack on pp. 15-16 of [T]. Show your work.
- 
- 5. Suppose that $s_1(x) = \alpha_1 x + \beta_1$ and $s_2(x) = \alpha_2 x + \beta_2$ represent two affine ciphers. Use algebra to compute a simplified formula for $s_2(s_1(x))$. Is repeated encryption by an affine cipher more secure than encryption by a single affine cipher? Explain.
+ 4. Suppose that $s_1(x) = \alpha_1 x + \beta_1$ and $s_2(x) = \alpha_2 x + \beta_2$ represent two affine ciphers. Use algebra to compute a simplified formula for $s_2(s_1(x))$. Is repeated encryption by an affine cipher more secure than encryption by a single affine cipher? Explain.
  

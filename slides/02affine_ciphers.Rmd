@@ -1,6 +1,6 @@
 ---
 title: "Affine Ciphers"
-date: "September 3, 2020"
+date: "September 1, 2022"
 output: 
   revealjs::revealjs_presentation:
     fig_width: 14
@@ -75,24 +75,6 @@ $$s: \mathbb{Z}_{26} \longrightarrow \mathbb{Z}_{26}$$ given by
 $$x \stackrel{s}{\longmapsto} \alpha x + \beta$$
 where the key consist of two elements $\alpha, \beta \in \mathbb{Z}_{26}$.
 
-## Groups for today
-
-Join the *voice channel* for your group. Use the *Jamboard* (link on `#macs-124`).
-
-```{r, echo=FALSE}
-library(knitr)
-roster <- c("Sam", "Wesley", "Andrew", "Winston", "Michael", "Logan", "Christian", "Caleb", "James", "Joe", "Emily", "Giselle", "Nathan")
-set.seed(932020) 
-n <- length(roster)
-ngps <- 3
-maxingp <- ceiling(n/ngps)
-# just make random groups
-groups <- matrix(c(roster[sample(n)], 
-                   rep("",(maxingp - (n %% maxingp)) %% maxingp)), 
-                 ncol=maxingp, byrow=FALSE)
-rownames(groups) <- paste0("Group #", 1:nrow(groups))
-kable(t(groups))
-```
 
 ## Group Activity (without computers)
 
@@ -300,7 +282,6 @@ Suppose $a$ and $n$ are *not* relatively prime. Then there is a common divisor $
 > 
 > 2. $x \stackrel{s}{\longmapsto} 13 x + 5$
 
-Work in your group's voice channel with your group's Jamboard.
 
 # Assignments
 

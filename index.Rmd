@@ -37,9 +37,8 @@ This site provides slides, assignments, and other resources that I use in my Cod
 # Slides 
 
 1. [Introduction: Cryptography and Coding Theory](slides/01intro_crypto.html) 
-
+2. [Affine Ciphers and the GCD](slides/02affine_ciphers.html) 
 ---
-# 2. [Affine Ciphers and the GCD](slides/02affine_ciphers.html) 
 # 3. [Substitution and Vigenère Ciphers](slides/03vigenere_ciphers.html)
 # 4. [Attacks on Vigenère Ciphers](slides/04vigenere_attacks.html)
 # 5. [Matrices and the Hill Cipher](slides/05matrix_hill.html)
@@ -66,9 +65,8 @@ This site provides slides, assignments, and other resources that I use in my Cod
 # Written Assignments
 
 1. [Modular arithmetic](assignments/01modding.html)
-
+2. [Shift ciphers and affine ciphers](assignments/02shiftaffine.html)
 ---
-# 2. [Shift ciphers and affine ciphers](assignments/02shiftaffine.html)
 # 3. [Substitution and Vigenère Ciphers](assignments/03subciphers.html)
 # 4. [Properties of Vigenère Ciphers](assignments/04vigenere.html)
 # 5. [Matrices and the Hill Cipher](assignments/05mathill.html)
@@ -94,8 +92,8 @@ This site provides slides, assignments, and other resources that I use in my Cod
 
 # Programming Assignments
 
+1. [Getting started with R packages](programming/01affine.html)
 ---
-# 1. [Getting started with R packages](programming/01affine.html)
 # 2. [Tools for Breaking a Vigenère Cipher](programming/02vigbreak.html)
 # 3. [OTP and LFSR tools](programming/03mathillotp.html)
 # 4. [GF(256) and AES](programming/04gf256aes.html)
