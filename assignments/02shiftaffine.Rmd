@@ -7,7 +7,7 @@ output:
     theme: spacelab
 ---
 
-Upload to Canvas a PDF scan of your written work to problems 1--5. If you would prefer to type, that's fine, just export to PDF and upload a PDF. The notation "[T]" refers to our textbook: *Introduction to Cryptography with Coding Theory* by Trappe and Washington.
+Upload to Canvas a PDF scan of your written work to problems 1--4. If you would prefer to type, that's fine, just export to PDF and upload a PDF. The notation "[T]" refers to our textbook: *Introduction to Cryptography with Coding Theory* by Trappe and Washington.
 
  1. Use your `affineCipher` function to encode the plaintext `tragic` and the plaintext `places`, using the key $\alpha=13$ and $\beta=7$. What do you notice? What number-theoretic properties of $\alpha$ and/or $\beta$ make them a bad choice for a key?
  
