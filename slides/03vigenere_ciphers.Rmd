@@ -1,6 +1,6 @@
 ---
 title: "Substitution and Vigenère Ciphers"
-date: "September 8, 2020"
+date: "September 6, 2022"
 output: 
   revealjs::revealjs_presentation:
     fig_width: 14
@@ -31,7 +31,7 @@ library(gmp)
 
 > A **cipher** is an algorithm that inputs a plaintext string and outputs a ciphertext string, according to some given key.
 
-Mathematically, a *substitution cipher* is a one-to-one and onto function on the alphabet set $X$.
+Mathematically, a **substitution cipher** is a *one-to-one* and *onto* function on the alphabet set $X$.
 
 $$
 c : X \longrightarrow X
@@ -169,6 +169,8 @@ In 1553, Giovan Battista Bellaso published a [paper](https://en.wikipedia.org/wi
 
 The system was later attributed (falsely) to Blaise de Vigenère, so that's what everyone calls it now.
 
+## {data-background-image="https://upload.wikimedia.org/wikipedia/commons/d/d5/Bellaso_foreword.jpg" data-background-size="contain"}
+
 ## How the Vigenère cipher works {.build}
 
 The key is a passphrase, usually consisting of a word or two. For example, `mypassphrase`.
@@ -193,27 +195,12 @@ ffxsakiovpdeuliepliortoiimjlvdxrvtgizagyhljzznyxtckiywclieumbftr
 
 Step 1: Take a moment to just **think** about the answers to these questions.
 
-## Discuss at your tables
+## Discuss in groups of 2 or 3
 
 1. How would you decrypt the Vigenère cipher, given the key?
 2. Is the Vigenère cipher a substitution cipher? Why or why not?
 
-Step 2: Discuss the answers in your table **groups**. 
-
-```{r, echo=FALSE}
-library(knitr)
-roster <- c("Sam", "Wesley", "Andrew", "Winston", "Michael", "Logan", "Christian", "Caleb", "James", "Joe", "Emily", "Giselle", "Nathan")
-set.seed(982020) 
-n <- length(roster)
-ngps <- 3
-maxingp <- ceiling(n/ngps)
-# just make random groups
-groups <- matrix(c(roster[sample(n)], 
-                   rep("",(maxingp - (n %% maxingp)) %% maxingp)), 
-                 ncol=maxingp, byrow=FALSE)
-rownames(groups) <- paste0("Table #", 1:nrow(groups))
-kable(t(groups))
-```
+Step 2: Form **groups** of 2 or 3 and discuss your thoughts.
 
 ## Discuss as a large group
 
@@ -236,11 +223,15 @@ $$
 $$
 where the addition is componentwise, modulo 26.
 
-## Terminology {.build}
+## Terminology 
+
+. . .
 
 > A cipher is called **symmetric** if it uses the same key to encrypt as to decrypt.
 
 All of the ciphers we have seen so far are symmetric.
+
+. . . 
 
 > A **block cipher** is a cipher algorithm that operates on fixed-length sections, or **blocks** of plaintext. 
 
