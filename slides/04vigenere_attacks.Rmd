@@ -1,6 +1,6 @@
 ---
 title: "Attacks on Vigenère Ciphers"
-date: "September 10, 2020"
+date: "September 8, 2022"
 output: 
   revealjs::revealjs_presentation:
     fig_width: 14 
@@ -61,10 +61,6 @@ vigenere("albuquerque", stringToMod26("walter"))
 ## Brute force attack?
 
 >  Suppose you knew the length $n$ of the key for a Vigenère cipher. How many keys would you have to try for a ciphertext-only brute force attack?
-
-```
--poll "How many keys would you have to try in a brute-force ciphertext-only attack on a Vigenère cipher of key length n?" n n^2 26n 26^n n^26 n! 26!
-```
 
 ## Letter-frequency of Vigenère ciphertext
 
@@ -215,7 +211,7 @@ axis(side=3, at=6*(0:16))
 abline(v=6*(0:16))
 ```
 
-## Summary: finding the key length {.build}
+## Summary: finding the key length 
 
 > **Summary.** To find the key length of a Vigenère cipher given only the ciphertext, count the matches between the ciphertext and shifts of the ciphertext, and find the (smallest) shift that maximizes the number of matches.
 
@@ -291,10 +287,6 @@ In our example, we found that $k=9$.
 ct <- stringToMod26(ciphertext)
 every9thct <- ct[seq(1,length(ctv), 9)]  # take every 9th element, starting with the first 
 letterCounts(mod26ToString(every9thct))
-```
-
-```
--poll "Guess the first element of the key, based on this output." a:0 d:3 h:7 l:11 n:13 q:16
 ```
 
 ## Mathematical tool: Dot products
