@@ -9,30 +9,9 @@ output:
 
 ## Assignment: due Sunday, 11:59 pm
 
-1. Add the functions `letterCounts`, `digramTable`, `vigenere`, `shiftVec`, `skipString`, and `letterFreq` to your R package, with appropriate documentation and examples as `roxygen` comments. Also, fix any issues that you may have had with Version 0.1.0. Check to make sure you aren't getting any warning messages. If you are getting a warning message about the `NAMESPACE` file, delete the `NAMESPACE` file, and then when you Install and Restart and ROxygen will build a new `NAMESPACE` file for you. Make sure that all of the documentation gets built properly.
+0. Update your R package with this new version of [vigtools.R](../R/vigtools.R) and rebuild. This version contains several new functions and a template for the function `findVigKey`.
 
-2. Write a function `findVigKey` that consumes a ciphertext string `ciphertext` and a key length `keyLength`, and returns the key that produced the ciphertext, assuming that the ciphertext was produced using a Vigenère cipher with key length `keyLength`. Most/all of the code you need for this is in the slides, you just need to piece it together. Here's a skeleton:
-```{r, eval=FALSE}
-findVigKey <- function(ciphertext, keyLength) {
-  vKey <- numeric(keyLength) # preallocate a vector of the desired length
-  englishFreqs <- c(0.082,0.015,0.028,0.043,0.127,0.022,0.020,0.061,0.070, 0.002,0.008,0.040,0.024,
-                  0.067,0.075,0.019,0.001,0.060,0.063,0.091,0.028,0.010,0.023,0.001,0.020,0.001)
-  # Insert code here to find the key, and assign the pth element of the key (as an element
-  # of Z_26) the variable vKey[p], for values of p from 1 to keyLength
-  return(vKey)
-}
-```
-
-Test your `findVigKey` on the following example. Make it one of the examples in your documentation.
-
-```{r, eval=FALSE}
-ptext <- "howeverinthisextremedistresshewasnotdestituteofhisusualsagacitybuttrustinghimselftotheprovidenceofgodheputhislifeintohazardinthemannerfollowingandnowsaidhesinceitisresolvedamongyouthatyouwilldie"
-keyAsVector <- stringToMod26("skyler")
-ctext <- vigenere(ptext, keyAsVector)
-findVigKey(ctext, 6)  # These...
-keyAsVector           #    should match.
-```
-Add this function to your package, with the appropriate documentation and examples.
+2. Complete the skeleton for the function `findVigKey` that consumes a ciphertext string `ciphertext` and a key length `keyLength`, and returns the key that produced the ciphertext, assuming that the ciphertext was produced using a Vigenère cipher with key length `keyLength`. Most/all of the code you need for this is in the slides, you just need to piece it together.  Test your `findVigKey` on the example provided in the skeleton documentation.
 
  3. Edit the `DESCRIPTION` file and update the version number to `0.1.1`. After you have built and reloaded your package, tested the examples, and checked the help files, click on `More` in the build menu, and build a source package. A new file called `cryptoXYZ_0.1.1.tar.gz` should appear in the parent directory. Upload this file to Canvas.
  

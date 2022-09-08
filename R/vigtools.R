@@ -1,4 +1,4 @@
-#' Count the occurence of each letter in a string
+#' Count the occurrence of each letter in a string
 #'
 #' This function counts how many times each letter occurs in a string and presents in a table.
 #'
@@ -114,7 +114,38 @@ skipString <- function(txt, n, r) {
 #' letterFreq("albuquerqueisacityinnewmexico")
 #'
 letterFreq <- function(txt) {
-  l <- unlist(c(strsplit(txt,""),letters))
-  t <- as.vector(table(l))-1
+  l <- unlist(c(strsplit(txt, ""), letters))
+  t <- as.vector(table(l)) - 1
   return(t/sum(t))
+}
+
+#' Find the Vigenere key
+#'
+#' This function consumes a ciphertext string `ciphertext` and a key 
+#' length `keyLength`, and returns the key that produced the ciphertext, 
+#' assuming that the ciphertext was produced using a Vigenère cipher with 
+#' key length `keyLength`.
+#'
+#' @param ciphertext String (assumed to contain only lowercase letters)
+#' @param keylength The length of the key
+#'
+#' @return The key, as a vector of elements of Z mod 26.
+#' @export
+#'
+#' @examples
+#' ptext <- "howeverinthisextremedistresshewasnotdestituteofhisusualsagacitybuttrustinghimselftotheprovidenceofgodheputhislifeintohazardinthemannerfollowingandnowsaidhesinceitisresolvedamongyouthatyouwilldie"
+#' keyAsVector <- stringToMod26("skyler")
+#' ctext <- vigenere(ptext, keyAsVector)
+#' findVigKey(ctext, 6)  # These...
+#' keyAsVector           #    should match.
+#'
+findVigKey <- function(ciphertext, keyLength) {
+  vKey <- numeric(keyLength) # preallocate a vector of the desired length
+  englishFreqs <- c(0.082,0.015,0.028,0.043,0.127,0.022,0.020,0.061,0.070, 0.002,0.008,0.040,0.024,
+                  0.067,0.075,0.019,0.001,0.060,0.063,0.091,0.028,0.010,0.023,0.001,0.020,0.001)
+
+    # TODO: Insert code here to find the key, and assign the pth element of the key (as an element
+    # of Z_26) the variable vKey[p], for values of p from 1 to keyLength
+
+  return(vKey)
 }

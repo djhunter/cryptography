@@ -194,6 +194,7 @@ abline(v=6*(0:16))
 ## Does it work without letter frequency patterns?
 
 ```{r}
+set.seed(60302)
 nfPlaintext <- mod26ToString(sample(0:25, 1043, replace=TRUE)) # random ciphertext
 nfCiphertext <- vigenere(nfPlaintext, keyAsVector)
 ctv <- stringToMod26(nfCiphertext)
