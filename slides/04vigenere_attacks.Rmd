@@ -298,10 +298,12 @@ Consequence: Given a collection of equal-length vectors $\mathbf{u}_1, \mathbf{u
 
 ## Big Idea: Match letter frequencies
 
-- Let $\mathbf{u}_0$ be the letter frequencies of the letters in position $1, k+1, 2k+1, 3k+1, \ldots$ of the ciphertext, where $k$ is the key length.
-- If $\mathbf{u}_1, \mathbf{u}_2, \ldots, \mathbf{u}_{25}$ are all the possible shifts of $\mathbf{u}_0$, and $\mathbf{v}$ is the vector of English letter frequencies, then the $\mathbf{u}_i$ that maximizes $\mathbf{u}_i \cdot \mathbf{v}$ is the most likely shift.
+- Let $\mathbf{v}$ be the letter frequencies of the letters in position $1, k+1, 2k+1, 3k+1, \ldots$ of the ciphertext, where $k$ is the key length.
+    - These letter frequencies should roughly match English letter frequencies, except they have been shifted by the first letter of the key.
+- Let $\mathbf{u}_0$ be the vector of English letter frequencies (of a, b, c, ...).
+- If $\mathbf{u}_1, \mathbf{u}_2, \ldots, \mathbf{u}_{25}$ are all the possible shifts of $\mathbf{u}_0$, then the $\mathbf{u}_i$ that maximizes $\mathbf{u}_i \cdot \mathbf{v}$ is the most likely shift.
 - That is, the first element of the key is $i$.
-- Repeat. For the $p$th element of the key, look at the letters in position $p, k+p, 2k+p, 3k+p, \ldots$.
+- Repeat. For the $p$th element of the key, compute $\mathbf{v}$ using the letters in position $p, k+p, 2k+p, 3k+p, \ldots$.
 
 ## R tools we need
 
@@ -329,9 +331,9 @@ letterFreq <- function(txt) {
 ```{r}
 englishFreqs <- c(0.082,0.015,0.028,0.043,0.127,0.022,0.020,0.061,0.070, 0.002,0.008,0.040,0.024,
                   0.067,0.075,0.019,0.001,0.060,0.063,0.091,0.028,0.010,0.023,0.001,0.020,0.001)
-u <- letterFreq(skipString(ciphertext,1,9))
+v <- letterFreq(skipString(ciphertext,1,9))
 for(i in 0:25) {
-  cat(paste("shift =", i, "\t", " u_i dot v =", u %*% shiftVec(englishFreqs, i), "\n"))
+  cat(paste("shift =", i, "\t", " v dot u_i =", v %*% shiftVec(englishFreqs, i), "\n"))
 }
 ```
 
@@ -340,8 +342,8 @@ for(i in 0:25) {
 ```{r}
 englishFreqs <- c(0.082,0.015,0.028,0.043,0.127,0.022,0.020,0.061,0.070, 0.002,0.008,0.040,0.024,
                   0.067,0.075,0.019,0.001,0.060,0.063,0.091,0.028,0.010,0.023,0.001,0.020,0.001)
-u <- letterFreq(skipString(ciphertext,1,9))
-matchFreqs <- sapply(0:25, function(i){u %*% shiftVec(englishFreqs, i)})
+v <- letterFreq(skipString(ciphertext,1,9))
+matchFreqs <- sapply(0:25, function(i){v %*% shiftVec(englishFreqs, i)})
 matchFreqs
 which.max(matchFreqs)-1
 ```
@@ -353,8 +355,8 @@ So the first element of the key is (probably) `d:3`.
 ```{r}
 vKey <- numeric(9) # preallocate a vector length 9
 for(p in 1:9) {
-  u <- letterFreq(skipString(ciphertext,p,9))
-  matchFreqs <- sapply(0:25, function(i){u %*% shiftVec(englishFreqs, i)})
+  v <- letterFreq(skipString(ciphertext,p,9))
+  matchFreqs <- sapply(0:25, function(i){v %*% shiftVec(englishFreqs, i)})
   vKey[p] <- which.max(matchFreqs)-1
 }
 mod26ToString(vKey) # print out the key

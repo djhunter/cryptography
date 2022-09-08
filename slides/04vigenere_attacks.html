@@ -2164,17 +2164,24 @@ direction of <span class="math inline">\(\mathbf{v}\)</span>.</p>
 <section id="big-idea-match-letter-frequencies" class="slide level2">
 <h2>Big Idea: Match letter frequencies</h2>
 <ul>
-<li>Let <span class="math inline">\(\mathbf{u}_0\)</span> be the letter
+<li>Let <span class="math inline">\(\mathbf{v}\)</span> be the letter
 frequencies of the letters in position <span class="math inline">\(1,
-k+1, 2k+1, 3k+1, \ldots\)</span> of the ciphertext, where <span class="math inline">\(k\)</span> is the key length.</li>
+k+1, 2k+1, 3k+1, \ldots\)</span> of the ciphertext, where <span class="math inline">\(k\)</span> is the key length.
+<ul>
+<li>These letter frequencies should roughly match English letter
+frequencies, except they have been shifted by the first letter of the
+key.</li>
+</ul></li>
+<li>Let <span class="math inline">\(\mathbf{u}_0\)</span> be the vector
+of English letter frequencies (of a, b, c, …).</li>
 <li>If <span class="math inline">\(\mathbf{u}_1, \mathbf{u}_2, \ldots,
-\mathbf{u}_{25}\)</span> are all the possible shifts of <span class="math inline">\(\mathbf{u}_0\)</span>, and <span class="math inline">\(\mathbf{v}\)</span> is the vector of English
-letter frequencies, then the <span class="math inline">\(\mathbf{u}_i\)</span> that maximizes <span class="math inline">\(\mathbf{u}_i \cdot \mathbf{v}\)</span> is the most
+\mathbf{u}_{25}\)</span> are all the possible shifts of <span class="math inline">\(\mathbf{u}_0\)</span>, then the <span class="math inline">\(\mathbf{u}_i\)</span> that maximizes <span class="math inline">\(\mathbf{u}_i \cdot \mathbf{v}\)</span> is the most
 likely shift.</li>
 <li>That is, the first element of the key is <span class="math inline">\(i\)</span>.</li>
 <li>Repeat. For the <span class="math inline">\(p\)</span>th element of
-the key, look at the letters in position <span class="math inline">\(p,
-k+p, 2k+p, 3k+p, \ldots\)</span>.</li>
+the key, compute <span class="math inline">\(\mathbf{v}\)</span> using
+the letters in position <span class="math inline">\(p, k+p, 2k+p, 3k+p,
+\ldots\)</span>.</li>
 </ul>
 </section>
 <section id="r-tools-we-need" class="slide level2">
@@ -2200,43 +2207,43 @@ lowercase letters.</p>
 best?</h2>
 <div class="sourceCode" id="cb42"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb42-1"><a href="#cb42-1" aria-hidden="true" tabindex="-1"></a>englishFreqs <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="fl">0.082</span>,<span class="fl">0.015</span>,<span class="fl">0.028</span>,<span class="fl">0.043</span>,<span class="fl">0.127</span>,<span class="fl">0.022</span>,<span class="fl">0.020</span>,<span class="fl">0.061</span>,<span class="fl">0.070</span>, <span class="fl">0.002</span>,<span class="fl">0.008</span>,<span class="fl">0.040</span>,<span class="fl">0.024</span>,</span>
 <span id="cb42-2"><a href="#cb42-2" aria-hidden="true" tabindex="-1"></a>                  <span class="fl">0.067</span>,<span class="fl">0.075</span>,<span class="fl">0.019</span>,<span class="fl">0.001</span>,<span class="fl">0.060</span>,<span class="fl">0.063</span>,<span class="fl">0.091</span>,<span class="fl">0.028</span>,<span class="fl">0.010</span>,<span class="fl">0.023</span>,<span class="fl">0.001</span>,<span class="fl">0.020</span>,<span class="fl">0.001</span>)</span>
-<span id="cb42-3"><a href="#cb42-3" aria-hidden="true" tabindex="-1"></a>u <span class="ot">&lt;-</span> <span class="fu">letterFreq</span>(<span class="fu">skipString</span>(ciphertext,<span class="dv">1</span>,<span class="dv">9</span>))</span>
+<span id="cb42-3"><a href="#cb42-3" aria-hidden="true" tabindex="-1"></a>v <span class="ot">&lt;-</span> <span class="fu">letterFreq</span>(<span class="fu">skipString</span>(ciphertext,<span class="dv">1</span>,<span class="dv">9</span>))</span>
 <span id="cb42-4"><a href="#cb42-4" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span>(i <span class="cf">in</span> <span class="dv">0</span><span class="sc">:</span><span class="dv">25</span>) {</span>
-<span id="cb42-5"><a href="#cb42-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">cat</span>(<span class="fu">paste</span>(<span class="st">&quot;shift =&quot;</span>, i, <span class="st">&quot;</span><span class="sc">\t</span><span class="st">&quot;</span>, <span class="st">&quot; u_i dot v =&quot;</span>, u <span class="sc">%*%</span> <span class="fu">shiftVec</span>(englishFreqs, i), <span class="st">&quot;</span><span class="sc">\n</span><span class="st">&quot;</span>))</span>
+<span id="cb42-5"><a href="#cb42-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">cat</span>(<span class="fu">paste</span>(<span class="st">&quot;shift =&quot;</span>, i, <span class="st">&quot;</span><span class="sc">\t</span><span class="st">&quot;</span>, <span class="st">&quot; v dot u_i =&quot;</span>, v <span class="sc">%*%</span> <span class="fu">shiftVec</span>(englishFreqs, i), <span class="st">&quot;</span><span class="sc">\n</span><span class="st">&quot;</span>))</span>
 <span id="cb42-6"><a href="#cb42-6" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
-<pre><code>shift = 0     u_i dot v = 0.0404444444444444 
-shift = 1     u_i dot v = 0.0301111111111111 
-shift = 2     u_i dot v = 0.0314222222222222 
-shift = 3     u_i dot v = 0.0643555555555556 
-shift = 4     u_i dot v = 0.0403111111111111 
-shift = 5     u_i dot v = 0.0322222222222222 
-shift = 6     u_i dot v = 0.0303777777777778 
-shift = 7     u_i dot v = 0.0411555555555555 
-shift = 8     u_i dot v = 0.0314222222222222 
-shift = 9     u_i dot v = 0.0415111111111111 
-shift = 10    u_i dot v = 0.0383777777777778 
-shift = 11    u_i dot v = 0.0391555555555555 
-shift = 12    u_i dot v = 0.0366888888888889 
-shift = 13    u_i dot v = 0.0427555555555556 
-shift = 14    u_i dot v = 0.0371111111111111 
-shift = 15    u_i dot v = 0.0419111111111111 
-shift = 16    u_i dot v = 0.0426222222222222 
-shift = 17    u_i dot v = 0.0348222222222222 
-shift = 18    u_i dot v = 0.0377333333333333 
-shift = 19    u_i dot v = 0.0352666666666667 
-shift = 20    u_i dot v = 0.0383111111111111 
-shift = 21    u_i dot v = 0.0310888888888889 
-shift = 22    u_i dot v = 0.0397555555555556 
-shift = 23    u_i dot v = 0.0357333333333333 
-shift = 24    u_i dot v = 0.0391777777777778 
-shift = 25    u_i dot v = 0.0471555555555556 </code></pre>
+<pre><code>shift = 0     v dot u_i = 0.0404444444444444 
+shift = 1     v dot u_i = 0.0301111111111111 
+shift = 2     v dot u_i = 0.0314222222222222 
+shift = 3     v dot u_i = 0.0643555555555556 
+shift = 4     v dot u_i = 0.0403111111111111 
+shift = 5     v dot u_i = 0.0322222222222222 
+shift = 6     v dot u_i = 0.0303777777777778 
+shift = 7     v dot u_i = 0.0411555555555555 
+shift = 8     v dot u_i = 0.0314222222222222 
+shift = 9     v dot u_i = 0.0415111111111111 
+shift = 10    v dot u_i = 0.0383777777777778 
+shift = 11    v dot u_i = 0.0391555555555555 
+shift = 12    v dot u_i = 0.0366888888888889 
+shift = 13    v dot u_i = 0.0427555555555556 
+shift = 14    v dot u_i = 0.0371111111111111 
+shift = 15    v dot u_i = 0.0419111111111111 
+shift = 16    v dot u_i = 0.0426222222222222 
+shift = 17    v dot u_i = 0.0348222222222222 
+shift = 18    v dot u_i = 0.0377333333333333 
+shift = 19    v dot u_i = 0.0352666666666667 
+shift = 20    v dot u_i = 0.0383111111111111 
+shift = 21    v dot u_i = 0.0310888888888889 
+shift = 22    v dot u_i = 0.0397555555555556 
+shift = 23    v dot u_i = 0.0357333333333333 
+shift = 24    v dot u_i = 0.0391777777777778 
+shift = 25    v dot u_i = 0.0471555555555556 </code></pre>
 </section>
 <section id="which-shift-of-english-frequencies-matches-best-1" class="slide level2">
 <h2>Which shift of English frequencies matches best?</h2>
 <div class="sourceCode" id="cb44"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb44-1"><a href="#cb44-1" aria-hidden="true" tabindex="-1"></a>englishFreqs <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="fl">0.082</span>,<span class="fl">0.015</span>,<span class="fl">0.028</span>,<span class="fl">0.043</span>,<span class="fl">0.127</span>,<span class="fl">0.022</span>,<span class="fl">0.020</span>,<span class="fl">0.061</span>,<span class="fl">0.070</span>, <span class="fl">0.002</span>,<span class="fl">0.008</span>,<span class="fl">0.040</span>,<span class="fl">0.024</span>,</span>
 <span id="cb44-2"><a href="#cb44-2" aria-hidden="true" tabindex="-1"></a>                  <span class="fl">0.067</span>,<span class="fl">0.075</span>,<span class="fl">0.019</span>,<span class="fl">0.001</span>,<span class="fl">0.060</span>,<span class="fl">0.063</span>,<span class="fl">0.091</span>,<span class="fl">0.028</span>,<span class="fl">0.010</span>,<span class="fl">0.023</span>,<span class="fl">0.001</span>,<span class="fl">0.020</span>,<span class="fl">0.001</span>)</span>
-<span id="cb44-3"><a href="#cb44-3" aria-hidden="true" tabindex="-1"></a>u <span class="ot">&lt;-</span> <span class="fu">letterFreq</span>(<span class="fu">skipString</span>(ciphertext,<span class="dv">1</span>,<span class="dv">9</span>))</span>
-<span id="cb44-4"><a href="#cb44-4" aria-hidden="true" tabindex="-1"></a>matchFreqs <span class="ot">&lt;-</span> <span class="fu">sapply</span>(<span class="dv">0</span><span class="sc">:</span><span class="dv">25</span>, <span class="cf">function</span>(i){u <span class="sc">%*%</span> <span class="fu">shiftVec</span>(englishFreqs, i)})</span>
+<span id="cb44-3"><a href="#cb44-3" aria-hidden="true" tabindex="-1"></a>v <span class="ot">&lt;-</span> <span class="fu">letterFreq</span>(<span class="fu">skipString</span>(ciphertext,<span class="dv">1</span>,<span class="dv">9</span>))</span>
+<span id="cb44-4"><a href="#cb44-4" aria-hidden="true" tabindex="-1"></a>matchFreqs <span class="ot">&lt;-</span> <span class="fu">sapply</span>(<span class="dv">0</span><span class="sc">:</span><span class="dv">25</span>, <span class="cf">function</span>(i){v <span class="sc">%*%</span> <span class="fu">shiftVec</span>(englishFreqs, i)})</span>
 <span id="cb44-5"><a href="#cb44-5" aria-hidden="true" tabindex="-1"></a>matchFreqs</span></code></pre></div>
 <pre><code> [1] 0.04044444 0.03011111 0.03142222 0.06435556 0.04031111 0.03222222 0.03037778 0.04115556
  [9] 0.03142222 0.04151111 0.03837778 0.03915556 0.03668889 0.04275556 0.03711111 0.04191111
@@ -2250,8 +2257,8 @@ shift = 25    u_i dot v = 0.0471555555555556 </code></pre>
 <h2>What about the rest of the key?</h2>
 <div class="sourceCode" id="cb48"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb48-1"><a href="#cb48-1" aria-hidden="true" tabindex="-1"></a>vKey <span class="ot">&lt;-</span> <span class="fu">numeric</span>(<span class="dv">9</span>) <span class="co"># preallocate a vector length 9</span></span>
 <span id="cb48-2"><a href="#cb48-2" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span>(p <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">9</span>) {</span>
-<span id="cb48-3"><a href="#cb48-3" aria-hidden="true" tabindex="-1"></a>  u <span class="ot">&lt;-</span> <span class="fu">letterFreq</span>(<span class="fu">skipString</span>(ciphertext,p,<span class="dv">9</span>))</span>
-<span id="cb48-4"><a href="#cb48-4" aria-hidden="true" tabindex="-1"></a>  matchFreqs <span class="ot">&lt;-</span> <span class="fu">sapply</span>(<span class="dv">0</span><span class="sc">:</span><span class="dv">25</span>, <span class="cf">function</span>(i){u <span class="sc">%*%</span> <span class="fu">shiftVec</span>(englishFreqs, i)})</span>
+<span id="cb48-3"><a href="#cb48-3" aria-hidden="true" tabindex="-1"></a>  v <span class="ot">&lt;-</span> <span class="fu">letterFreq</span>(<span class="fu">skipString</span>(ciphertext,p,<span class="dv">9</span>))</span>
+<span id="cb48-4"><a href="#cb48-4" aria-hidden="true" tabindex="-1"></a>  matchFreqs <span class="ot">&lt;-</span> <span class="fu">sapply</span>(<span class="dv">0</span><span class="sc">:</span><span class="dv">25</span>, <span class="cf">function</span>(i){v <span class="sc">%*%</span> <span class="fu">shiftVec</span>(englishFreqs, i)})</span>
 <span id="cb48-5"><a href="#cb48-5" aria-hidden="true" tabindex="-1"></a>  vKey[p] <span class="ot">&lt;-</span> <span class="fu">which.max</span>(matchFreqs)<span class="sc">-</span><span class="dv">1</span></span>
 <span id="cb48-6"><a href="#cb48-6" aria-hidden="true" tabindex="-1"></a>}</span>
 <span id="cb48-7"><a href="#cb48-7" aria-hidden="true" tabindex="-1"></a><span class="fu">mod26ToString</span>(vKey) <span class="co"># print out the key</span></span></code></pre></div>
