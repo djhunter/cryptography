@@ -1,6 +1,6 @@
 ---
 title: "Matrices and the Hill Cipher"
-date: "September 15, 2020"
+date: "September 13, 2022"
 output: 
   revealjs::revealjs_presentation:
     fig_width: 14 
@@ -81,7 +81,7 @@ where $M = \begin{bmatrix} a_{1,1} & a_{1,2} & \cdots & a_{1,n} \\ a_{2,1} & a_{
 
 (Example)
 
-## Try, then answer poll question
+## Try now
 
 In $\mathbb{Z}_3$, the matrix
 $$
@@ -101,9 +101,6 @@ M
 \end{bmatrix}
 $$
 
-```
--poll "Which is M[0 1 2]^T?" "[1 2 1 1]^T" "[2 0 1 0]^T" "[2 2 1 0]^T" "[2 0 1 1]^T" "None of these"
-```
 
 ## Matrix multiplication
 
@@ -211,11 +208,7 @@ Such an equation is called a **dependence relation**.
 
 Example: The vectors $\begin{bmatrix} 2 \\ 1 \end{bmatrix}$, $\begin{bmatrix} 1 \\ 1 \end{bmatrix}$, $\begin{bmatrix} 1 \\ 2 \end{bmatrix}$ are dependent over $\mathbb{Z}_5$.
 
-Find $a,b,c \in \mathbb{Z}_5$ such that $a\begin{bmatrix} 2 \\ 1 \end{bmatrix} +b\begin{bmatrix} 1 \\ 1 \end{bmatrix} +c\begin{bmatrix} 1 \\ 2 \end{bmatrix}= \begin{bmatrix} 0 \\ 0 \end{bmatrix}$
-
-```
--poll "What are a,b,c?" "1,1,2" "1,2,1" "2,2,1" "2,1,1" 
-```
+**Try now:** Find $a,b,c \in \mathbb{Z}_5$ such that $a\begin{bmatrix} 2 \\ 1 \end{bmatrix} +b\begin{bmatrix} 1 \\ 1 \end{bmatrix} +c\begin{bmatrix} 1 \\ 2 \end{bmatrix}= \begin{bmatrix} 0 \\ 0 \end{bmatrix}$
 
 ## Dependence Relations and Matrices
 
@@ -246,7 +239,9 @@ The following theorem is true over a field.
 
 > **Theorem.** A square matrix is invertible if and only if there are no dependence relations among its rows (or columns).
 
-Example: Use Gaussian elimination to row reduce the following matrix. Then decide whether or not the matrix is invertible in $M_3(\mathbb{Z}_3)$. 
+. . .
+
+**Try Now:** Example: Use Gaussian elimination to row reduce the following matrix. Then decide whether or not the matrix is invertible in $M_3(\mathbb{Z}_3)$. 
 $$
 \begin{bmatrix}
 2 & 1 & 0 \\
@@ -254,27 +249,6 @@ $$
 2 & 1 & 1 
 \end{bmatrix}
 $$
-
-(groups on Jamboard)
-
-## Join your table group
-
-```{r, echo=FALSE}
-library(knitr)
-roster <- c("Sam", "Wesley", "Andrew", "Winston", "Michael", "Logan", "Christian", "Caleb", "James", "Joe", "Emily", "Nathan")
-set.seed(9152020) 
-n <- length(roster)
-ngps <- 3
-maxingp <- ceiling(n/ngps)
-# just make random groups
-groups <- matrix(c(roster[sample(n)], 
-                   rep("",(maxingp - (n %% maxingp)) %% maxingp)), 
-                 ncol=maxingp, byrow=FALSE)
-rownames(groups) <- paste0("Table #", 1:nrow(groups))
-kable(t(groups))
-```
-
-Work on your group's [Jamboard](https://jamboard.google.com/d/1xgHNJwx4qvLMo9zHW16qLe25sdPS3dYKjMWgH7ohxcE/edit?usp=sharing). You may want to upload a photo of your written work.
 
 ## Matrices in R
 
@@ -425,9 +399,7 @@ Cons: Big key
 
 https://www.vice.com/en_us/article/ezvyyj/cubas-mysterious-numbers-station-is-still-on-the-air
 
-```
-!soundcloud https://soundcloud.com/wrench86/cuban-numbers-station-5-883-am
-```
+https://soundcloud.com/wrench86/cuban-numbers-station-5-883-am
 
 ## Diffusion and Confusion?
 
