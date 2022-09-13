@@ -381,10 +381,10 @@ Condition for Confusion: Each character of the ciphertext depends on several par
 
 ## Attacks on Hill cipher
 
-Ciphertext only is hard.
-
-Known plaintext is easy (amounts to solving a matrix equation, i.e., inverting a matrix.)
-
+- Ciphertext only is hard.
+- Known plaintext is easy (amounts to solving a matrix equation, i.e., inverting a matrix.)
+    - Modern variants of Hill cipher attempt to address known plaintext attacks.
+    
 ## One-Time Pad
 
 Plaintext: a vector $\mathbf{p} \in \mathbb{Z}_{26}^{N}$, where $N$ is the number of characters in the plaintext.

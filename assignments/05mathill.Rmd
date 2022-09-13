@@ -36,22 +36,9 @@ $a\mathbf{w} + b\mathbf{x} + c\mathbf{y} + d\mathbf{z} = \mathbf{0}$.
      a. Write a system of three equations that the four variables $a,b,c,d$ must satisfy.
      b.  Find all possible dependence relations, and explain how you know you have found them all.
 
-3. Add the file (hillcipher.R)[../R/hillcipher.R] function to your R package and rebuild.  Show, by example, that changing one letter of plaintext can change more than one letter of ciphertext. How much of the ciphertext changes? Does it matter which letter of plaintext changes? (TODO: make hillcipher.R)
+3. Add the file [hillcipher.R](../R/hillcipher.R) to your R package and rebuild.  Show, by example, that changing one letter of plaintext can change more than one letter of ciphertext. How much of the ciphertext changes? Does it matter which letter of plaintext changes? 
 
 ```{r, eval=FALSE}
-
-# TODO: remove this 
-
-hillCipher <- function(txt, keyMatrix) {
-  pt <- stringToMod26(txt)
-  n <- attributes(keyMatrix)$dim[2]
-  suppressWarnings(
-    mPtxt <- matrix(pt,nrow=n) # repeats text so length is a multiple of n
-  )
-  mCtxt <- (keyMatrix %*% mPtxt) %% 26
-  return(mod26ToString(as.vector(mCtxt)))
-}
-
 key <- matrix(c(1,4,11, 2,5,9, 3,6,8), nrow = 3, ncol = 3);
 hillCipher("whathappensifyouchangeoneletteroftheplaintext", key)
 ```
