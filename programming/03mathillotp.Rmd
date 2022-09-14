@@ -1,5 +1,5 @@
 ---
-title: "OTP and LFSR Tools"
+title: "LFSR Tools"
 output:
   html_document:
     toc: false
@@ -9,12 +9,7 @@ output:
 
 ## Assignment: due Sunday, 11:59 pm
 
-You should already have added the file [hillcipher.R](../R/hillcipher.R) to your R package. If not, make sure you do.
+0. You should already have added the file [hillcipher.R](../R/hillcipher.R) to your R package. If not, make sure you do.
 
-1.  Add the file [`motp.R`](https://djhunter.github.io/cryptography/R/motp.R) to the `R` subdirectory of your project. This file contains ROxygen comments and templates for two functions that you need to implement. Fix the one-time-pad implementation given in the slides to avoid the null character problem.
-     - First, compute `ctHex` as in the original `oneTimePad`.
-     - Before converting `ctHex` to a string, change the leftmost bit of each byte from a `0` to a `1`. 
-     - Take this conversion into account when decrypting.
-
-2.  Add the file [`lfsrtools.R`](https://djhunter.github.io/cryptography/R/lfsrtools.R) to the `R` subdirectory of your project. Implement the functions `shiftMatrix` and `recurrenceLength`, as described in the given documentation and examples.
+1.  Add the file [`lfsrtools.R`](https://djhunter.github.io/cryptography/R/lfsrtools.R) to the `R` subdirectory of your project. Implement the functions `shiftMatrix` and `recurrenceLength`, as described in the given documentation and examples.
 

@@ -1,6 +1,6 @@
 ---
 title: "Linear Feedback Shift Registers"
-date: "September 17, 2020"
+date: "September 15, 2022"
 output: 
   revealjs::revealjs_presentation:
     fig_width: 14 
@@ -43,9 +43,7 @@ Cons: Big key
 
 https://www.vice.com/en_us/article/ezvyyj/cubas-mysterious-numbers-station-is-still-on-the-air
 
-```
-!soundcloud https://soundcloud.com/wrench86/cuban-numbers-station-5-883-am
-```
+https://soundcloud.com/wrench86/cuban-numbers-station-5-883-am
 
 ## [Ascii](http://www.asciitable.com/) and Binary {.smaller}
 
@@ -179,29 +177,6 @@ Bonus feature: In $\mathbb{Z}_2$, $-1 = 1$. So you don't need negative signs!
 - Key: a vector $\mathbf{k} \in \mathbb{Z}_{2}^{N}$, where $N$ is the number of characters in the plaintext.
 - Encryption function: $\mathbf{p} \longmapsto \mathbf{p} + \mathbf{k}$
 
-```{r}
-oneTimePad <- function(plaintext, key) # needs fixing
-{
-  ptHex <- charToRaw(plaintext)
-  keyHex <- charToRaw(key)
-  ctHex <- xor(ptHex, keyHex[seq_along(ptHex)])
-  return(rawToChar(ctHex))
-}
-```
-
-## Null characters are a problem
-
-```{r, eval=FALSE}
-oneTimePad("hello", "mellow")
-oneTimePad("hello", "harry")
-```
-
-One way to fix: 
-
-- First, compute `ctHex` as in the original `oneTimePad`.
-- Before converting `ctHex` to a string, change the leftmost bit of each byte from a `0` to a `1`. 
-- Take this conversion into account when decrypting.
-
 # Linear Feedback Shift Registers
 
 ## Fibonacci Numbers in $\mathbb{Z}_2$
@@ -270,8 +245,6 @@ A more practical OTP?
 - Agree on a linear recurrence (i.e., A Linear Feedback Shift Register) with large period.
 - Share an initial vector.
 - Use the LFSR to generate a key for a one-time pad.
-- ???
-- Profit!
 
 ## How to hack a linear recurrence
 
@@ -324,25 +297,6 @@ sm3inv <- solve(sm3) %% 2
 sm3inv
 (sm3inv %*% sm3) %% 2
 ```
-
-## Join your table group
-
-```{r, echo=FALSE}
-library(knitr)
-roster <- c("Sam", "Wesley", "Andrew", "Winston", "Michael", "Logan", "Christian", "Caleb", "James", "Joe", "Emily", "Nathan")
-set.seed(9172020) 
-n <- length(roster)
-ngps <- 3
-maxingp <- ceiling(n/ngps)
-# just make random groups
-groups <- matrix(c(roster[sample(n)], 
-                   rep("",(maxingp - (n %% maxingp)) %% maxingp)), 
-                 ncol=maxingp, byrow=FALSE)
-rownames(groups) <- paste0("Table #", 1:nrow(groups))
-kable(t(groups))
-```
-
-Work on your group's [Jamboard](https://jamboard.google.com/d/1i8facJo6uJHeLJYADdMwPq2rjNI4wKLeEiILDWXybpw/edit?usp=sharing). You may want to upload a photo of your written work.
 
 ## Did it work?
 
