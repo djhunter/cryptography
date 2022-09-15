@@ -39,7 +39,7 @@ T = \begin{bmatrix}
 0 & 0 & 0 & 1 & 1 & 1 & 1 
 \end{bmatrix}
 $$
-Explain how and why the matrix $MT$ can be inspected to determine whether $M$ is invertible. If $M$ were an $n\times n$ matrix over $\mathbb{Z}_2$, what would the dimensions of an analogous such $T$ have to be (in terms of $n$)?
+Explain how and why the matrix $MT$ can be inspected to determine whether $M$ is invertible. (Hint: What does it have to do with linear combinations of the rows of $M$?) If $M$ were an $n\times n$ matrix over $\mathbb{Z}_2$, what would the dimensions of an analogous such $T$ have to be (in terms of $n$)?
 
 3.  The bit string $1 0 1 0 0 1 1 1 0 1 0$ was produced by a linear recurrence.  Use your `recurrenceLength` function to guess the length of the linear recurrence. Using this length, solve a system to find the coefficients of the linear recurrence, and give a formula for the recurrence.
 

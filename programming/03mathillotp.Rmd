@@ -13,3 +13,4 @@ output:
 
 1.  Add the file [`lfsrtools.R`](https://djhunter.github.io/cryptography/R/lfsrtools.R) to the `R` subdirectory of your project. Implement the functions `shiftMatrix` and `recurrenceLength`, as described in the given documentation and examples.
 
+Update the version number to 0.1.2 and submit the rebuilt package to Canvas.

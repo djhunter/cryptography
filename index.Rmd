@@ -41,9 +41,9 @@ This site provides slides, assignments, and other resources that I use in my Cod
 3. [Substitution and Vigenère Ciphers](slides/03vigenere_ciphers.html)
 4. [Attacks on Vigenère Ciphers](slides/04vigenere_attacks.html)
 5. [Matrices and the Hill Cipher](slides/05matrix_hill.html)
+6. [Linear Feedback Shift Registers](slides/06lfsr.html)
 
 ---
-# 6. [Linear Feedback Shift Registers](slides/06lfsr.html)
 # 7. [Data Encryption Standard (DES); Finite Fields](slides/07desaes1.html)
 # 8. [Advanced Encryption Standard (AES)](slides/08desaes2.html)
 # 9. [RSA Public Key Encryption](slides/09rsa1.html)
@@ -70,9 +70,9 @@ This site provides slides, assignments, and other resources that I use in my Cod
 3. [Substitution and Vigenère Ciphers](assignments/03subciphers.html)
 4. [Properties of Vigenère Ciphers](assignments/04vigenere.html)
 5. [Matrices and the Hill Cipher](assignments/05mathill.html)
+6. [Matrices and LFSR's](assignments/06matlfsr.html)
 
 ---
-# 6. [Matrices and LFSR's](assignments/06matlfsr.html)
 # 7. [Meet-in-the-middle; Finite Fields](assignments/07mitmff.html)
 # 8. [AES and Modes of Operation](assignments/08aesmodes.html)
 # 9. [Some RSA Calculations](assignments/09rsacalc.html)
@@ -96,9 +96,9 @@ This site provides slides, assignments, and other resources that I use in my Cod
 
 1. [Getting started with R packages](programming/01affine.html)
 2. [Tools for Breaking a Vigenère Cipher](programming/02vigbreak.html)
+3. [LFSR tools](programming/03mathillotp.html)
 
 ---
-# 3. [OTP and LFSR tools](programming/03mathillotp.html)
 # 4. [GF(256) and AES](programming/04gf256aes.html)
 # 5. [RSA tools](programming/05rsa.html)
 # 6. [Discrete Logarithms and Hash Functions](programming/06discloghash.html)

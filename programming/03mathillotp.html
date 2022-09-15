@@ -11,7 +11,7 @@
 
 
 
-<title>OTP and LFSR Tools</title>
+<title>LFSR Tools</title>
 
 <script>// Pandoc 2.9 adds attributes on both header and div. We remove the former (to
 // be compatible with the behavior of Pandoc < 2.8).
@@ -1656,34 +1656,23 @@ pre code {
 
 
 
-<h1 class="title toc-ignore">OTP and LFSR Tools</h1>
+<h1 class="title toc-ignore">LFSR Tools</h1>
 
 </div>
 
 
 <div id="assignment-due-sunday-1159-pm" class="section level2">
 <h2>Assignment: due Sunday, 11:59 pm</h2>
-<p>You should already have added the file <a href="../R/hillcipher.R">hillcipher.R</a> to your R package. If not,
-make sure you do.</p>
-<ol style="list-style-type: decimal">
-<li>Add the file <a href="https://djhunter.github.io/cryptography/R/motp.R"><code>motp.R</code></a>
-to the <code>R</code> subdirectory of your project. This file contains
-ROxygen comments and templates for two functions that you need to
-implement. Fix the one-time-pad implementation given in the slides to
-avoid the null character problem.
-<ul>
-<li>First, compute <code>ctHex</code> as in the original
-<code>oneTimePad</code>.</li>
-<li>Before converting <code>ctHex</code> to a string, change the
-leftmost bit of each byte from a <code>0</code> to a
-<code>1</code>.</li>
-<li>Take this conversion into account when decrypting.</li>
-</ul></li>
-<li>Add the file <a href="https://djhunter.github.io/cryptography/R/lfsrtools.R"><code>lfsrtools.R</code></a>
+<ol start="0" style="list-style-type: decimal">
+<li><p>You should already have added the file <a href="../R/hillcipher.R">hillcipher.R</a> to your R package. If not,
+make sure you do.</p></li>
+<li><p>Add the file <a href="https://djhunter.github.io/cryptography/R/lfsrtools.R"><code>lfsrtools.R</code></a>
 to the <code>R</code> subdirectory of your project. Implement the
 functions <code>shiftMatrix</code> and <code>recurrenceLength</code>, as
-described in the given documentation and examples.</li>
+described in the given documentation and examples.</p></li>
 </ol>
+<p>Update the version number to 0.1.2 and submit the rebuilt package to
+Canvas.</p>
 </div>
 
 
