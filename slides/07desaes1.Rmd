@@ -1,6 +1,6 @@
 ---
 title: "Data Encryption Standard (DES)"
-date: "September 22, 2020"
+date: "September 20, 2022"
 output: 
   revealjs::revealjs_presentation:
     fig_width: 14 
@@ -29,7 +29,7 @@ library(gmp)
 
 ## {data-background="https://honda-tech.com/wp-content/uploads/2020/01/cvcc6-e1578901622925.jpg" data-background-size="contain"}
 
-## {data-background="http://www.rockmusictimeline.com/beegees_75.jpg" data-background-size="contain"}
+## {data-background="https://upload.wikimedia.org/wikipedia/commons/8/80/LedZeppelinChicago75.jpg" data-background-size="contain"}
 
 ## {data-background="https://upload.wikimedia.org/wikipedia/commons/2/2d/IBM_5100_-_MfK_Bern.jpg" data-background-size="contain"}
 
@@ -216,25 +216,6 @@ Some of this material is covered on pp. 93--97 of the book, but their notation i
 
 - When $p(x)$ is irreducible of degree $n$, the field $\mathbb{Z}_2[x]/(p(x))$ is called **the** *Galois Field* of order $2^n$, or $\text{GF}(2^n)$.
 - Different choices irreducible polynomial of degree $n$ all result in the same field, *up to isomorphism*. (The representation is different, but the pattern of the multiplication table is the same.)
-
-## Join your table group
-
-```{r, echo=FALSE}
-library(knitr)
-roster <- c("Sam", "Wesley", "Andrew", "Winston", "Michael", "Logan", "Christian", "Caleb", "James", "Joe", "Emily", "Nathan")
-set.seed(9222020) 
-n <- length(roster)
-ngps <- 3
-maxingp <- ceiling(n/ngps)
-# just make random groups
-groups <- matrix(c(roster[sample(n)], 
-                   rep("",(maxingp - (n %% maxingp)) %% maxingp)), 
-                 ncol=maxingp, byrow=FALSE)
-rownames(groups) <- paste0("Table #", 1:nrow(groups))
-kable(t(groups))
-```
-
-Work on your group's [Jamboard](https://jamboard.google.com/d/1i7R8aTDD4WqKf31Mf0v4Ipf9uOKv7yYjUq7qSy73dlk/edit?usp=sharing). 
 
 ## Group Activity
 
