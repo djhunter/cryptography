@@ -204,16 +204,6 @@ knitr::include_graphics("images/cbc.jpg")
 
 Note: $C_0$ is the **initial vector** IV. It should be chosen at random, but can be sent unencrypted.
 
-## Activity
-
-Block size: 3 bits
-
-Encryption Function: $E_K : \mbox{GF}(2^3) \longrightarrow \mbox{GF}(2^3)$ given by $E_K(p(x))=xp(x)$.
-
-1. Encrypt the bit string $011110011$ using ECB.
-
-2. Encrypt the bit string $011110011$ using CBC with initial vector $101$.
-
 ## Cipher Feedback (CFB) 
 
 ```{r, out.height = "442px", out.width="647px",echo=FALSE}
