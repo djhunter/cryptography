@@ -304,4 +304,14 @@ Unlike OFB:
 >- There are other modes (OCB, etc). Check what your platform/software/hardware support.
 >- [NIST Recommendations](http://dx.doi.org/10.6028/NIST.SP.800-38A) (66 pages)
 
+## Group Exercise
+
+Use the field $\mbox{GF}(2^3) = \mathbb{Z}_2/(1+x+x^3)$.
+Define an encryption function $E:\mbox{GF}(2^3) \longrightarrow \mbox{GF}(2^3)$ on 3-bit blocks by $E(p(x)) = xp(x)$. 
+
+1. Encrypt the 3-block ciphertext $110011101$ using this cipher in CBC mode with initial vector $111$.
+
+2. Encrypt the 3-block ciphertext $110011101$ using this cipher in CTR mode with initial vector $010$.
+
+
 
