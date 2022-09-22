@@ -1,0 +1,20 @@
+---
+title: "GF(256) Addition and Multiplication"
+output:
+  html_document:
+    toc: false
+    df_print: paged
+    theme: spacelab
+---
+
+## Assignment: due Sunday, 11:59 pm
+
+Add the file [`gf256.R`](https://djhunter.github.io/cryptography/R/gf256.R) to the `R` subdirectory of your project. Note that we are using the representation $\mbox{GF}(2^8) = \mathbb{Z}_2[x]/(x^8+x^4+x^3+x+1)$.
+
+1. Implement the function `addGF256`.
+
+2. Implement the function `multByXinGF256`. This helper function will need to take into account the polynomial modulus.
+
+3.  Implement the function `multGF256`. (Make use of the previous two functions.)
+
+

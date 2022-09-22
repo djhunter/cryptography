@@ -1,6 +1,6 @@
 ---
 title: "Advanced Encryption Standard (AES)"
-date: "September 24, 2020"
+date: "September 22, 2022"
 output: 
   revealjs::revealjs_presentation:
     fig_width: 14 
@@ -88,7 +88,7 @@ extGCDbigz <- function (a, b)
 
 ## Next programming assignment
 
-Implement addition and multiplication in $\mbox{GF}(2^8) = \mathbb{Z}_2[x]/(x^8+x^4+x^3+x+1)$. Polynomials are raw bytes.
+Implement addition and multiplication in $\mbox{GF}(2^8) = \mathbb{Z}_2[x]/(x^8+x^4+x^3+x+1)$. Polynomials are represented as length 8 vectors of 0s and 1s.
 
 - $p(x) + q(x)$ should be easy.
 - Suggestion: Helper function to calculate $xp(x)$. This function is the only one that needs to take into account the modulus in $\mbox{GF}(256)$.
@@ -102,7 +102,7 @@ What you must know:
 
 >- AES is a block cipher.
 >- AES is a symmetric key cryptosystem.
->- **AES has replaced DES** as an NIST endorsed cryptosystem, and is widely used today (2020).
+>- **AES has replaced DES** as an NIST endorsed cryptosystem, and is widely used today (2022).
 >- AES uses matrix multiplication over a finite field in a very clever way!
 
 ## History of AES
@@ -204,25 +204,6 @@ knitr::include_graphics("images/cbc.jpg")
 
 Note: $C_0$ is the **initial vector** IV. It should be chosen at random, but can be sent unencrypted.
 
-## Join your table group
-
-```{r, echo=FALSE}
-library(knitr)
-roster <- c("Sam", "Wesley", "Andrew", "Winston", "Michael", "Logan", "Christian", "Caleb", "James", "Joe", "Emily", "Nathan")
-set.seed(9242020) 
-n <- length(roster)
-ngps <- 3
-maxingp <- ceiling(n/ngps)
-# just make random groups
-groups <- matrix(c(roster[sample(n)], 
-                   rep("",(maxingp - (n %% maxingp)) %% maxingp)), 
-                 ncol=maxingp, byrow=FALSE)
-rownames(groups) <- paste0("Table #", 1:nrow(groups))
-kable(t(groups))
-```
-
-Work on your group's [Jamboard](https://jamboard.google.com/d/1wzXHqGPc2fVgqpCK0E1c7DWpXPF-UC7GhjPSxys-weE/edit?usp=sharing). 
-
 ## Activity
 
 Block size: 3 bits
@@ -313,20 +294,14 @@ Unlike OFB:
 
 - Simpler.
 
-## What you should know: {.build}
+## What you should know: 
 
-ECB: Do not use.
-
-CBC: Need round number of blocks.
-
-CBC, CFB: One bit error destroys the whole block.
-
-CTR: Fast, simple, parallelizable. 
-
-Make sure you randomize the IV's well.
-
-There are other modes (OCB, etc). Check what your platform/software/hardware support.
-
-[NIST Recommendations](http://dx.doi.org/10.6028/NIST.SP.800-38A) (66 pages)
+>- ECB: Do not use.
+>- CBC: Need round number of blocks.
+>- CBC, CFB: One bit error destroys the whole block.
+>- CTR: Fast, simple, parallelizable. 
+>- Make sure you randomize the IV's well.
+>- There are other modes (OCB, etc). Check what your platform/software/hardware support.
+>- [NIST Recommendations](http://dx.doi.org/10.6028/NIST.SP.800-38A) (66 pages)
 
 
