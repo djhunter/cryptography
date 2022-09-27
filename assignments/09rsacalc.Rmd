@@ -31,7 +31,7 @@ rsaExponent <- as.bigz("65537")
 plainText <- as.bigz("453787497332492283997614676595994471")
 ```
 
-Observe that, for this example, the ciphertext number has many more digits than the plaintext number. 
+Observe that, for this example, the ciphertext number has many more digits than the plaintext number. Try some other short ciphertexts? Does this usually happen?
 
 2. Out of all the positive integers that are less than 1 million, what percentage of them have six digits? What does this have to do with the observation at the end of question 1?
 

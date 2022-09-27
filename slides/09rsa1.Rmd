@@ -31,8 +31,10 @@ library(openssl)
 ## Public Key Cryptosystems 
 
 >- AES is great, but it is a **symmetric key** cryptosystem; it uses the same key to encrypt as to decrypt.
->-Suppose you have thousands of customers, and you want a secure way of collecting credit card information from them: if you want to use AES, you need a secure way of getting each of them a (different) key. 
->-RSA is a **public key** cryptosystem. The key to encrypt is made public, but the key to decrypt is kept private.
+
+>- Suppose you have thousands of customers, and you want a secure way of collecting credit card information from them: if you want to use AES, you need a secure way of getting each of them a (different) key. 
+
+>- RSA is a **public key** cryptosystem. The key to encrypt is made public, but the key to decrypt is kept private.
 
 ## Public key cryptosystems {transition="slide-in fade-out"}
 
@@ -269,7 +271,7 @@ bigzToString <- function(n) {
 bigzToString(powm(c,d,n))
 ```
 
-## Proof that RSA works: why we use $pq$
+## Proof that RSA works: why we use $(p-1)(q-1)$
 
 **Euler's Theorem:** If $\gcd(a,n)=1$, then $a^{\phi(n)} \equiv 1 \pmod n$.
 
@@ -399,6 +401,7 @@ log2(m) ## number of bits in m
 key <- rsa_keygen()
 rsaModulus <- as.list(key)$data$n
 rsaModulus
+str(rsaModulus)
 ```
 
 (See console.)
