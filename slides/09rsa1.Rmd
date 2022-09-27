@@ -1,6 +1,6 @@
 ---
 title: "The RSA Algorithm"
-date: "September 29, 2020"
+date: "September 27, 2022"
 output: 
   revealjs::revealjs_presentation:
     fig_width: 14 
@@ -67,26 +67,6 @@ In the natural numbers $\mathbb{N}$,
 - Given $n = pq$ where $p$ and $q$ are large primes, it is very difficult to compute $p$ and $q$.
 
 Idea behind RSA: If you know $pq$, you can encrypt a message, but you have to know $p$ and $q$ to decrypt the message.
-
-## Table groups
-
-```{r, echo=FALSE}
-library(knitr)
-roster <- c("Sam", "Wesley", "Andrew", "Winston", "Logan", "Christian", "Caleb", "James", "Joe", "Emily", "Nathan")
-set.seed(9292020) 
-n <- length(roster)
-ngps <- 3
-maxingp <- ceiling(n/ngps)
-# just make random groups
-groups <- matrix(c(roster[sample(n)], 
-                   rep("",(maxingp - (n %% maxingp)) %% maxingp)), 
-                 ncol=maxingp, byrow=FALSE)
-rownames(groups) <- paste0("Table #", 1:nrow(groups))
-kable(t(groups))
-```
-
-Work on your group's [Jamboard](https://jamboard.google.com/d/1owGJoVw8X_gBRR_FtXC8vFXQjP0w3AEgTab9QIE2nD4/edit?usp=sharing). 
-
 
 
 ## Group Discussion
@@ -318,7 +298,7 @@ c^d \bmod n &= (m^e)^d \bmod n \\
 \end{aligned}
 $$
 
-## Practice on a "toy" example (tables/Jamboard)
+## Practice on a "toy" example (groups)
 
 - Public: modulus: 77, encryption exponent: 13
 - Encrypt the plaintext 20.
@@ -326,7 +306,6 @@ $$
 - Check that the decryption exponent works.
 - Would this example work if the encryption exponent were 3 instead of 13? Try it.
 
-Work on your group's [Jamboard](https://jamboard.google.com/d/1owGJoVw8X_gBRR_FtXC8vFXQjP0w3AEgTab9QIE2nD4/edit?usp=sharing). 
 
 # Some practical considerations
 
