@@ -52,30 +52,44 @@ How can we generate large prime numbers?
 1. Choose a large, odd, random number.
 2. Test to see if it is prime. If not, add 2 and repeat.
 
-Important facts:
+. . . 
 
-- There are infinitely many primes. (Euclid, 300 BC)
-- **The Prime Number Theorem.** (Hadamard, 1896) [Short proof](https://people.mpim-bonn.mpg.de/zagier/files/doi/10.2307/2975232/fulltext.pdf)
+The hard part is going to be determining if a large number is prime.
+
+## Some prime number theorems
+
+- There are infinitely many primes. (Euclid, 300 BC) Proof by contradiction.
+
+. . .
+
+- **The Prime Number Theorem.** (Hadamard, 1896) 
     - The $n$th prime is approximately (asymptotically) $n \ln n$. 
     - The number of primes less than $x$ is approximately (asymptotically) $\displaystyle{\frac{x}{\ln x}}$.
+    - [Short proof](https://people.mpim-bonn.mpg.de/zagier/files/doi/10.2307/2975232/fulltext.pdf)
     
-## Testing primality by brute force
+. . .
 
-Keep a big list of primes. To determine if $n$ is prime, test all the prime numbers up to $\sqrt{n}$ to see if any divide $n$.
+$$
+\lim_{x \rightarrow \infty} \frac{\pi(x)}{\ln x} = 1
+$$
+    
+## Testing primality
 
-> Exercise: If $n$ has 60 digits, how big will this list need to be? 
+>- Exhaustive search for factors:
+>    - Keep a big list of primes. 
+>    - To determine if a given $n$ is prime, test all the prime numbers up to $\sqrt{n}$ to see if any divide $n$.
+>- *Exercise:* If $n$ has 100 digits, how big will this list need to be (roughly)? 
+>    - Fact needed: The number of primes less than $x$ is approximately $\displaystyle{\frac{x}{\ln x}}$.
 
 ## Recall Euler's Theorem
 
 > **Euler's Theorem:** If $\gcd(a,n)=1$, then $a^{\phi(n)} \equiv 1 \pmod n$.
 
-An immediate corollary is known as **Fermat's Little Theorem**.
+An immediate corollary is known as **Fermat's Little Theorem**. (FlT)
 
 > If $p$ is prime, then $a^{p-1} \equiv 1 \pmod{p}$, for any $a < p$. 
 
-## Fermat's Little Theorem {.smaller}
-
-> If $p$ is prime, then $a^{p-1} \equiv 1 \pmod{p}$, for any $a < p$. 
+## Contrapositive of FlT
 
 ```{r}
 bigNumber <- as.bigz("2759906923170465870349284572513444495119639631
@@ -173,7 +187,7 @@ Otherwise, let $b_2 = b_1^2$.
 
 Continue, if necessary, until reaching $b_{k-1}$. If $b_{k-1}\neq -1$, then $n$ is composite. Otherwise, $n$ is probably prime.
 
-## Exercise
+## Group Exercise
 
 Step through Miller-Rabin for 561.
 
@@ -267,6 +281,9 @@ Prevention: padding.
 - If the plaintext is not an integral number of blocks, you need to pad it to make it so.
     - How do you decrypt? Make the padding say how many bytes you added. (e.g. `03 03 03`)
     - Decrypt, then throw away padding.
+    
+. . .
+
 - Problem: if the plaintext *is* an integral number of blocks, and you don't pad it, decryption might think it has to throw away padding.
     - Solution: pad an integral number of blocks with a whole block of padding.
     - i.e., you always pad, so you always throw away padding when decrypting.

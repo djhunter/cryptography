@@ -20,7 +20,10 @@ FermatTest <- function(n, a)
 
 #' Generate a decent RSA modulus
 #'
-#' Randomly generates an RSA modulus n = pq. Checks to make sure p-q is at least a googol, and checks to make sure that p-1 and q-1 have no small prime factors. We'll use e = 65537. Returns a list containing n, p, q, e, and d, the decryption exponent.
+#' Randomly generates a 2048-bit RSA modulus n = pq. Checks to make sure p-q is 
+#' at least a googol (10^100), and checks to make sure that p-1 and q-1 have no 
+#' small prime factors (i.e., up to 137). We'll use e = 65537. 
+#' Returns a list containing n, p, q, e, and d, the decryption exponent.
 #'
 #' @return A list, containing n, p, q, e, and d.
 #' @export
