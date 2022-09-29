@@ -11,8 +11,6 @@ output:
 
 Add the file [`rsatools.R`](https://djhunter.github.io/cryptography/R/rsatools.R) to the `R` subdirectory of your project. This file includes functions for converting between strings and big integers.
 
-1. Implement the function `bfRSAattack`, which implements a brute force attack on a ciphertext, given that the plaintext is a small number. The parameter `ptBound` tells you the biggest plaintext that you need to try. In the argument list, the expression `ptBound = as.bigz(1000)` gives `ptBound` default value of 1000 if no value is specified. (Your function should work for much larger values.) If the function fails to find a plaintext, it should return `NA`.
+1. Implement `FermatTest` as specified, to carry out the Fermat Primality Test ([T] p. 177).
 
-2. Implement `FermatTest` as specified, to carry out the Fermat Primality Test ([T] p. 177).
-
-3. Implement `makeRSAkey` as specified, to generate a random 2048-bit RSA modulus. The primes $p$ and $q$ should both be large (at least 1000 bits). Your choice of $n = pq$ should be immune to the Fermat factorization attack, so $p-q$ should be at least a googol ($10^{100}$). Furthermore, it should be immune to the quadratic sieve attack, so check that $p-1$ and $q-1$ do not have any small (<100) prime factors. The `gmp` functions `urand.bigz`, `isprime`, and `nextprime` may be helpful. Each time the function is called, it should produce a new random RSA key. (No, you can't use the `openssh` package, or similar.)
+2. Implement `makeRSAkey` as specified, to generate a random 2048-bit RSA modulus. The primes $p$ and $q$ should both be large (at least 1000 bits). Your choice of $n = pq$ should be immune to the Fermat factorization attack, so $p-q$ should be at least a googol ($10^{100}$). Furthermore, it should be immune to the quadratic sieve attack, so check that $p-1$ and $q-1$ do not have any small (<100) prime factors. The `gmp` functions `urand.bigz`, `isprime`, and `nextprime` may be helpful. Each time the function is called, it should produce a new random RSA key. (No, you can't use the `openssh` package, or similar.)

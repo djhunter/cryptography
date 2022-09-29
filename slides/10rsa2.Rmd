@@ -1,6 +1,6 @@
 ---
 title: "Attacks on RSA and Primality Testing"
-date: "October 1, 2020"
+date: "September 29, 2022"
 output: 
   revealjs::revealjs_presentation:
     fig_width: 14 
@@ -42,112 +42,6 @@ bigzToString <- function(n) {
   return(rawToChar(as.raw(nnumeric)))
 }
 ```
-
-
-# RSA Considerations 
-
-## Recall: RSA {transition="slide-in fade-out"}
-
-1. Bob chooses large primes $p$ and $q$ and computes $n=pq$.
-2. Bob chooses exponent $e$ relatively prime to $(p-1)(q-1)$. 
-3. Bob computes $d = e^{-1}$ modulo $(p-1)(q-1)$.
-4. Bob makes $n$ and $e$ public, but keeps $p$, $q$, and $d$ secret.
-5. Alice codes a plaintext message as a number $m$. She computes $c = m^e \bmod n$ and sends $c$ to Bob.
-6. Bob decrypts by computing $m = c^d \bmod n$.
-
-## Computational cost of RSA? {transition="fade-in slide-out"}
-
-1. Bob chooses large primes $p$ and $q$ and computes $n=pq$.
-2. Bob chooses exponent $e$ relatively prime to $(p-1)(q-1)$. 
-3. Bob computes $d = e^{-1}$ modulo $(p-1)(q-1)$.
-4. Bob makes $n$ and $e$ public, but keeps $p$, $q$, and $d$ secret.
-5. Alice codes a plaintext message as a number $m$. She *computes* $c = m^e \bmod n$ and sends $c$ to Bob.
-6. Bob decrypts by *computing* $m = c^d \bmod n$.
-
-## Fast exponentiation
-
-```{r pow, echo=TRUE}
-rPower <- function(x, n)
-{
-  if(n==0) return(1)
-  x*rPower(x, n-1)
-}
-
-qPower <- function(x, n)
-{
-  if(n==0) return(1)
-  ifelse(n %% 2 == 0, (qPower(x, n/2))^2, x*(qPower(x, n %/% 2))^2)
-}
-```
-
-For big integers, `powm` is some version of the latter.
-
-## Why does RSA use prime numbers?
-
-Which step of the following derivation relies on $p$ and $q$ being prime?
-
-$$
-\begin{aligned}
-c^d \bmod n &= (m^e)^d \bmod n \\
-&= m^{de} \bmod n \\
-&= m^{1 + k(p-1)(q-1)} \bmod n\\
-&= m \cdot \left(m^{(p-1)(q-1)}\right)^k \bmod n \\
-& = m \cdot 1^k \\
-&= m
-\end{aligned}
-$$
-
-## Basic prime number facts {.build}
-
-- A natural number $n$ is **prime** if it has no divisors other than $n$ and $1$.
-- If a number is not prime, it is called **composite.**
-- If all of the prime numbers up to $\sqrt{n}$ fail to divide $n$, then $n$ is prime.
-
-Next time we'll focus on how to deal with big prime numbers.
-
-## How big do the primes need to be? {.build}
-
-- Long enough so they can't be factored.
-- Long enough so the blocks aren't annoyingly small.
-
-```{r}
-factorize("211463707796206571")
-```
-
-## Factorization records?
-
-During 2007-2009, a team of 10 researchers managed to factor one of the RSA challenge numbers:
-
-```{r}
-rsaChallenge <- as.bigz("12301866845301177551304949583849627207728535695953347921973
-                22452151726400507263657518745202199786469389956474942774063845925192
-                55732630345373154826850791702612214291346167042921431160222124047927
-                4737794080665351419597459856902143413")
-log2(rsaChallenge)
-log10(rsaChallenge)
-```
-
-Try `factorize("rsaChallenge")` and see what happens.
-
-## Message/block length can't exceed modulus 
-
-```{r}
-m <- stringToBigz("I would like to send a message that could correspond 
-                   to a reasonably complicated sentence.")
-m
-log10(m) ## number of decimal digits in m
-log2(m) ## number of bits in m
-```
-
-## OpenSSL currently recommends 2048-bit moduli
-
-```{r, linewidth=50}
-key <- rsa_keygen()
-rsaModulus <- as.list(key)$data$n
-rsaModulus
-```
-
-- How do passwordless logins work in ssh?
 
 # Prime numbers
 
@@ -224,7 +118,7 @@ A probable prime that isn't prime is called a "pseudoprime".
 
 More precisely, if $a^{n-1} \equiv 1 \pmod{n}$, and $n$ is composite, then $n$ is a *(weak) pseudoprime for the base $a$.* 
 
-For example, 561 is a pseudoprime for the base 2. Pseudoprimes make up a tiny fraction of any range of numbers, but not tiny enough.
+For example, 561 is a pseudoprime for the base 2. Pseudoprimes make up a tiny fraction of any range of numbers (but not tiny enough).
 
 ## Square roots of 1?
 
@@ -378,14 +272,6 @@ Prevention: padding.
     - i.e., you always pad, so you always throw away padding when decrypting.
 
 ## Programming assignment
-
-Default values:
-
-```{r, eval=FALSE}
-bfRSAattack <- function(n, e, ct, ptBound = as.bigz(1000)) {
-  # TODO
-}
-```
 
 Returning [a bunch of things](../programming/05rsa.Rmd) in a list:
 
