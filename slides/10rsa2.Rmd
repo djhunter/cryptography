@@ -70,7 +70,7 @@ The hard part is going to be determining if a large number is prime.
 . . .
 
 $$
-\lim_{x \rightarrow \infty} \frac{\pi(x)}{\ln x} = 1
+\lim_{x \rightarrow \infty} \frac{\pi(x)}{x/\ln x} = 1
 $$
     
 ## Testing primality
