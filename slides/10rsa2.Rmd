@@ -246,7 +246,7 @@ Otherwise, let $b_2 = b_1^2$.
 
 Idea: Search for $x$ and $y$ by looking at products of squares of small primes.
 
-Prevention: Make sure $p-1$ and $q-1$ don't have small prime factors.
+Prevention: Make sure $p-1$ and $q-1$ don't have only small prime factors.
 
 ## Low Exponent Attacks
 

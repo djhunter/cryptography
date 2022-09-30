@@ -1666,8 +1666,8 @@ Fermat Primality Test ([T] p. 177).</p></li>
 random 2048-bit RSA modulus. The primes <span class="math inline">\(p\)</span> and <span class="math inline">\(q\)</span> should both be large (at least 1000
 bits). Your choice of <span class="math inline">\(n = pq\)</span> should
 be immune to the Fermat factorization attack, so <span class="math inline">\(p-q\)</span> should be at least a googol (<span class="math inline">\(10^{100}\)</span>). Furthermore, it should be
-immune to the quadratic sieve attack, so check that <span class="math inline">\(p-1\)</span> and <span class="math inline">\(q-1\)</span> do not have any small (&lt;100) prime
-factors. The <code>gmp</code> functions <code>urand.bigz</code>,
+immune to the quadratic sieve attack, so check that <span class="math inline">\(p-1\)</span> and <span class="math inline">\(q-1\)</span> do not have only small (&lt;100)
+prime factors. The <code>gmp</code> functions <code>urand.bigz</code>,
 <code>isprime</code>, and <code>nextprime</code> may be helpful. Each
 time the function is called, it should produce a new random RSA key.
 (No, you can’t use the <code>openssh</code> package, or
