@@ -34,7 +34,7 @@ FermatTest <- function(n, a)
 #' log2(key$n) # should be between 2047 and 2048
 #' isprime(key$p) # q should be prime too
 #' key$p - key$q # should be at least 10^100 in absolute value
-#' key$p %% 17 # better not be zero
+#' (key$p - 1) %% 17 # better not be zero
 #' log2(key$q) # better be at least 1000
 #' (key$d * key$e) %% ((key$p-1) * (key$q-1)) # d and e should be inverses mod (p-1)(q-1)
 makeRSAkey <- function() {
