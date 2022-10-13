@@ -33,3 +33,12 @@ Upload to Canvas a PDF of your work for the following problems.
     c. Decrypt to check your answer. <br><br>
     
 5. In $U(53457634678734567834567367867346003)$, compute $L_5(31224112303063959919880288679125645)$ modulo 2. Show your work.
+
+6. Show that the implementation of Baby Step Giant Step given in the slides can be sped up considerably by using character vectors rather than lists of `bigz`. Replace the assignment of `baby` and `giant` with the following.
+```{r, eval = FALSE}
+baby <- sapply(1:N, function(j){as.character(powm(alpha, j, p))})
+giant <- sapply(1:N, function(k){as.character((beta*powm(alpha, -N*k, p)) %% p)})
+```
+Compute `system.time(match(baby,giant)` for the original `baby` and `giant` (given in the slides) and also for the above version of `baby` and `giant`. Compare the elapsed times. Also look in the environment tab and compare the sizes of the lists/vectors for both versions.
+
+

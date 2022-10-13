@@ -233,6 +233,7 @@ Compute $L_7(12)$ in $U(41)$. (i.e., Solve $7^x = 12$.)
 How to avoid this attack: Make sure $p-1$ has at least one large prime factor.
 
 ```{r}
+isprime("234804645645701")
 factorize(as.bigz("234804645645701") - 1)
 ```
 
@@ -246,6 +247,45 @@ To solve $\alpha^x = \beta$ in $U(p)$: Choose large $N > \sqrt{p-1}$
 2. Compute $\beta\alpha^{-Nk}$ for $k = 1, 2, \ldots, N$. (Giant step.)
 
 If a match is found in these two lists, $x=j+Nk$ is a solution. (Note that $k$ and $j$ are the "digits" in the base $N$ representation of $x$.)
+
+## BSGS in R
+
+We can use `match`.
+
+```{r}
+w1 <- c("I", "thought", "you", "said", "your", "dog", "did", "not", "bite")
+w2 <- c("That", "is", "not", "my", "dog")
+m <- match(w1, w2)
+m
+which(!is.na(m))
+commonWords <- w2[m]
+commonWords
+commonWords[!is.na(commonWords)]
+```
+
+
+## BSGS example
+
+```{r}
+alpha <- 103
+beta <- as.bigz(41425148)
+p <- as.bigz(240922393)
+N <- 16000
+
+baby <- sapply(1:N, function(j){powm(alpha, j, p)})
+giant <- sapply(1:N, function(k){(beta*powm(alpha, -N*k, p)) %% p})
+
+m <- match(baby, giant)
+j <- which(!is.na(m))
+k <- m[j]
+```
+
+## Check answer
+
+```{r}
+ans <- j + N * as.bigz(k)
+powm(alpha, ans, p)
+```
 
 How to avoid this attack: Use large primes.
 
