@@ -39,6 +39,6 @@ Upload to Canvas a PDF of your work for the following problems.
 baby <- sapply(1:N, function(j){as.character(powm(alpha, j, p))})
 giant <- sapply(1:N, function(k){as.character((beta*powm(alpha, -N*k, p)) %% p)})
 ```
-Compute `system.time(match(baby,giant)` for the original `baby` and `giant` (given in the slides) and also for the above version of `baby` and `giant`. Compare the elapsed times. Also look in the environment tab and compare the sizes of the lists/vectors for both versions.
+Compute `system.time(match(baby,giant))` for the original `baby` and `giant` (given in the slides) and also for the above version of `baby` and `giant`. Compare the elapsed times. Also look in the environment tab and compare the sizes of the lists/vectors for both versions.
 
 

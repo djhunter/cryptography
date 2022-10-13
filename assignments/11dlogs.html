@@ -1708,7 +1708,7 @@ than lists of <code>bigz</code>. Replace the assignment of
 </ol>
 <pre class="r"><code>baby &lt;- sapply(1:N, function(j){as.character(powm(alpha, j, p))})
 giant &lt;- sapply(1:N, function(k){as.character((beta*powm(alpha, -N*k, p)) %% p)})</code></pre>
-<p>Compute <code>system.time(match(baby,giant)</code> for the original
+<p>Compute <code>system.time(match(baby,giant))</code> for the original
 <code>baby</code> and <code>giant</code> (given in the slides) and also
 for the above version of <code>baby</code> and <code>giant</code>.
 Compare the elapsed times. Also look in the environment tab and compare
