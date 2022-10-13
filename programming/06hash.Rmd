@@ -1,0 +1,23 @@
+---
+title: "Discrete Logarithms and Hash Functions"
+output:
+  html_document:
+    toc: false
+    df_print: paged
+    theme: spacelab
+---
+
+## Assignment: due Sunday, 11:59 pm
+
+Add the file [`hash.R`](https://djhunter.github.io/cryptography/R/dlhash.R) to the `R` subdirectory of your project. 
+
+0. This file includes a function `miniSHA` that imports the `openssl` package (which you need to install if you haven't already.) Unfortunately, there is a naming collision with the `digest` package that produces annoying warning messages. To make these messages go away, we need to fix `aestools.R` so that it only imports the function `AES` and not any other functions. To do this, change the line in `aestools.R` from
+```{r, eval=FALSE}
+#' @import digest
+```
+to
+```{r, eval=FALSE}
+#' @importFrom digest AES
+```
+
+1. Implement `birthdayAttack` as specified. There is some advice in the slides about using the `duplicated` function.

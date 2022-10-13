@@ -219,17 +219,22 @@ Facts used:
 Compute $L_7(12)$ in $U(41)$. (i.e., Solve $7^x = 12$.)
 
 >- $p-1 = 41 - 1 = 40 = 2^3 \cdot 5$
->- Since $12^{20} \equiv -1 \pmod{41}$, we know $L_7(12) \equiv 1 \pmod{2}$.
+>- Since $12^{20} \equiv -1 \pmod{41}$, we know $x = L_7(12) \equiv 1 \pmod{2}$.
 >    - In fact, *$L_7(12) \equiv 5 \pmod{8}$*. (Details omitted.)
->- Observe: $12^{40/5} \equiv 18 \pmod{41}$, and $7^{40/5} \equiv 37 \pmod{41}$.
+>- Observe: $12^{40/5} = 12^8 \equiv 18 \pmod{41}$, and $7^8 \equiv 37 \pmod{41}$.
 >- Try powers of $37$ and find that $37^3 \equiv 18 \pmod{41}$.
->- So $(7^{40/5})^3 \equiv 12^{40/5} \pmod{41}$.
->- Therefore *$L_7(12) \equiv 3 \pmod{5}$*. (TODO)
+>- So $(7^8)^3 \equiv 12^8 = (7^x)^8 \pmod{41}$. So $8\cdot 3 \equiv x \cdot 8 \pmod{40}$.
+>- It follows that $3 \equiv x \pmod{5}$.
+>- Therefore *$L_7(12) \equiv 3 \pmod{5}$*. 
 >- Now use CRT: $L_7(12) = (5)(5)(5) + (3)(2)(8) \pmod{40} = 13$.
 
 ## Avoid the Pohlig-Hellman Attack?
 
 How to avoid this attack: Make sure $p-1$ has at least one large prime factor.
+
+```{r}
+factorize(as.bigz("234804645645701") - 1)
+```
 
 ## Baby Step, Giant Step
 
