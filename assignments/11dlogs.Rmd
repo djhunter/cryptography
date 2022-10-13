@@ -27,14 +27,14 @@ Upload to Canvas a PDF of your work for the following problems.
 
     If Alice and Bob are not aware that Eve is doing this, what "shared secrets" do they compute? Is it possible for Eve to also know these secrets? Explain.
     
-4.  Alice and Bob are communicating using the ElGamal cryptosystem with $p = 179841529021446883498969891$ and $\alpha = 7$. Bob's secret exponent is $a = 10000$. 
+4.  The [recipe for the ElGamal cryptosystem](../slides/11discrete_logs.html#/elgamal-public-key-cryptosystem) is in the slides. Suppose that Alice and Bob are communicating using the ElGamal cryptosystem with $p = 179841529021446883498969891$ and $\alpha = 7$. Bob's secret exponent is $a = 10000$. 
     a. Give the triple that Bob makes public.
     b. Suppose Alice wants to send the message `370288657646690981668211`. Compute a ciphertext pair that Alice could send.
     c. Decrypt to check your answer. <br><br>
     
 5. In $U(53457634678734567834567367867346003)$, compute $L_5(31224112303063959919880288679125645)$ modulo 2. Show your work.
 
-6. Show that the implementation of Baby Step Giant Step given in the slides can be sped up considerably by using character vectors rather than lists of `bigz`. Replace the assignment of `baby` and `giant` with the following.
+6. Show that the [implementation of Baby Step Giant Step](../slides/11discrete_logs.html#/bsgs-example) given in the slides can be sped up considerably by using character vectors rather than lists of `bigz`. Replace the assignment of `baby` and `giant` with the following.
 ```{r, eval = FALSE}
 baby <- sapply(1:N, function(j){as.character(powm(alpha, j, p))})
 giant <- sapply(1:N, function(k){as.character((beta*powm(alpha, -N*k, p)) %% p)})

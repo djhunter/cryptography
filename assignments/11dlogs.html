@@ -1687,9 +1687,9 @@ intercept messages between Alice and Bob and alter them (i.e., Eve is an
 <p>If Alice and Bob are not aware that Eve is doing this, what “shared
 secrets” do they compute? Is it possible for Eve to also know these
 secrets? Explain.</p></li>
-<li><p>Alice and Bob are communicating using the ElGamal cryptosystem
-with <span class="math inline">\(p =
-179841529021446883498969891\)</span> and <span class="math inline">\(\alpha = 7\)</span>. Bob’s secret exponent is
+<li><p>The <a href="../slides/11discrete_logs.html#/elgamal-public-key-cryptosystem">recipe
+for the ElGamal cryptosystem</a> is in the slides. Suppose that Alice
+and Bob are communicating using the ElGamal cryptosystem with <span class="math inline">\(p = 179841529021446883498969891\)</span> and <span class="math inline">\(\alpha = 7\)</span>. Bob’s secret exponent is
 <span class="math inline">\(a = 10000\)</span>.</p>
 <ol style="list-style-type: lower-alpha">
 <li>Give the triple that Bob makes public.</li>
@@ -1701,10 +1701,11 @@ Alice could send.</li>
 <li><p>In <span class="math inline">\(U(53457634678734567834567367867346003)\)</span>,
 compute <span class="math inline">\(L_5(31224112303063959919880288679125645)\)</span>
 modulo 2. Show your work.</p></li>
-<li><p>Show that the implementation of Baby Step Giant Step given in the
-slides can be sped up considerably by using character vectors rather
-than lists of <code>bigz</code>. Replace the assignment of
-<code>baby</code> and <code>giant</code> with the following.</p></li>
+<li><p>Show that the <a href="../slides/11discrete_logs.html#/bsgs-example">implementation of
+Baby Step Giant Step</a> given in the slides can be sped up considerably
+by using character vectors rather than lists of <code>bigz</code>.
+Replace the assignment of <code>baby</code> and <code>giant</code> with
+the following.</p></li>
 </ol>
 <pre class="r"><code>baby &lt;- sapply(1:N, function(j){as.character(powm(alpha, j, p))})
 giant &lt;- sapply(1:N, function(k){as.character((beta*powm(alpha, -N*k, p)) %% p)})</code></pre>
