@@ -9,7 +9,7 @@ output:
 
 Upload to Canvas a PDF of your work for the following problems. 
 
-## Assignment: due Monday, 11:59 pm
+## Assignment: due Wednesday, 11:59 pm
 
 1. Explain what the following code is counting, and what it has to do with diffusion.
 
@@ -20,9 +20,9 @@ m2 <- "Oh, say, can you see, By the dawn's early light, What so proudly we haile
 sum(rawToBits(xor(as.raw(sha256(charToRaw(m1))), as.raw(sha256(charToRaw(m2))))) != rawToBits(as.raw(0)))
 ```
 
-2. In the last programming assignment, the hash function `miniSHA` defaults to a 32-bit hash.
-    a. The examples say that `birthdayAttack(miniSHA, giveUp = 100000)` "probably" should find a collision. Use the Birthday Theorem to calculate the probability of finding a collision in this case.
-    b. The examples say that `birthdayAttack(miniSHA, giveUp = 1000000)` "almost certainly" should find a collision. Use the Birthday Theorem to calculate the probability of finding a collision in this case.
+2. Consider a hash function `miniSHA` that produces a 32-bit hash.
+    a. Use the Birthday Theorem to calculate the probability of finding a collision using $r = 100000$ hashes.
+    b. Use the Birthday Theorem to calculate the probability of finding a collision using $r = 1000000$ hashes.
     c. Approximately how many messages would have to be hashed to do a birthday attack on `miniSHA` that has a probability of 0.25 of succeeding? (Use the Birthday Theorem.)
     d. Approximately how many messages would have to be hashed to do a birthday attack on `miniSHA` that has a probability of 0.99 of succeeding? (Use the Birthday Theorem.)
 

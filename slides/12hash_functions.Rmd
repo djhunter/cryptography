@@ -1,6 +1,6 @@
 ---
 title: "Hash Functions"
-date: "October 15, 2020"
+date: "October 18, 2022"
 output: 
   revealjs::revealjs_presentation:
     fig_width: 14 
@@ -18,53 +18,8 @@ output:
       height: 540
 ---
 
-# Last Time: Primitive Roots
 
-## Recall: Primitive Roots
-
-- When $U(n)$ is cyclic, a generator of $U(n)$ is called a **primitive root** modulo $n$.
-- In $U(p)$ where $p$ is prime, for any $a$, $a^{p-1} = 1$ (Fermat's Little Theorem).
-- However, the powers $a, a^2, a^3, \ldots a^{p-1}$ are not always *distinct* elements of $U(n)$. But they are distinct exactly when $a$ is primitive.
-
-*Programming Problem:* Automate your procedure in Problem #1 from last night: `nextPrimRoot` function.
-
-## Recall: Discrete Logarithms are hard to compute
-
-Suppose $\alpha$ is a primitive root modulo large prime $p$.
-
-- Given $\alpha$ and $x$, it is easy to compute $\alpha^x$.
-- Given $\alpha$ and $\alpha^x$, it is nearly impossible to compute $x$.
-
-*Programming Problems:* Implement two discrete logarithm finders.
-
-1. Brute force.
-2. Baby-step, Giant-step
-
-## Baby Step, Giant Step
-
-To solve $\alpha^x = \beta$ in $U(p)$: Choose large $N > \sqrt{p-1}$
-
-1. Compute $\alpha^j$ for $j = 1, 2, \ldots, N$. (Baby step.)
-2. Compute $\beta\alpha^{-Nk}$ for $k = 1, 2, \ldots, N$. (Giant step.)
-
-If a match is found in these two lists, $x=j+Nk$ is a solution. (Note that $k$ and $j$ are the "digits" in the base $N$ representation of $x$.)
-
-**Advice:** Check out R's built-in `match` function. It doesn't work on `bigz`'s, but it works on strings, so you can `as.character()` your `bigz`'s to strings before you try using `match()`
-
-## Using `match`
-
-```{r}
-w1 <- c("I", "thought", "you", "said", "your", "dog", "did", "not", "bite")
-w2 <- c("That", "is", "not", "my", "dog")
-m <- match(w1, w2)
-m
-which(!is.na(m))
-commonWords <- w2[m]
-commonWords
-commonWords[!is.na(commonWords)]
-```
-
-## Hash functions
+# Hash functions
 
 Given a set of data (e.g., an employee's name, address, birthday etc.) we would like to assign a "unique" identifier to the data set in a fast, algorithmic way. This identifier is called a **hash** or a **message digest** of the given set of data.
 
@@ -138,6 +93,8 @@ Discuss. For each possible hash function $h$, which properties (efficiency, one-
 
 For example, openssl defaults to `sha256`, which is SHA-2. [Check out the pseudocode.](https://en.wikipedia.org/wiki/SHA-2#Pseudocode)
 
+# Attacking Hash Functions
+
 ## Dictionary attacks
 
 Suppose a set $P$ of passwords are stored as hashes: $\{h(p) \mid p \in P\}$.
@@ -174,6 +131,13 @@ A6XMHH8W0Sq4togY1I6UQKgeBMV0:18166:0:99999:7:::
 - Pepper is random and secret, while salt is just random.
 - Store pepper somewhere else; salt gets stored with the hashed passwords.
 
+## Collisions
+
+- If Eve can produce a collision, she can do something nefarious, like forge a digital signature/certificate.
+- So an attack on a hash function involves finding a collision.
+- No collisions have ever been found for the best hash functions.
+    - If a collision is found, the hash function is considered broken.
+
 ## Random Oracle
 
 An ideal hash function $h: M \longrightarrow D$ is a **random oracle**.
@@ -187,12 +151,27 @@ To calculate theoretical probabilities, we often assume we have a random oracle 
 
 > What is the probability that two people in a group have the same birthday?
 
-- Write down your birthday (day/month) and the birthdays of two family members.
+- Write down your birthday (day/month) and the birthday of one family member.
 - Did we obtain a collision?
 
 ```{r, echo=FALSE, eval=FALSE}
-1-prod(1-(1:33)/365)
+1-prod(1-(1:30)/365)
 ```
+
+## Group Exercise
+
+For simplicity, consider a "random birthday" to be a number chosen at random from the set $\{1,2,3,\ldots, 365\}$
+
+1. What is the probability that two random birthdays are the same?
+
+2. What is the probability that two random birthdays are different?
+
+3. Suppose you have already drawn two random birthdays, and the birthdays are different. What is the probability that a third random birthday will be different from the previous two?
+
+4. What is the probability that three random birthdays will all be different?
+
+5. Give a formula for the probability that $r$ random birthdays will all be different.
+
 
 ## The Birthday Theorem
 
@@ -203,8 +182,8 @@ $$
 This probability is approximately $1-e^{-r^2/2N}$.
 
 ```{r}
-1-prod(1-(1:33)/365)
-1-exp(-33^2/(2*365))
+1-prod(1-(1:30)/365)
+1-exp(-30^2/(2*365))
 ```
 
 ## Birthday Attacks 
@@ -240,6 +219,8 @@ dups
 which(dups)
 piDigits[which(dups)]
 ```
+
+# Other Applications
 
 ## Application: Using hash functions to encrypt
 
