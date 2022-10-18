@@ -1,5 +1,5 @@
 ---
-title: "Discrete Logarithms and Hash Functions"
+title: "Hash Functions and DSA"
 output:
   html_document:
     toc: false
