@@ -48,9 +48,9 @@ This site provides slides, assignments, and other resources that I use in my Cod
 10. [Attacks on RSA and Primality Testing](slides/10rsa2.html)
 11. [Discrete Logarithms, Diffie-Hellman, ElGamal](slides/11discrete_logs.html)
 12. [Hash Functions](slides/12hash_functions.html)
+13. [Digital Signatures](slides/13digital_sigs.html)
 
 ---
-# 13. [Digital Signatures](slides/13digital_sigs.html)
 # 14. [Real Elliptic Curves](slides/14elliptic_curves1.html)
 # 15. [Mod p Elliptic Curves](slides/15elliptic_curves2.html)
 # 16. [Elliptic Curve Cryptography](slides/16elliptic_curves3.html)
@@ -77,9 +77,9 @@ This site provides slides, assignments, and other resources that I use in my Cod
 10. [Prime Numbers and RSA](assignments/10primes.html)
 11. [Discrete Logarithms](assignments/11dlogs.html)
 12. [Hash Functions and the Birthday Theorem](assignments/12hash.html)
+13. [Digital Signatures](assignments/13sigs.html)
 
 ---
-# 13. [Digital Signatures](assignments/13sigs.html)
 # 14. [Real Elliptic Curves](assignments/14real_ell.html)
 # 15. [Mod p Elliptic Curves](assignments/15modp_ell.html)
 # 16. [Elliptic Curve Cryptography](assignments/16ec_crypto.html)
