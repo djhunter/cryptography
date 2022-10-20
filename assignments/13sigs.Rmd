@@ -9,7 +9,7 @@ output:
 
 Upload to Canvas a PDF of your work for the following problems. 
 
-## Assignment: due Wednesday, 11:59 pm
+## Assignment: due Monday, 11:59 pm
 
 1. The standard California Residential Lease/Rental Agreement contains 138 sentences ending in a period. For example, `"The security deposit shall not exceed two times the monthly rent. "` At the end of each of these sentences, it is possible to have one whitespace character or two. Consider all the versions of this document that can be formed by putting either one or two whitespace characters after each period.
     a. How many different versions of this document could be formed this way?
