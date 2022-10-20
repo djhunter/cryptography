@@ -16,7 +16,7 @@ Upload to Canvas a PDF of your work for the following problems.
     b. Is it *possible* that all of these documents have different SHA-256 hashes?
     c. Is it *likely* that all of these documents have different SHA-256 hashes? Use the Birthday Theorem (approximation) to justify your answer.
     
-2. Suppose your landlord obtains your digital signature on a lease agreement, charging $2000 per month for rent. Your unscrupulous landlord (who happens to own a very large server farm) then creates a large list of new rental agreements, changing the rent to $3000 per month, and adding whitespace in the manner described in Problem 1. What is the probability that one of these fraudulent contracts has the same SHA-256 hash as the one you signed? Give an exact answer as a numeric expression, and determine or guess its approximate value.
+2. Suppose your landlord obtains your digital signature on a lease agreement, charging $2000 per month for rent. Your unscrupulous landlord (who happens to own a very large server farm) then creates a large list of new rental agreements, changing the rent to $3000 per month, and adding whitespace in the manner described in Problem 1. What is the probability that one or more of these fraudulent contracts has the same SHA-256 hash as the one you signed? Give an exact answer as a numeric expression, and determine or guess its approximate value.
     
 3. Suppose that Alice signs two documents using the ElGamal signature scheme with Bob's chosen
 $$

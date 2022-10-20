@@ -61,7 +61,7 @@ Alice wants to send a public message $m$, and sign the message to indicate (a) t
 5. Alice codes a plaintext message as a number $m$. She computes $c = m^e \bmod n$ and sends $c$ to Bob.
 6. Bob decrypts by computing $m = c^d \bmod n$.
 
-**Exercise.** Make this algorithm into a signature scheme. Let the message be some integer $m$. Then explain what Alice makes public, and what Bob does to verify the signature. (Notice that Alice is the one who does steps 1--4.)
+**Pair Exercise.** Make this algorithm into a signature scheme. Let the message be some integer $m$. Then explain what Alice makes public, and what Bob does to verify the signature. (Notice that Alice is the one who does steps 1--4.)
 
 ## RSA Signature Scheme
 
@@ -80,7 +80,7 @@ $$
 
 ## El Gamal Signature Scheme 
 
-Alice want to sign the message $m$.
+Alice wants to sign the message $m$.
 
 1. Alice chooses a large prime $p$ and primitive root $\alpha$, as well as a secret exponent $a$.  Alice computes $\beta = \alpha^a$ in $U(p)$, and makes the triple $(p,\alpha, \beta)$ public.
 2. Alice chooses a secret random $k$ in $U(p-1)$ and computes $r = \alpha^k$ in $U(p)$.
@@ -88,9 +88,9 @@ Alice want to sign the message $m$.
 
 To verify, Bob checks that $\beta^rr^s = \alpha^m$ in $U(p)$.
 
-**Exercise.** 
+**Group Exercise.** 
 
->1. Check that conditions 1--3 ensure that Bob's verification will work.
+>1. Check that conditions 1--3 ensure that Bob's verification will work, citing any theorems needed.
 >2. What facts ensure that Alice really signed the message?
 
 ## ElGamal Signatures: What if the same $k$ is used twice? 
@@ -132,6 +132,7 @@ History:
 - Proposed in 1991
 - NIST standard in 1994
 - Revised in 1996, 2000, 2009, 2013
+- Probably going away soon, replaced by ECDSA.
 
 Revisions are based primarily on the length of the hashes used.
 

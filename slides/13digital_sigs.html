@@ -1870,7 +1870,7 @@ relatively prime to <span class="math inline">\((p-1)(q-1)\)</span>.</li>
 <li>Bob decrypts by computing <span class="math inline">\(m = c^d \bmod
 n\)</span>.</li>
 </ol>
-<p><strong>Exercise.</strong> Make this algorithm into a signature
+<p><strong>Pair Exercise.</strong> Make this algorithm into a signature
 scheme. Let the message be some integer <span class="math inline">\(m\)</span>. Then explain what Alice makes public,
 and what Bob does to verify the signature. (Notice that Alice is the one
 who does steps 1–4.)</p>
@@ -1897,7 +1897,7 @@ tr^{-a} = \beta^km(\alpha^k)^{-a} = (\alpha^a)^km\alpha^{-ak} = m
 </section>
 <section id="el-gamal-signature-scheme" class="slide level2">
 <h2>El Gamal Signature Scheme</h2>
-<p>Alice want to sign the message <span class="math inline">\(m\)</span>.</p>
+<p>Alice wants to sign the message <span class="math inline">\(m\)</span>.</p>
 <ol type="1">
 <li>Alice chooses a large prime <span class="math inline">\(p\)</span>
 and primitive root <span class="math inline">\(\alpha\)</span>, as well
@@ -1910,10 +1910,10 @@ p-1\)</span>. The signed message is <span class="math inline">\((m,r,s)\)</span>
 </ol>
 <p>To verify, Bob checks that <span class="math inline">\(\beta^rr^s =
 \alpha^m\)</span> in <span class="math inline">\(U(p)\)</span>.</p>
-<p><strong>Exercise.</strong></p>
+<p><strong>Group Exercise.</strong></p>
 <ol type="1">
 <li class="fragment">Check that conditions 1–3 ensure that Bob’s
-verification will work.</li>
+verification will work, citing any theorems needed.</li>
 <li class="fragment">What facts ensure that Alice really signed the
 message?</li>
 </ol>
@@ -1975,6 +1975,7 @@ signed.</li>
 <li>Proposed in 1991</li>
 <li>NIST standard in 1994</li>
 <li>Revised in 1996, 2000, 2009, 2013</li>
+<li>Probably going away soon, replaced by ECDSA.</li>
 </ul>
 <p>Revisions are based primarily on the length of the hashes used.</p>
 </section>
