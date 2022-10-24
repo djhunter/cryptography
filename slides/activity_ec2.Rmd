@@ -1,5 +1,5 @@
 ---
-geometry: left=1in, right=0.5in, top=0.5in, bottom=0.5in
+geometry: left=0.75in, right=0.75in, top=0.5in, bottom=0.5in
 classoption: twoside
 output: 
   pdf_document:

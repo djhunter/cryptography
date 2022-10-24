@@ -1,6 +1,6 @@
 ---
 title: "Elliptic Curves, Introduction"
-date: "October 22, 2020"
+date: "October 25, 2022"
 output: 
   revealjs::revealjs_presentation:
     fig_width: 14 
@@ -45,7 +45,7 @@ y^2 = x^3 + bx + c
 $$
 over some field $F$. 
 
-[Applications](http://csrc.nist.gov/groups/SMA/ispab/documents/minutes/2006-03/E_Barker-March2006-ISPAB.pdf)
+[Applications](https://cryptome.org/2016/01/CNSA-Suite-and-Quantum-Computing-FAQ.pdf)
 
 # Experiments
 
@@ -78,6 +78,11 @@ Curve: $y^2 = x^3 + 73$
 
 1. Add $(2,9) + (3,10)$.
 2. Add $(-4,-3) + (-4,-3)$.
+
+## Upshot
+
+- Once you get the slope $m$ of the line, it is easy to find $x_3$, the $x$-coordinate of the intersection, using the "sum of the roots" trick.
+- Once you get $x_3$, it is easy to use the equation of the line to get $y_3$.
 
 ## Addition: Algebraic formulas
 

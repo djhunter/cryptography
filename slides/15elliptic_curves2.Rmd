@@ -1,6 +1,6 @@
 ---
 title: "Elliptic Curves Mod p"
-date: "October 27, 2020"
+date: "October 27, 2022"
 output: 
   revealjs::revealjs_presentation:
     fig_width: 14 
