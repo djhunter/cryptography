@@ -192,32 +192,3 @@ ecPowModp <- function(b, c, modulus, p, n)
   # TODO
 }
 
-#' Elliptic curve discrete logarithm (BSGS)
-#'
-#' Given a point \code{nG} on an elliptic curve mod \code{modulus} and a point 
-#' \code{G} on the curve, returns the integer/bigz \code{n}, the discrete 
-#' logarithm of \code{nG}. Uses the Baby-step Giant-step algorithm.
-#'
-#' @param b A bigz or integer representing the coefficient b in the equation of the curve.
-#' @param c A bigz or integer representing the coefficient c in the equation of the curve.
-#' @param modulus The modulus of the curve (bigz or integer).
-#' @param G A length 2 integer or bigz vector, representing the "base".
-#' @param nG A length 2 integer or bigz vector, representing a "power" of the base.
-#' @param N The number of baby/giant steps to take.
-#'
-#' @return The "exponent" n as a bigz.
-#' @export
-#' @import gmp
-#'
-#' @examples
-#' ecDiscreteLog(-3, 3, 761, c(1,1), c(533,687), N=30)
-#' ecDiscreteLog(4, -12063, 34543427, c(23,14), c(10735908, 411234))
-#' \dontrun{
-#' library(gmp)
-#' # Try if you want a challenge:
-#' ecDiscreteLog(4, 1, as.bigz("426904703359"), c(4,9), as.bigz(c("26917083261", "24329765219")), N=500000)
-#' }
-ecDiscreteLog <- function(b, c, modulus, G, nG, N = 5000)
-{
-  # TODO
-}
