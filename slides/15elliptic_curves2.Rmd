@@ -24,7 +24,7 @@ output:
 
 If $P$ is any point on an elliptic curve, then $P + \infty = P = \infty + P$. Let $P_1 = (x_1,y_1)$ and $P_2 = (x_2,y_2)$ be points on the elliptic curve $y^2 = x^3 + bx +c$. 
 
-If $P_1 = P_2$ and $y_1 = 0$, then $P_1+P_2 = \infty$.
+If $P_1 = P_2$ and $y_1 = 0$, or if $x_1 = x_2$, then $P_1+P_2 = \infty$.
 
 Otherwise, $P_1 + P_2 = P_3 =  (x_3,y_3)$, where
 $$
@@ -47,7 +47,7 @@ where all computations are performed in $\mathbb{R}$.
 
 If $P$ is any point on an elliptic curve, then $P + \infty = P = \infty + P$. Let $P_1 = (x_1,y_1)$ and $P_2 = (x_2,y_2)$ be points on the elliptic curve $y^2 = x^3 + bx +c$. 
 
-If $P_1 = P_2$ and $y_1 = 0$, then $P_1+P_2 = \infty$.
+If $P_1 = P_2$ and $y_1 = 0$, or if $x_1 = x_2$, then $P_1+P_2 = \infty$.
 
 Otherwise, $P_1 + P_2 = P_3 =  (x_3,y_3)$, where
 $$
@@ -66,7 +66,6 @@ m = \left\{\begin{array}{cl}
 $$
 where all computations are performed in $\mathbb{Z}_p$.
 
->- **Programming assignment:** Implement addition for mod $p$ elliptic curves.
 
 ## Example: real vs. mod $p$
 
@@ -96,7 +95,7 @@ Mod $p$ elliptic curves give us groups to replace $U(p)$ groups.
     - "Powers" in mod $p$ elliptic curves are elements of the form $nP = \underbrace{P + P + \cdots + P}_{n \; P \mbox{'s}}$
     - The discrete "logarithm" problem is *harder* in mod $p$ elliptic curve groups.
 
-# Factorization
+# Factorization revisited
 
 ## Factorization using gcd
 
@@ -273,13 +272,11 @@ qPower <- function(x, n)
 
 ## Finding points on elliptic curves
 
-*Exercise:* In $\mathbb{Z}_7$:
+*Group Exercise:* In $\mathbb{Z}_7$:
 
 1. Find all the perfect squares.
 2. Find all the elements of the form $x^3 + 2$.
 3. Find all the points on the elliptic curve $y^2 = x^3 + 2$.
-
-Work in groups on [this Jamboard](https://jamboard.google.com/d/14LzeJLMqDbCaIm7HuGocNWzPWS3yGoDJ6y2K19qn9Ok/edit?usp=sharing).
 
 ## Square roots mod $p$
 
