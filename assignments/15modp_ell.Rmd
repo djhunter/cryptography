@@ -11,15 +11,17 @@ Upload to Canvas a PDF of your work for the following problems.
 
 ## Assignment: due Monday, 11:59 pm
 
-1. Use Pollard's $p-1$ method to factor the number `n` given below. Show work. (Of course, `gmp` has a function called `factorize`, but beware of using this function so close to Halloween.)
+1. Consider an equation of a real elliptic curve with an $x^2$ term: $y^2 = x^3 + ax^2 + bx + c$. Substitute $x = u - a/3$ and simplify to show that the resulting equation has no $u^2$ term. (This exercise proves that the $x^2$ term can be eliminated via a change of variables.)  
+
+2. Use Pollard's $p-1$ method to factor the number `n` given below. Show work. (Of course, `gmp` has a function called `factorize`, but beware of using this function so close to Halloween.)
 
 ```{r, message=FALSE}
 library(gmp)
 n <- as.bigz("32815976131045173956403096853277193054971618642813813139023877173")
 ```
 
-2. Let $E$ be the group defined by the elliptic curve $y^2 = x^3 -3x + 3$ modulo 7.
+3. Let $E$ be the group defined by the elliptic curve $y^2 = x^3 -3x + 3$ modulo 7.
     a. List all the points in $E$. Explain how you know you have found all the points.
     b. Show that the number of points in $E$ satisfies Hasse's Theorem.
 
-3. Let $E$ be the group defined by the elliptic curve $y^2 = x^3 - x$ modulo 71. Determine how many points $E$ contains. (You don't need to find them all; just determine how many there are.) Show your calculations. Hint: Since $71 \bmod 4 = 3$, you can use the theorem on square roots to find all of the values of $x^3-x$ that have square roots.
+4. Let $E$ be the group defined by the elliptic curve $y^2 = x^3 - x$ modulo 71. Determine how many points $E$ contains. (You don't need to find them all; just determine how many there are.) Show your calculations. Hint: Since $71 \bmod 4 = 3$, you can use the theorem on square roots to find all of the values of $x^3-x$ that have square roots.

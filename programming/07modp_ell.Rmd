@@ -1,0 +1,24 @@
+---
+title: "Mod p Elliptic Curves"
+output:
+  html_document:
+    toc: false
+    df_print: paged
+    theme: spacelab
+---
+
+## Assignment: due Sunday, 11:59 pm
+
+Add the file [`elliptic.R`](https://djhunter.github.io/cryptography/R/elliptic.R) to the `R` subdirectory of your project. 
+
+1. Implement the function `ecAddModp` as described in the documentation. Since this function is intended to be used for Lenstra's algorithm, we need it to print a warning if either of the inverse calculations fail (which should sometimes happen if the modulus is not prime). See `?warning` for details on how to print a warning.
+
+2. Implement `ecNegModp` as specified. 
+
+3. Implement `ecPowModp` as specified. This needs to be an elliptic curve version of the `qPower` function [from the notes](../slides/15elliptic_curves2.html#/efficient-exponentiation), using repeated "squaring" (doubling). Otherwise it will be too slow. It only needs to work for nonnegative exponents. The given examples should run quickly:
+```{r, eval=FALSE}
+> system.time(ecPowModp(3, 45, 8831, c(4,11), as.bigz("2349089023472938409283490823")))
+   user  system elapsed 
+  0.033   0.000   0.033
+```
+

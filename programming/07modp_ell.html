@@ -1654,39 +1654,27 @@ display: none;
 </div>
 
 
-<p>Upload to Canvas a PDF of your work for the following problems.</p>
-<div id="assignment-due-monday-1159-pm" class="section level2">
-<h2>Assignment: due Monday, 11:59 pm</h2>
+<div id="assignment-due-sunday-1159-pm" class="section level2">
+<h2>Assignment: due Sunday, 11:59 pm</h2>
+<p>Add the file <a href="https://djhunter.github.io/cryptography/R/elliptic.R"><code>elliptic.R</code></a>
+to the <code>R</code> subdirectory of your project.</p>
 <ol style="list-style-type: decimal">
-<li><p>Consider an equation of a real elliptic curve with an <span class="math inline">\(x^2\)</span> term: <span class="math inline">\(y^2
-= x^3 + ax^2 + bx + c\)</span>. Substitute <span class="math inline">\(x
-= u - a/3\)</span> and simplify to show that the resulting equation has
-no <span class="math inline">\(u^2\)</span> term. (This exercise proves
-that the <span class="math inline">\(x^2\)</span> term can be eliminated
-via a change of variables.)</p></li>
-<li><p>Use Pollard’s <span class="math inline">\(p-1\)</span> method to
-factor the number <code>n</code> given below. Show work. (Of course,
-<code>gmp</code> has a function called <code>factorize</code>, but
-beware of using this function so close to Halloween.)</p></li>
+<li><p>Implement the function <code>ecAddModp</code> as described in the
+documentation. Since this function is intended to be used for Lenstra’s
+algorithm, we need it to print a warning if either of the inverse
+calculations fail (which should sometimes happen if the modulus is not
+prime). See <code>?warning</code> for details on how to print a
+warning.</p></li>
+<li><p>Implement <code>ecNegModp</code> as specified.</p></li>
+<li><p>Implement <code>ecPowModp</code> as specified. This needs to be
+an elliptic curve version of the <code>qPower</code> function <a href="../slides/15elliptic_curves2.html#/efficient-exponentiation">from
+the notes</a>, using repeated “squaring” (doubling). Otherwise it will
+be too slow. It only needs to work for nonnegative exponents. The given
+examples should run quickly:</p></li>
 </ol>
-<pre class="r"><code>library(gmp)
-n &lt;- as.bigz(&quot;32815976131045173956403096853277193054971618642813813139023877173&quot;)</code></pre>
-<ol start="3" style="list-style-type: decimal">
-<li>Let <span class="math inline">\(E\)</span> be the group defined by
-the elliptic curve <span class="math inline">\(y^2 = x^3 -3x +
-3\)</span> modulo 7.
-<ol style="list-style-type: lower-alpha">
-<li>List all the points in <span class="math inline">\(E\)</span>.
-Explain how you know you have found all the points.</li>
-<li>Show that the number of points in <span class="math inline">\(E\)</span> satisfies Hasse’s Theorem.</li>
-</ol></li>
-<li>Let <span class="math inline">\(E\)</span> be the group defined by
-the elliptic curve <span class="math inline">\(y^2 = x^3 - x\)</span>
-modulo 71. Determine how many points <span class="math inline">\(E\)</span> contains. (You don’t need to find them
-all; just determine how many there are.) Show your calculations. Hint:
-Since <span class="math inline">\(71 \bmod 4 = 3\)</span>, you can use
-the theorem on square roots to find all of the values of <span class="math inline">\(x^3-x\)</span> that have square roots.</li>
-</ol>
+<pre class="r"><code>&gt; system.time(ecPowModp(3, 45, 8831, c(4,11), as.bigz(&quot;2349089023472938409283490823&quot;)))
+   user  system elapsed 
+  0.033   0.000   0.033</code></pre>
 </div>
 
 
