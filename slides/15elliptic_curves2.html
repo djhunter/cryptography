@@ -1895,7 +1895,7 @@ P\)</span>. Let <span class="math inline">\(P_1 = (x_1,y_1)\)</span> and
 <span class="math inline">\(P_2 = (x_2,y_2)\)</span> be points on the
 elliptic curve <span class="math inline">\(y^2 = x^3 + bx
 +c\)</span>.</p>
-<p>If <span class="math inline">\(P_1 = P_2\)</span> and <span class="math inline">\(y_1 = 0\)</span>, or if <span class="math inline">\(x_1 = x_2\)</span>, then <span class="math inline">\(P_1+P_2 = \infty\)</span>.</p>
+<p>If <span class="math inline">\(P_1 = P_2\)</span> and <span class="math inline">\(y_1 = 0\)</span>, or if <span class="math inline">\(P_1 \neq P_2\)</span> and <span class="math inline">\(x_1 = x_2\)</span>, then <span class="math inline">\(P_1+P_2 = \infty\)</span>.</p>
 <p>Otherwise, <span class="math inline">\(P_1 + P_2 = P_3 =
 (x_3,y_3)\)</span>, where <span class="math display">\[
 \begin{aligned}
@@ -1919,7 +1919,7 @@ P\)</span>. Let <span class="math inline">\(P_1 = (x_1,y_1)\)</span> and
 <span class="math inline">\(P_2 = (x_2,y_2)\)</span> be points on the
 elliptic curve <span class="math inline">\(y^2 = x^3 + bx
 +c\)</span>.</p>
-<p>If <span class="math inline">\(P_1 = P_2\)</span> and <span class="math inline">\(y_1 = 0\)</span>, or if <span class="math inline">\(x_1 = x_2\)</span>, then <span class="math inline">\(P_1+P_2 = \infty\)</span>.</p>
+<p>If <span class="math inline">\(P_1 = P_2\)</span> and <span class="math inline">\(y_1 = 0\)</span>, or if <span class="math inline">\(P_1 \neq P_2\)</span> and <span class="math inline">\(x_1 = x_2\)</span>, then <span class="math inline">\(P_1+P_2 = \infty\)</span>.</p>
 <p>Otherwise, <span class="math inline">\(P_1 + P_2 = P_3 =
 (x_3,y_3)\)</span>, where <span class="math display">\[
 \begin{aligned}
@@ -2005,7 +2005,8 @@ you have found a nontrivial factor of <span class="math inline">\(n\)</span>.</p
 <h2>Pollard’s method: Example</h2>
 <p><span class="math inline">\(n = 540143, a = 2, B = 7\)</span></p>
 <div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(gmp)</span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="fu">gcd</span>(<span class="fu">as.bigz</span>(<span class="dv">2</span>)<span class="sc">^</span><span class="fu">factorialZ</span>(<span class="dv">7</span>)<span class="sc">-</span><span class="dv">1</span>, <span class="fu">as.bigz</span>(<span class="st">&quot;540143&quot;</span>))</span></code></pre></div>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>r <span class="ot">&lt;-</span> <span class="fu">powm</span>(<span class="dv">2</span>, <span class="fu">factorialZ</span>(<span class="dv">7</span>), <span class="dv">540143</span>)</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="fu">gcd</span>(r<span class="dv">-1</span>, <span class="dv">540143</span>)</span></code></pre></div>
 <pre><code>## Big Integer (&#39;bigz&#39;) :
 ## [1] 421</code></pre>
 <div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="dv">540143</span><span class="sc">/</span><span class="dv">421</span></span></code></pre></div>

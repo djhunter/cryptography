@@ -24,7 +24,7 @@ output:
 
 If $P$ is any point on an elliptic curve, then $P + \infty = P = \infty + P$. Let $P_1 = (x_1,y_1)$ and $P_2 = (x_2,y_2)$ be points on the elliptic curve $y^2 = x^3 + bx +c$. 
 
-If $P_1 = P_2$ and $y_1 = 0$, or if $x_1 = x_2$, then $P_1+P_2 = \infty$.
+If $P_1 = P_2$ and $y_1 = 0$, or if $P_1 \neq P_2$ and $x_1 = x_2$, then $P_1+P_2 = \infty$.
 
 Otherwise, $P_1 + P_2 = P_3 =  (x_3,y_3)$, where
 $$
@@ -47,7 +47,7 @@ where all computations are performed in $\mathbb{R}$.
 
 If $P$ is any point on an elliptic curve, then $P + \infty = P = \infty + P$. Let $P_1 = (x_1,y_1)$ and $P_2 = (x_2,y_2)$ be points on the elliptic curve $y^2 = x^3 + bx +c$. 
 
-If $P_1 = P_2$ and $y_1 = 0$, or if $x_1 = x_2$, then $P_1+P_2 = \infty$.
+If $P_1 = P_2$ and $y_1 = 0$, or if $P_1 \neq P_2$ and $x_1 = x_2$, then $P_1+P_2 = \infty$.
 
 Otherwise, $P_1 + P_2 = P_3 =  (x_3,y_3)$, where
 $$
@@ -121,7 +121,8 @@ $n = 540143, a = 2, B = 7$
 
 ```{r, message=FALSE}
 library(gmp)
-gcd(as.bigz(2)^factorialZ(7)-1, as.bigz("540143"))
+r <- powm(2, factorialZ(7), 540143)
+gcd(r-1, 540143)
 ```
 ```{r}
 540143/421
