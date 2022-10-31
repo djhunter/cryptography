@@ -1,6 +1,6 @@
 ---
 title: "Elliptic Curve Cryptography"
-date: "October 29, 2020"
+date: "November 1, 2022"
 output: 
   revealjs::revealjs_presentation:
     fig_width: 14 
@@ -44,7 +44,7 @@ Consequently, there is a more elegant way to state the addition law.
 
 If $P$ is any point on an elliptic curve, then $P + \infty = P = \infty + P$. Let $P_1 = (x_1,y_1)$ and $P_2 = (x_2,y_2)$ be points on the elliptic curve $y^2 = x^3 + bx +c$. 
 
-If $P_1 = P_2$ and $y_1 = 0$, then $P_1+P_2 = \infty$.
+If $P_1 = P_2$ and $y_1 = 0$, or if $P_1 \neq P_2$ and $x_1 = x_2$, then $P_1+P_2 = \infty$.
 
 Otherwise, $P_1 + P_2 = P_3 =  (x_3,y_3)$, where
 $$
@@ -67,7 +67,7 @@ where all computations are performed in $\mathbb{R}$.
 
 If $P$ is any point on an elliptic curve, then $P + \infty = P = \infty + P$. Let $P_1 = (x_1,y_1)$ and $P_2 = (x_2,y_2)$ be points on the elliptic curve $y^2 = x^3 + bx +c$. 
 
-If $P_1 = P_2$ and $y_1 = 0$, then $P_1+P_2 = \infty$.
+If $P_1 = P_2$ and $y_1 = 0$, or if $P_1 \neq P_2$ and $x_1 = x_2$, then $P_1+P_2 = \infty$.
 
 Otherwise, $P_1 + P_2 = P_3 =  (x_3,y_3)$, where
 $$
@@ -86,9 +86,76 @@ m = \left\{\begin{array}{cl}
 $$
 where all computations are performed in $\mathbb{Z}_p$.
 
-**Question:** What goes wrong if $p = 2$?
+## Encoding messages in elliptic curves 
+
+*Problem:* To use elliptic curve groups for cryptography, we have to be able to represent messages as points on the curves.
+
+**One Idea:** Make the message the $x$-component of a point on an elliptic curve. 
+
+*Problem with this idea:* It will work about half the time.
+
+- **Theorem.** Let $p$ be prime. In $U(p)$, $y$ has a square root if and only if $y^{(p-1)/2} \equiv 1 \pmod{p}$. In this case, if $p \equiv 3 \pmod{4}$, then the square roots of $y$ are $\pm y^{(p+1)/4}$
+
+. . .
+
+**Better Idea:** Add some digits to the end of your message. Tweak them so you can find a point on the curve.
+
+## Example
+
+Alice wants to send the message $m = 9230923203240394234$ using a cryptosystem based on the elliptic curve $y^2 = x^3 + 7x + 9$ modulo $p = 34588345934850984359911$. 
+
+1. Show that there is no point of the form $(m, y)$ on this elliptic curve.
+2. Encode $m$ as a point on this curve by adding a digit. That is, find a point of the form $(10m+k, y)$ on this curve, for some value of $k$ between 0 and 9.
+3. What is the approximate probability that this method (adding a single digit) will fail to produce a point on the curve?
+
+## Example, part 1
+
+Alice wants to send the message $m = 9230923203240394234$ using a cryptosystem based on the elliptic curve $y^2 = x^3 + 7x + 9$ modulo $p = 34588345934850984359911$. 
+
+```{r}
+m <- as.bigz("9230923203240394234")
+p <- as.bigz("34588345934850984359911")
+powm(m^3 + 7*m+ 9, (p-1)/2, p)
+```
+
+So $m^3+7m+9$ is not a perfect square. So there can't be a point $(m,y)$ on this curve.
+
+## Example, part 2
+
+Encode $m$ as a point on this curve by adding a digit. That is, find a point of the form $(10m+k, y)$ on this curve, for some value of $k$ between 0 and 9.
+
+```{r}
+k <- 0:9
+powm((10*m+k)^3+7*(10*m+k)+9, (p-1)/2, p)
+```
+
+It looks like $k = 4$ will work.
+
+## Example, part 2, continued
+
+Instead of using $m = 9230923203240394234$, we use $10m + 4 = 92309232032403942344$. By the theorem on square roots, the corresponding $y$ is $\pm[(10m+4)^3+7(10m+4)+9]^{(p+1)/4}$.
+
+```{r}
+y <- powm((10*m+4)^3+7*(10*m+4)+9, (p+1)/4, p)
+y^2 %% p
+((10*m+4)^3+7*(10*m+4)+9) %% p
+```
+
+## How likely is this to work?
+
+3. What is the approximate probability that this method (adding a single digit) will fail to produce a point on the curve?
 
 # Characteristic 2
+
+**Question:** What goes wrong if $p = 2$?
+
+$$
+m = \left\{\begin{array}{cl}
+(y_2-y_1)(x_2-x_1)^{-1} & \mbox{if } P_1 \neq P_2 \\
+(3x_1^2+b)(2y_1)^{-1} & \mbox{if } P_1 = P_2 
+\end{array}
+\right.
+$$
 
 ## Recall finite fields over $\mathbb{Z}_2$ 
 
@@ -121,12 +188,11 @@ $$
 - Doubling: If $P = (x_1, y_1)$ and $P \neq -P$, then $2P = (x_3, y_3)$, where
 $$
 \begin{align}
-x_3 &= x^2 + bx^{-2} \\
-y_3 &= x^2 + xx_3 + yx^{-1}x_3 + x_3 
+x_3 &= x^2_1 + bx^{-2}_1 \\
+y_3 &= x^2_1 + x_1x_3 + y_1x_1^{-1}x_3 + x_3 
 \end{align}
 $$
 
-See [FIPS recommended curves](https://nvlpubs.nist.gov/nistpubs/FIPS/NIST.FIPS.186-4.pdf), pp. 92ff.
 
 # Discrete Logarithms
 
@@ -164,24 +230,27 @@ Use the Baby Step Giant Step algorithm to solve $2^x = 37$ in $U(53)$.
 
 ## Compute the two lists
 
-<iframe width='100%' height='500' src='https://rdrr.io/snippets/embed/' frameborder='0'></iframe>
-
-
-```{r, include=FALSE, eval=FALSE}
-## Solution
+```{r}
 l1 <- (2 ^ (1:10)) %% 53
 l2 <- sapply(1:10, function(i) {as.numeric((37*powm(2,-10*(i), 53)) %% 53)})
+```
+
+## Find the matches
+
+
+```{r}
 match(l1,l2)
 intersect(l1,l2)
-l1
-l2
-powm(2, 2+10*8, 53)
-powm(2, 10+10*2, 53)
+rbind(l1,l2)
 ```
 
 ## Check your answer
 
-<iframe width='100%' height='500' src='https://rdrr.io/snippets/embed/' frameborder='0'></iframe>
+```{r}
+powm(2, 2+10*8, 53)
+powm(2, 10+10*2, 53)
+```
+
 
 ## Attacking EC discrete logarithms (BSGS)
 
@@ -253,7 +322,7 @@ Suppose $m$ is a hashed message we want to sign. Find an elliptic curve and base
 
 To verify, Bob computes $u_1 = ms^{-1}$ and $u_2 = rs^{-1}$ in $U(n)$. Signature is valid is $u_1G + u_2Q_A = kG$ on the elliptic curve. 
 
-## ECDSA specs
+## ECDSA Standards
 
-See [ANSI Standard X9.62-1998](http://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.202.2977&rep=rep1&type=pdf), pages 14-17.
+See [FIPS PUB 186-4](https://nvlpubs.nist.gov/nistpubs/FIPS/NIST.FIPS.186-4.pdf), e.g., pages 34, 92ff.
 
