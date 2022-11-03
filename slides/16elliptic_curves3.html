@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="generator" content="pandoc">
-  <meta name="dcterms.date" content="2022-11-01" />
+  <meta name="dcterms.date" content="2022-11-03" />
   <title>Elliptic Curve Cryptography</title>
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -1871,7 +1871,7 @@ document.addEventListener('DOMContentLoaded', function(e) {
 
 <section>
     <h1 class="title">Elliptic Curve Cryptography</h1>
-    <h3 class="date">November 1, 2022</h3>
+    <h3 class="date">November 3, 2022</h3>
 </section>
 
 <section>
@@ -2023,8 +2023,12 @@ single digit) will fail to produce a point on the curve?</li>
 </ol>
 </section></section>
 <section>
-<section id="characteristic-2" class="title-slide slide level1">
-<h1>Characteristic 2</h1>
+<section id="elliptic-curve-variants" class="title-slide slide level1">
+<h1>Elliptic Curve Variants</h1>
+
+</section>
+<section id="characteristic-2" class="slide level2">
+<h2>Characteristic 2</h2>
 <p><strong>Question:</strong> What goes wrong if <span class="math inline">\(p = 2\)</span>?</p>
 <p><span class="math display">\[
 m = \left\{\begin{array}{cl}
@@ -2078,6 +2082,24 @@ y_3 &amp;= x^2_1 + x_1x_3 + y_1x_1^{-1}x_3 + x_3
 \end{align}
 \]</span></li>
 </ul>
+</section>
+<section id="twisted-edwards-curves-ed25519" class="slide level2">
+<h2>Twisted Edwards Curves (ed25519)</h2>
+<ul>
+<li>Field: <span class="math inline">\(\mathbb{Z}_p\)</span>, where
+<span class="math inline">\(p = 2^{255} - 19\)</span>.</li>
+<li>Curve: <span class="math inline">\(-x^2 + y^2 = 1 -
+dx^2y^2\)</span>, where <span class="math inline">\(d =
+121665/121666\)</span></li>
+<li>Addition Rule:
+<ul>
+<li><span class="math inline">\(\displaystyle{(x_1, y_1) + (x_2, y_2) =
+\left(\frac{x_1y_2 + y_1x_2}{1+dx_1y_1x_2y_2}, \frac{y_1y_2 +
+x_1x_2}{1+dx_1y_1x_2y_2} \right)}\)</span></li>
+<li>Identity: <span class="math inline">\((0, 1)\)</span></li>
+</ul></li>
+</ul>
+<p>Look at your ssh keys.</p>
 </section></section>
 <section>
 <section id="discrete-logarithms" class="title-slide slide level1">
@@ -2105,8 +2127,8 @@ step.)</li>
 </ol>
 <p>If a match is found in these two lists, <span class="math inline">\(x=j+Nk\)</span> is a solution.</p>
 </section>
-<section id="exampleexercise" class="slide level2">
-<h2>Example/Exercise</h2>
+<section id="example-1" class="slide level2">
+<h2>Example</h2>
 <p>To solve <span class="math inline">\(\alpha^x = \beta\)</span> in
 <span class="math inline">\(U(p)\)</span>: Choose large <span class="math inline">\(N &gt; \sqrt{p-1}\)</span></p>
 <ol type="1">

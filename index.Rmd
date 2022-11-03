@@ -51,9 +51,9 @@ This site provides slides, assignments, and other resources that I use in my Cod
 13. [Digital Signatures](slides/13digital_sigs.html)
 14. [Real Elliptic Curves](slides/14elliptic_curves1.html)
 15. [Mod p Elliptic Curves](slides/15elliptic_curves2.html)
+16. [Elliptic Curve Cryptography](slides/16elliptic_curves3.html)
 
 ---
-# 16. [Elliptic Curve Cryptography](slides/16elliptic_curves3.html)
 # 17. [Introduction to Codes](slides/17codes1.html)
 # 18. [Codes: Definitions and Theorems](slides/18codes2.html)
 # 19. [Linear Codes](slides/19codes3.html)
@@ -80,9 +80,9 @@ This site provides slides, assignments, and other resources that I use in my Cod
 13. [Digital Signatures](assignments/13sigs.html)
 14. [Real Elliptic Curves](assignments/14real_ell.html)
 15. [Mod p Elliptic Curves](assignments/15modp_ell.html)
+16. [Elliptic Curve Cryptography](assignments/16ec_crypto.html)
 
 ---
-# 16. [Elliptic Curve Cryptography](assignments/16ec_crypto.html)
 # 17. [Codes: Introductory Examples](assignments/17introcodes.html)
 # 18. [Codes: Theoretical Limitations](assignments/18codelimits.html)
 # 19. [Systematic Codes](assignments/19systematic.html)

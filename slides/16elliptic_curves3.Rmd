@@ -1,6 +1,6 @@
 ---
 title: "Elliptic Curve Cryptography"
-date: "November 1, 2022"
+date: "November 3, 2022"
 output: 
   revealjs::revealjs_presentation:
     fig_width: 14 
@@ -145,7 +145,9 @@ y^2 %% p
 
 3. What is the approximate probability that this method (adding a single digit) will fail to produce a point on the curve?
 
-# Characteristic 2
+# Elliptic Curve Variants
+
+## Characteristic 2
 
 **Question:** What goes wrong if $p = 2$?
 
@@ -193,6 +195,15 @@ y_3 &= x^2_1 + x_1x_3 + y_1x_1^{-1}x_3 + x_3
 \end{align}
 $$
 
+## Twisted Edwards Curves (ed25519)
+
+- Field: $\mathbb{Z}_p$, where $p = 2^{255} - 19$.
+- Curve: $-x^2 + y^2 = 1 - dx^2y^2$, where $d = 121665/121666$
+- Addition Rule: 
+   - $\displaystyle{(x_1, y_1) + (x_2, y_2) = \left(\frac{x_1y_2 + y_1x_2}{1+dx_1y_1x_2y_2}, \frac{y_1y_2 + x_1x_2}{1+dx_1y_1x_2y_2} \right)}$
+   - Identity: $(0, 1)$
+   
+Look at your ssh keys.
 
 # Discrete Logarithms
 
@@ -213,7 +224,7 @@ To solve $\alpha^x = \beta$ in $U(p)$: Choose large $N > \sqrt{p-1}$
 
 If a match is found in these two lists, $x=j+Nk$ is a solution.
 
-## Example/Exercise
+## Example
 
 To solve $\alpha^x = \beta$ in $U(p)$: Choose large $N > \sqrt{p-1}$
 
