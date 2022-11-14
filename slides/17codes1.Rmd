@@ -1,6 +1,6 @@
 ---
 title: "Error-Control Codes"
-date: "November 10, 2020"
+date: "November 15, 2022"
 output: 
   revealjs::revealjs_presentation:
     fig_width: 14 
@@ -88,14 +88,14 @@ $$
 
 ## Repitition Code effectiveness?
 
-[Jamboard](https://jamboard.google.com/d/1x2lBuW10YUKnf2GL2HZM9OzSjaOdBx_1QCcaGb8j36g/edit?usp=sharing) exercise: Consider a binary repetition code with $k=3$. Alice sends a 3-bit code word (`000` or `111`) to Bob.
+Group exercise: Consider a binary repetition code with $k=3$. Alice sends a 3-bit code word (`000` or `111`) to Bob.
 
 1. Suppose Bob receives `001`. What could have happened?
 
 2. Suppose Bob receives `001` and knows that only one error has occurred. What can he conclude?
 
 3. Bob decides to decode a received word by finding the code word that matches the received word the closest. Suppose that the probability that a bit changes in transit is $p$. 
-     - Assuming that bit-flips occur independently, calculuate (in terms of p) the probabilities of no bits changing, 1 bit changing, 2 changing, and 3 changing.
+     - Assuming that bit-flips occur independently, calculate (in terms of p) the probabilities of no bits changing, 1 bit changing, 2 changing, and 3 changing.
      - What is the probability that Bob's method will decode correctly?
 
 ## When is a repetition code effective?
@@ -158,7 +158,7 @@ c_1 & c_2 & c_3 & c_4 & d
 $$
 where the $a_i$'s are parity check digits for the rows, and the $c_i$'s are parity check digits for the columns. The digit $d$ is the parity check digit for the string $c_1c_2c_3c_4$.
 
-## Parity Check Matrix: [Jamboard](https://jamboard.google.com/d/1x2lBuW10YUKnf2GL2HZM9OzSjaOdBx_1QCcaGb8j36g/edit?usp=sharing) Exercise
+## Parity Check Matrix: Group Exercise
 
 Suppose Bob receives the following matrices. What can he conclude?
 $$
@@ -186,7 +186,7 @@ $$
 $$
 where the entries of the matrices are computed in $\mathbb{Z}_2$.
 
-[Jamboard Exercise.](https://jamboard.google.com/d/1x2lBuW10YUKnf2GL2HZM9OzSjaOdBx_1QCcaGb8j36g/edit?usp=sharing) How many different code words are there? Write them all down on the Jamboard.
+Exercise: How many different code words are there? Write them all down.
 
 ## Hamming Distance
 
@@ -209,7 +209,7 @@ A binary **linear code** is a binary code whose code words are formed by taking 
 
 - For example, the Hamming $[7,4]$ code is a linear code.
 - The sum ($\oplus$) of two code words is another code word.
-- Linear codes are vector spaces over $\mathbb{Z}_2$.
+- Linear codes are *vector spaces* over $\mathbb{Z}_2$.
 
 ## Correction and Detection
 

@@ -22,7 +22,7 @@ a_1 + 3a_2 + a_3 + 3a_4 + a_5 + 3a_6 + a_7 + 3a_8 + a_9 +3a_{10} + a_{11} + 3a_{
 $$
 in $\mathbb{Z}_{10}$.
 
-Show (by finding an example), that it is possible to switch two adjacent digits without changing the check digit. (Of course, the adjacent digits should not be equal.)
+Show (by finding an example), that it is possible to switch two adjacent digits without changing the check digit. (Of course, the adjacent digits in your example should not be equal.)
 
 2. Compute the code rate for the Two-Dimensional Parity Check code discussed in the notes. 
 
