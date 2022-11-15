@@ -24,7 +24,7 @@ in $\mathbb{Z}_{10}$.
 
 Show (by finding an example), that it is possible to switch two adjacent digits without changing the check digit. (Of course, the adjacent digits in your example should not be equal.)
 
-2. Compute the code rate for the Two-Dimensional Parity Check code discussed in the notes. 
+2. Compute the code rate for the [Two-Dimensional Parity Check](https://djhunter.github.io/cryptography/slides/17codes1.html#/two-dimensional-parity-check) code discussed in the notes. 
 
 3. Here's an $8 \times 8$ Hadamard matrix. (See pages 397-398.)
 

@@ -1,5 +1,5 @@
 ---
-title: "Error-Control Codes"
+title: "Codes: Introductory Examples"
 date: "November 15, 2022"
 output: 
   revealjs::revealjs_presentation:
@@ -86,9 +86,9 @@ $$
 
 - A code using only the symbols `0` and `1` is called a **binary code**.
 
-## Repitition Code effectiveness?
+## Repitition Code effectiveness: Group Exercise
 
-Group exercise: Consider a binary repetition code with $k=3$. Alice sends a 3-bit code word (`000` or `111`) to Bob.
+Using a binary repetition code with $k=3$, Alice sends a 3-bit code word (`000` or `111`) to Bob.
 
 1. Suppose Bob receives `001`. What could have happened?
 
@@ -160,7 +160,8 @@ where the $a_i$'s are parity check digits for the rows, and the $c_i$'s are pari
 
 ## Parity Check Matrix: Group Exercise
 
-Suppose Bob receives the following matrices. What can he conclude?
+Suppose Bob receives the following matrices. Decide on a plausible explanation for where an error, or errors, may have occurred.
+
 $$
 \begin{bmatrix} 0&1&0&0&1 \\ 0&1&1&0&0 \\ 1&0&0&1&1 \\ 0&0&1&0&1 \\ 1&1&0&1&1 \end{bmatrix}
 \quad\quad
@@ -215,6 +216,8 @@ A binary **linear code** is a binary code whose code words are formed by taking 
 
 - How many errors can a Hamming $[7,4]$ code correct?
 - How many errors can a Hamming $[7,4]$ code detect?
+
+## {data-background-image="https://www.nasa.gov/sites/default/files/thumbnails/image/mar_7n19_new.jpg" data-background-size="contain"}
 
 ## Hadamard Matrix
 
