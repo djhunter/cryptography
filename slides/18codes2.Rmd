@@ -1,6 +1,6 @@
 ---
 title: "Codes: Definitions and Theorems"
-date: "November 18, 2022"
+date: "November 17, 2022"
 output: 
   revealjs::revealjs_presentation:
     fig_width: 14 
@@ -138,7 +138,7 @@ elements.
 **Theorem.** A binary $(n,M,d)$ code with $d \geq 2t+1$ satisfies
 $$ M \leq \frac{2^n}{\sum_{j=0}^t \binom{n}{j}}. $$
 
-**Definition.** A binary code that achieves the above bound is called **perfect**.
+**Definition.** A binary code with $d = 2t+1$ that achieves the above bound is called **perfect**.
 
 That is, a perfect code is an $(n,M,d)$ code that corrects $t$ errors such that $$M = \frac{2^n}{\sum_{j=0}^t \binom{n}{j}}.$$ 
 

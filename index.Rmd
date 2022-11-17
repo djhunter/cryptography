@@ -82,9 +82,9 @@ This site provides slides, assignments, and other resources that I use in my Cod
 15. [Mod p Elliptic Curves](assignments/15modp_ell.html)
 16. [Elliptic Curve Cryptography](assignments/16ec_crypto.html)
 17. [Codes: Introductory Examples](assignments/17introcodes.html)
+18. [Codes: Theoretical Limitations](assignments/18codelimits.html)
 
 ---
-# 18. [Codes: Theoretical Limitations](assignments/18codelimits.html)
 # 19. [Systematic Codes](assignments/19systematic.html)
 # 20. [Cyclic Codes](assignments/20cyclic.html)
 # 21. [BCH Codes](assignments/21bch.html)
@@ -101,9 +101,9 @@ This site provides slides, assignments, and other resources that I use in my Cod
 5. [RSA tools](programming/05rsa.html)
 6. [Hash Functions and DSA](programming/06hash.html)
 7. [Mod p Elliptic Curves](programming/07modp_ell.html)
+8. [Code Distance and Generation](programming/08code_tools1.html)
 
 ---
-# 9. [Code Distance and Generation](programming/09code_tools1.html)
 # 10. [Systematic Codes](programming/10code_tools2.html)
 # 11. [Matrix Tools for Codes](programming/11code_tools3.html)
 ---
