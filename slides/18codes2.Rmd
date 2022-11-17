@@ -1,6 +1,6 @@
 ---
 title: "Codes: Definitions and Theorems"
-date: "November 12, 2020"
+date: "November 18, 2022"
 output: 
   revealjs::revealjs_presentation:
     fig_width: 14 
@@ -39,9 +39,9 @@ $$ d(u,v) \leq d(u,w) + d(w,v) $$
 
 *Proof.* (Induction on the length of $C$.) 
 
-- Suppose the length of $C$ is 1. If $u = v$, then $d(u,v)$ = 0 and the inequality holds. If $u \neq v$, then one of $d(u,w)$ or $d(w,v)$ equals 1, and the inequality holds.
+>- Suppose the length of $C$ is 1. If $u = v$, then $d(u,v)$ = 0 and the inequality holds. If $u \neq v$, then one of $d(u,w)$ or $d(w,v)$ equals 1, and the inequality holds.
 
-- Suppose as inductive hypothesis that the inequality holds for codes of length $k-1$, for some $k > 1$. Let $u, v, w$ be code words of length $k$. By inductive hypothesis, the inequality holds on the first $k-1$ bits of $u,v,w$. By the above argument, it holds on the last bit. 
+>- Suppose as inductive hypothesis that the inequality holds for codes of length $k-1$, for some $k > 1$. Let $u, v, w$ be code words of length $k$. By inductive hypothesis, the inequality holds on the first $k-1$ bits of $u,v,w$. By the above argument, it holds on the last bit. 
 
 
 ## Minimum distance theorem
@@ -62,7 +62,7 @@ Application: Hamming $[7,4]$ code.
 
 A binary code with length $n$, $M$ code words, and minimum distance $d$ is called an $(n,M,d)$ code.
 
-**[Jamboard](https://jamboard.google.com/d/1GIIhJqPSgI-N769vjH9Zx5ZyD_yGvVDrfV4rox5yJm4/edit?usp=sharing) Exercise.** Complete the table.
+**Exercise.** Complete the table.
 
 Code | $n$ | $M$ | $d$ | code rate | errors detected | errors corrected 
 ---- | --- | --- | --- | --- | --- | ---
@@ -92,7 +92,7 @@ Tradeoffs:
 >1. $M \leq 2^n$, where $M$ is the number of code words and $n$ is their length.
 >2. $M \leq 2^{n-d+1}$, where $d$ is the minimum distance between code words.
 >    - *Singleton bound* 
->    - Delete the first $d-1$ digits from every code word; the remaining digits still have to be different in at least one place.
+>    - Proof: Delete the first $d-1$ digits from every code word; the remaining digits still have to be different in at least one place.
 >    - If $M = 2^{n-d+1}$, the code is called **maximum distance separable (MDS)**. (i.e., "$M$ acheives the Singleton bound".)
 
 ## {data-background="https://i.stack.imgur.com/HfayXm.png" data-background-size="contain"}
@@ -101,7 +101,7 @@ Tradeoffs:
 
 **Definition.** An $n$-dimensional **Hamming sphere** of radius $r$ with center $c$ is the set of all vectors $v$ in $\mathbb{Z}_2^n$ such that $d(v,c) \leq r$.
 
-[Jamboard](https://jamboard.google.com/d/1GIIhJqPSgI-N769vjH9Zx5ZyD_yGvVDrfV4rox5yJm4/edit?usp=sharing) Exercise:
+Exercise:
 
 1. Write down all the vectors in a two-dimensional Hamming sphere of radius 1 centered at `00`.
 2. Write down all the vectors in a three-dimensional Hamming sphere of radius 2 centered at `000`.
