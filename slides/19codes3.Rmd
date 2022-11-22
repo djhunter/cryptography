@@ -1,6 +1,6 @@
 ---
 title: "Linear Codes"
-date: "November 17, 2020"
+date: "November 22, 2022"
 output: 
   revealjs::revealjs_presentation:
     fig_width: 14 
@@ -98,10 +98,10 @@ The **Hamming weight** $\mbox{wt}(v)$ of a binary vector $v$ is the number of $1
 
 Facts:
 
-- $\mbox{wt}(v) = d(v,\mathbf{0})$
-- $\mbox{wt}(v_1+v_2) = d(v_1, v_2)$
-- The minimum distance $d(C)$ of a linear binary code $C$ is the weight of its "lightest" nonzero codeword.
-    - Proof: $v_1, v_2$ minimize $d(v_1,v_2)$ iff $v_1+v_2$ is lightest.
+>- $\mbox{wt}(v) = d(v,\mathbf{0})$
+>- $\mbox{wt}(v_1+v_2) = d(v_1, v_2)$
+>- The minimum distance $d(C)$ of a linear binary code $C$ is the weight of its "lightest" nonzero codeword.
+>    - Proof: $v_1, v_2$ minimize $d(v_1,v_2)$ iff $v_1+v_2$ is lightest.
 
 # Systematic Codes
 
@@ -167,9 +167,10 @@ Quiz: What is the coset represented by a codeword?
 
 Quiz: What is the syndrome of a codeword?
 
-## Example
+## Group Exercise
 
-[Jamboard Exercise](https://jamboard.google.com/d/16DOZhwJara-sq0LqhMdDpIGtwkqc3eHFpU7WqrqgFXA/edit?usp=sharing): Let $C$ be the $[4,2]$ code with generator matrix
+Let $C$ be the $[4,2]$ code with the following generator matrix.
+
 $$
 G = \begin{bmatrix} 1 & 0 & 1 & 1 \\ 0 & 1 & 1 & 0 \end{bmatrix}
 $$
@@ -216,7 +217,8 @@ To decode a received message $r \in \mathbb{Z}_2^n$,
 
 ## Coset leader syndrome table:
 
-[Jamboard Exercise](https://jamboard.google.com/d/16DOZhwJara-sq0LqhMdDpIGtwkqc3eHFpU7WqrqgFXA/edit?usp=sharing): For the code with generator matrix
+**Exercise:** For the code with generator matrix
+
 $$
 G = \begin{bmatrix} 1 & 0 & 1 & 1 \\ 0 & 1 & 1 & 0 \end{bmatrix}
 $$

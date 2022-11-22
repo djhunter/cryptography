@@ -14,7 +14,7 @@ knitr::opts_chunk$set(comment = NA)
 
 Upload to Canvas a PDF of your work for the following problems. 
 
-## Assignment: due Wednesday, 11:59 pm
+## Assignment: due Monday, 11:59 pm
 
 1. Use the fact that $vH^T = \mathbf{0}$ for any codeword $v$ to prove both parts of the following lemma.
 
