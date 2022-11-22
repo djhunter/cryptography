@@ -1664,7 +1664,7 @@ lemma.</li>
 </ol>
 <blockquote>
 <p><strong>Lemma.</strong> Let <span class="math inline">\(C\)</span> be
-a sytematic linear binary code, and let <span class="math inline">\(H\)</span> be its parity check matrix.</p>
+a systematic linear binary code, and let <span class="math inline">\(H\)</span> be its parity check matrix.</p>
 <ol style="list-style-type: decimal">
 <li>If <span class="math inline">\(C\)</span> contains a codeword of
 weight 1, then <span class="math inline">\(H\)</span> contains a zero
@@ -1679,13 +1679,16 @@ columns.</li>
 <code>G</code> and message <code>mess</code> given below.
 <ol style="list-style-type: lower-alpha">
 <li>The matrix <code>G</code> is a generating matrix for a systematic
-linear binary code. How many codewords are there in this code?</li>
+linear binary code <span class="math inline">\(C\)</span>. How many
+codewords are there in this code?</li>
+<li>Generate all the codewords in <span class="math inline">\(C\)</span>, and find <span class="math inline">\(d(C)\)</span> by finding the weight of the
+lightest nonzero codeword in <span class="math inline">\(C\)</span>.</li>
 <li>How many errors can this code correct?</li>
 <li>How many different syndromes are there?</li>
 <li>Compute the parity check matrix <span class="math inline">\(H\)</span>.</li>
 <li>Bob receives the message <code>mess</code>. Find its syndrome.</li>
-<li>Determine the coset leader of the corresponding coset, and decode
-the message.</li>
+<li>Determine the coset leader of the coset of <code>mess</code>, and
+decode the message.</li>
 </ol></li>
 </ol>
 <pre class="r"><code>G &lt;- matrix(c(1,0,0,0,0,1,1,1,0,1,1,0,0,1,0,

@@ -2086,16 +2086,18 @@ in <span class="math inline">\(\mathbb{Z}_2^4\)</span>.</p></li>
 <section id="facts-about-cosets" class="slide level2">
 <h2>Facts about cosets</h2>
 <ul>
-<li><p>Cosets form a <strong>partition</strong> of <span class="math inline">\(\mathbb{Z}_2^n\)</span>.</p></li>
-<li><p>If <span class="math inline">\(r_1\)</span> and <span class="math inline">\(r_2\)</span> are in the same coset, then, for some
-<span class="math inline">\(c\in C\)</span>, <span class="math inline">\(r_1 + c = r_2\)</span>, so <span class="math inline">\(r_1+r_2\)</span> is a codeword.</p></li>
-<li><p>Two vectors have the same syndrome iff they are in the same
-coset.</p>
+<li class="fragment">Cosets form a <strong>partition</strong> of <span class="math inline">\(\mathbb{Z}_2^n\)</span>.</li>
+<li class="fragment">If <span class="math inline">\(r_1\)</span> and
+<span class="math inline">\(r_2\)</span> are in the same coset, then,
+for some <span class="math inline">\(c\in C\)</span>, <span class="math inline">\(r_1 + c = r_2\)</span>, so <span class="math inline">\(r_1+r_2\)</span> is a codeword.</li>
+<li class="fragment">Two vectors have the same syndrome iff they are in
+the same coset.
 <ul>
-<li>Proof: <span class="math inline">\((v+c)R^T = vR^T + cR^T =
-vR^T\)</span></li>
+<li class="fragment">Proof: <span class="math inline">\((v+c)R^T = vR^T
++ cR^T = vR^T\)</span></li>
 </ul></li>
 </ul>
+<div class="fragment">
 <p>Quiz: In an <span class="math inline">\([n,k]\)</span> linear binary
 code,</p>
 <ul>
@@ -2103,6 +2105,7 @@ code,</p>
 <li>How many cosets are there?</li>
 <li>How many syndromes are there?</li>
 </ul>
+</div>
 </section>
 <section id="coset-decoding-impractical" class="slide level2">
 <h2>Coset Decoding (impractical)</h2>
@@ -2200,9 +2203,13 @@ G = \begin{bmatrix} 1 &amp; 0 &amp; 1 &amp; 1 \\ 0 &amp; 1 &amp; 1 &amp;
 <p>For any <span class="math inline">\(m \geq 1\)</span>, there is a
 Hamming code with <span class="math inline">\(n = 2^m-1\)</span> and
 <span class="math inline">\(k = 2^m-1-m\)</span>.</p>
-<p>The columns of the parity check matrix <span class="math inline">\(H\)</span> consist of all possible binary vectors
-of length <span class="math inline">\(m\)</span>, with the weight 1
-vectors at the end.</p>
+<ul>
+<li><em>Trick:</em> Define the code by defining its parity check matrix
+<span class="math inline">\(H\)</span>.</li>
+<li>The columns of <span class="math inline">\(H\)</span> consist of all
+possible binary vectors of length <span class="math inline">\(m\)</span>, with the weight 1 vectors at the
+end.</li>
+</ul>
 <div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>m <span class="ot">&lt;-</span> <span class="dv">3</span></span>
 <span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>powersOf2 <span class="ot">&lt;-</span> <span class="dv">2</span><span class="sc">^</span>(<span class="dv">0</span><span class="sc">:</span>(m<span class="dv">-1</span>))</span>
 <span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>hamH <span class="ot">&lt;-</span> <span class="fu">sapply</span>(<span class="fu">c</span>(<span class="fu">setdiff</span>(<span class="dv">1</span><span class="sc">:</span>(<span class="dv">2</span><span class="sc">^</span>m<span class="dv">-1</span>), powersOf2), powersOf2), </span>
@@ -2212,10 +2219,24 @@ vectors at the end.</p>
 [1,]    1    1    0    1    1    0    0
 [2,]    1    0    1    1    0    1    0
 [3,]    0    1    1    1    0    0    1</code></pre>
-<p>Given the parity check matrix <span class="math inline">\(H =
-\begin{bmatrix} P^T &amp; I_{n-k} \end{bmatrix}\)</span>, it is easy to
-write down the generating matrix <span class="math inline">\(G =
+</section>
+<section id="hamming-generating-matrix-1" class="slide level2">
+<h2>Hamming Generating Matrix</h2>
+<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>hamH</span></code></pre></div>
+<pre><code>     [,1] [,2] [,3] [,4] [,5] [,6] [,7]
+[1,]    1    1    0    1    1    0    0
+[2,]    1    0    1    1    0    1    0
+[3,]    0    1    1    1    0    0    1</code></pre>
+<p>If <span class="math inline">\(H = \begin{bmatrix} P^T &amp; I_{n-k}
+\end{bmatrix}\)</span>, then <span class="math inline">\(G =
 \begin{bmatrix} I_k &amp; P \end{bmatrix}\)</span>.</p>
+<div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>hamG <span class="ot">&lt;-</span> <span class="fu">cbind</span>(<span class="fu">diag</span>(<span class="dv">4</span>), <span class="fu">t</span>(hamH[,<span class="dv">1</span><span class="sc">:</span><span class="dv">4</span>]))</span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>hamG</span></code></pre></div>
+<pre><code>     [,1] [,2] [,3] [,4] [,5] [,6] [,7]
+[1,]    1    0    0    0    1    1    0
+[2,]    0    1    0    0    1    0    1
+[3,]    0    0    1    0    0    1    1
+[4,]    0    0    0    1    1    1    1</code></pre>
 </section>
 <section id="hamming-generator-from-hamming-parity-check" class="slide level2">
 <h2>Hamming Generator from Hamming Parity Check</h2>
@@ -2223,12 +2244,12 @@ write down the generating matrix <span class="math inline">\(G =
 \begin{bmatrix} P^T &amp; I_{n-k} \end{bmatrix}\)</span>, it is easy to
 write down the generating matrix <span class="math inline">\(G =
 \begin{bmatrix} I_k &amp; P \end{bmatrix}\)</span>.</p>
-<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>generatorMatrix <span class="ot">&lt;-</span> <span class="cf">function</span>(H) {</span>
-<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>  k <span class="ot">&lt;-</span> <span class="fu">ncol</span>(H)<span class="sc">-</span><span class="fu">nrow</span>(H)</span>
-<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>  n <span class="ot">&lt;-</span> <span class="fu">ncol</span>(H)</span>
-<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span>(<span class="fu">cbind</span>(<span class="fu">diag</span>(k),<span class="fu">t</span>(H[<span class="dv">1</span><span class="sc">:</span>(n<span class="sc">-</span>k),<span class="dv">1</span><span class="sc">:</span>k])))</span>
-<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a><span class="fu">generatorMatrix</span>(hamH)</span></code></pre></div>
+<div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>generatorMatrix <span class="ot">&lt;-</span> <span class="cf">function</span>(H) {</span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>  k <span class="ot">&lt;-</span> <span class="fu">ncol</span>(H)<span class="sc">-</span><span class="fu">nrow</span>(H)</span>
+<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a>  n <span class="ot">&lt;-</span> <span class="fu">ncol</span>(H)</span>
+<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span>(<span class="fu">cbind</span>(<span class="fu">diag</span>(k),<span class="fu">t</span>(H[<span class="dv">1</span><span class="sc">:</span>(n<span class="sc">-</span>k),<span class="dv">1</span><span class="sc">:</span>k])))</span>
+<span id="cb20-5"><a href="#cb20-5" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb20-6"><a href="#cb20-6" aria-hidden="true" tabindex="-1"></a><span class="fu">generatorMatrix</span>(hamH)</span></code></pre></div>
 <pre><code>     [,1] [,2] [,3] [,4] [,5] [,6] [,7]
 [1,]    1    0    0    0    1    1    0
 [2,]    0    1    0    0    1    0    1

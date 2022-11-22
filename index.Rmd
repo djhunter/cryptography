@@ -54,6 +54,7 @@ This site provides slides, assignments, and other resources that I use in my Cod
 16. [Elliptic Curve Cryptography](slides/16elliptic_curves3.html)
 17. [Introduction to Codes](slides/17codes1.html)
 18. [Codes: Definitions and Theorems](slides/18codes2.html)
+19. [Linear Codes](slides/19codes3.html)
 
 ---
 # 19. [Linear Codes](slides/19codes3.html)
@@ -83,9 +84,9 @@ This site provides slides, assignments, and other resources that I use in my Cod
 16. [Elliptic Curve Cryptography](assignments/16ec_crypto.html)
 17. [Codes: Introductory Examples](assignments/17introcodes.html)
 18. [Codes: Theoretical Limitations](assignments/18codelimits.html)
+19. [Systematic Codes](assignments/19systematic.html)
 
 ---
-# 19. [Systematic Codes](assignments/19systematic.html)
 # 20. [Cyclic Codes](assignments/20cyclic.html)
 # 21. [BCH Codes](assignments/21bch.html)
 # 22. [Reed-Solomon Codes](assignments/22reedsolomon.html)

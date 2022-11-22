@@ -183,13 +183,13 @@ $$
 
 ## Facts about cosets
 
-- Cosets form a **partition** of $\mathbb{Z}_2^n$.
+>- Cosets form a **partition** of $\mathbb{Z}_2^n$.
+>- If $r_1$ and $r_2$ are in the same coset, then, for some $c\in C$, $r_1 + c = r_2$, so $r_1+r_2$ is a codeword.
+>- Two vectors have the same syndrome iff they are in the same coset.
+>     - Proof: $(v+c)R^T = vR^T + cR^T = vR^T$
+ 
+. . . 
 
-- If $r_1$ and $r_2$ are in the same coset, then, for some $c\in C$, $r_1 + c = r_2$, so $r_1+r_2$ is a codeword.
-
-- Two vectors have the same syndrome iff they are in the same coset.
-     - Proof: $(v+c)R^T = vR^T + cR^T = vR^T$
-     
 Quiz: In an $[n,k]$ linear binary code,
 
 - How big are the cosets?
@@ -259,7 +259,8 @@ C
 
 For any $m \geq 1$, there is a Hamming code with $n = 2^m-1$ and $k = 2^m-1-m$.
 
-The columns of the parity check matrix $H$ consist of all possible binary vectors of length $m$, with the weight 1 vectors at the end.
+- *Trick:* Define the code by defining its parity check matrix $H$.
+- The columns of $H$ consist of all possible binary vectors of length $m$, with the weight 1 vectors at the end.
 
 ```{r}
 m <- 3
@@ -269,7 +270,19 @@ hamH <- sapply(c(setdiff(1:(2^m-1), powersOf2), powersOf2),
 hamH
 ```
 
-Given the parity check matrix $H = \begin{bmatrix} P^T & I_{n-k} \end{bmatrix}$, it is easy to write down the generating matrix $G = \begin{bmatrix} I_k &  P \end{bmatrix}$.
+## Hamming Generating Matrix
+
+```{r}
+hamH
+```
+
+If $H = \begin{bmatrix} P^T & I_{n-k} \end{bmatrix}$, then $G = \begin{bmatrix} I_k &  P \end{bmatrix}$.
+
+```{r}
+hamG <- cbind(diag(4), t(hamH[,1:4]))
+hamG
+```
+
 
 ## Hamming Generator from Hamming Parity Check
 
