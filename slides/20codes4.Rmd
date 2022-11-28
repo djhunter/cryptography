@@ -1,6 +1,6 @@
 ---
 title: "Cyclic Codes"
-date: "November 19, 2020"
+date: "November 29, 2022"
 output: 
   revealjs::revealjs_presentation:
     fig_width: 14 
@@ -24,108 +24,69 @@ knitr::opts_chunk$set(comment = NA)
 options(width = 100)
 ```
 
-# Golay Codes
+# Last Time: Linear Codes
 
-## {data-background="https://upload.wikimedia.org/wikipedia/commons/thumb/6/60/Voyager_spacecraft_model.png/1280px-Voyager_spacecraft_model.png" data-background-size="contain"}
+## Cosets and Syndromes
 
-## Golay $[24,12]$-code (Voyager I, II, 1979)
+Suppose $C$ is a linear code, and a code word $w$ is sent, and $r$ is received.
 
-The Golay code $G_{24}$ has the following generator matrix.
+- If you can find the *coset* $r + C$, then its coset leader $e$ gives you the nearest neighbor $r+e$.
+- You can compute the *syndrome* $rH^T$, and this can help you find the coset leader (given a table).
 
-```{r, results='hide'}
-golay24 <- matrix(c(1,0,0,0,0,0,0,0,0,0,0,0,1,1,1,0,1,1,1,0,0,0,1,0,
-                    0,1,0,0,0,0,0,0,0,0,0,0,1,0,1,1,0,1,1,1,0,0,0,1,
-                    0,0,1,0,0,0,0,0,0,0,0,0,1,1,0,1,1,0,1,1,1,0,0,0,
-                    0,0,0,1,0,0,0,0,0,0,0,0,1,0,1,0,1,1,0,1,1,1,0,0,
-                    0,0,0,0,1,0,0,0,0,0,0,0,1,0,0,1,0,1,1,0,1,1,1,0,
-                    0,0,0,0,0,1,0,0,0,0,0,0,1,0,0,0,1,0,1,1,0,1,1,1,
-                    0,0,0,0,0,0,1,0,0,0,0,0,1,1,0,0,0,1,0,1,1,0,1,1,
-                    0,0,0,0,0,0,0,1,0,0,0,0,1,1,1,0,0,0,1,0,1,1,0,1,
-                    0,0,0,0,0,0,0,0,1,0,0,0,1,1,1,1,0,0,0,1,0,1,1,0,
-                    0,0,0,0,0,0,0,0,0,1,0,0,1,0,1,1,1,0,0,0,1,0,1,1,
-                    0,0,0,0,0,0,0,0,0,0,1,0,1,1,0,1,1,1,0,0,0,1,0,1,
-                    0,0,0,0,0,0,0,0,0,0,0,1,0,1,1,1,1,1,1,1,1,1,1,1),
-                  byrow=TRUE, nrow=12)
-```
+## Minimum distance of Hamming codes
 
-## Decoding options
+**Lemma.** Let $C$ be a systematic linear binary code, and let $H$ be its parity check matrix.
 
-In order of speed (slow to fast):
+1. If $C$ contains a codeword of weight 1, then $H$ contains a zero column.
+2. If $C$ contains a codeword of weight 2, then $H$ has two identical columns.
 
-- Search for nearest neighbor.
-- Compute coset of received word $r$, then use coset leader.
-- Compute syndrome of received word $r$, then use table.
+. . .
 
-## Coset Leader Syndrome lookup table 
+**Corollary:** The minimum distance of a Hamming code is 3, and they're perfect.
 
-```{r, eval=FALSE}
-cosetLeaderSyndromeTable <- function(G) {
-  n <- ncol(G)
-  k <- nrow(G)
-  C <- generateCode(G) # TODO (or done)
-  H <- parityCheckMatrix(G) # TODO
-  Z2n <- t(sapply(0:(2^n-1), function(x){as.numeric(intToBits(x)[1:n])}))
-  allsynd <- sapply(1:2^n, function(x) {syndrome(Z2n[x,],H)}) # TODO (syndrome)
-  uniqueReps <- which(!duplicated(allsynd))
-  syndromes <- allsynd[uniqueReps]
-  cosetLeaders <- lapply(uniqueReps, function(x) {cosetLeader(Z2n[x,],C)} ) # TODO (cosetLeader)
-  names(cosetLeaders) <- syndromes
-  return(cosetLeaders)
-}
-```
+## Hamming codes are perfect
 
-## Golay lookup table
+**Corollary:** The minimum distance of a Hamming code is 3, and they're perfect.
+
+Proof: Hamming codes are constructed by forming $H$ first, where $H$ has $2^m-1$ different nonzero columns, so the minimum distance is greater than 2, by the Lemma. The code has length $n = 2^m-1$, and $M = 2^k$ code words, where $k = 2^m-1-m$. Observe:
+
+$$
+\frac{2^n}{\binom{n}{0} + \binom{n}{1}} = \frac{2^n}{1+n} = \frac{2^{2^m-1}}{2^m} = 2^k = M
+$$
+
+Therefore $d > 3$ is impossible, because $M$ would then exceed the Hamming bound. So $d = 3$, and the code is perfect. 
+
+## Hamming Syndrome Decoding
+
+- The nonzero syndromes are the columns of the parity check matrix $H$. Proof:
+    - Hamming codes can correct 1 error.
+        - If $r$ has one error, then $r = w+\delta_i$, where $w \in C$.
+        - $\delta_i$ is the vector with a 1 in the $i$th position, 0s elsewhere.
+    - Syndrome of $r$ is $rH^T = wH^T + \delta_iH^T = \delta_iH^T$.
+        - This accounts for $n+1 = 2^m$ syndromes (including $\mathbf{0}$).
+        - The cosets have size $M = 2^k$. So this accounts for $2^m\cdot 2^k = 2^n$ possible bit strings (i.e. all of them). So these are *all* the syndromes.
+- For nearest neighbor decoding, the column of the syndrome is the location of the error. Proof:
+    - For any coset, the coset leader must be $\delta_i$.
+
+## Example: The Hamming (7,4) code
+
 
 ```{r}
-load("golay24table.RData") # made using cosetLeaderSyndromeTable
-gT$`010100001111`
-gT[["010100001111"]]
-head(gT,10) # first 10 entries
+m <- 3
+powersOf2 <- 2^(0:(m-1))
+hamH <- sapply(c(setdiff(1:(2^m-1), powersOf2), powersOf2), 
+       function(x){as.numeric(intToBits(x)[1:m])})
+hamH
 ```
 
-
-## Golay $[24,12]$ decoding shortcut
-
-The Golay code is *self-dual*, meaning its generator matrix can function as a parity check matrix.
-
-Bob receives $r = c+e$. He computes the syndrome $s = rG^T$. (Note: this is a different way of computing the syndrome.)
-
->1. If $\mbox{wt}(s) \leq 3$, then $e = [s \,\,\, \mathbf{0}]$.
->2. Let $B$ be such that $G = [I \, B]$. If $\mbox{wt}(sB)\leq 3$, then $e = [\mathbf{0}\,\,\, sB]$
->3. Let $c_{13}, c_{14}, \ldots, c_{24}$ be the columns of $B$. If $\mbox{wt}(s+c_j^T) \leq 2$ for some $j$, then $e = [s+c_j^T \,\,\, \mathbf{0}] +u_j$, where $u_j$ has a 1 in the $j$th position and 0's elsewhere.
->4. Let $b_1, b_2, \ldots, b_{12}$ be the columns of $B^T$. If $\mbox{wt}(sB+b_j^T) \leq 2$ for some $j$, then $e = [\mathbf{0} \,\,\, sB+b_j^T] + u_j$. 
-
-## Golay $[24,12]$ decoding shortcut example 
-
-Bob receives $m = c+e$. He computes the "syndrome" $s = rG^T$. 
+Correct the error in $(1,0,1,0,1,1,1)$
 
 ```{r}
-mess <- c(1,1,1,0,0,0,1,0,1,0,0,0,0,1,0,1,0,0,0,0,1,0,1,1)
-s <- (mess %*% t(golay24) ) %% 2
-s
+(c(1,0,1,0,1,1,1) %*% t(hamH)) %% 2
 ```
 
-*1.* If $\mbox{wt}(s) \leq 3$, then $e = [s \,\,\, \mathbf{0}]$.
+The error is in position 6: $w = (1,0,1,0,1,0,1)$
 
-## Golay $[24,12]$ decoding shortcut example 
-
-*2.* Let $B$ be such that $G = [I \, B]$. If $\mbox{wt}(sB)\leq 3$, then $e = [\mathbf{0}\,\,\, sB]$
-
-```{r}
-B <- golay24[,13:24]
-sB <- (s %*% B) %% 2
-sB
-```
-
-## Golay $[24,12]$ decoding shortcut example {.smaller}
-
-*3.* Let $c_{13}, c_{14}, \ldots, c_{24}$ be the columns of $B$. If $\mbox{wt}(s+c_j^T) \leq 2$, then $e = [s+c_j^T \,\,\, \mathbf{0}] +u_j$, where $u_j$ has a 1 in the $j$th position and 0's elsewhere.
-
-```{r}
-sapply(1:12, function(j) {(s + B[,j]) %% 2})
-```
-
-So $j = 18$, and $e = \scriptsize{\begin{bmatrix} 0 &0 &0 &0 &0 &0 &0 &1 &0 &0 &0 &0 &0 &0 & 0 &0 &0 &1 &0 &0 &0 \end{bmatrix}}$.
 
 # Cyclic Codes
 
@@ -145,7 +106,7 @@ $$
 
 Examples: 8th bit parity check, $k$-fold repetition code
 
-[Jamboard](https://jamboard.google.com/d/1hQg7Df49pdmeGBT1V2TC3cl7j7VkgQ8_HshFVoQkG8U/edit?usp=sharing) Exercise: For each given code word, find the smallest cyclic linear code containing the code word.
+Exercise: For each given code word, find the smallest cyclic linear code containing the code word.
 
 1. $\begin{bmatrix} 1 & 0 &  0 & 1 \end{bmatrix}$
 
@@ -187,7 +148,7 @@ $$
 for some *generating polynomial* $g(x)$ (which is the polynomial of least degree in $C$).
 
 - In this case, we write $C = \langle g(x) \rangle$, the ideal generated by $g(x)$.
-- [Jamboard](https://jamboard.google.com/d/1hQg7Df49pdmeGBT1V2TC3cl7j7VkgQ8_HshFVoQkG8U/edit?usp=sharing) Exercise, continued: Find the generating polynomials for these two cyclic codes.
+- Exercise, continued: Find the generating polynomials for these two cyclic codes.
 
 ## More Algebra Facts
 

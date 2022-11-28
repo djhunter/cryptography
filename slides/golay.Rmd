@@ -1,0 +1,102 @@
+# Golay Codes
+
+## {data-background="https://upload.wikimedia.org/wikipedia/commons/thumb/6/60/Voyager_spacecraft_model.png/1280px-Voyager_spacecraft_model.png" data-background-size="contain"}
+
+## Golay $[24,12]$-code (Voyager I, II, 1979)
+
+The Golay code $G_{24}$ has the following generator matrix.
+
+```{r, results='hide'}
+golay24 <- matrix(c(1,0,0,0,0,0,0,0,0,0,0,0,1,1,1,0,1,1,1,0,0,0,1,0,
+                    0,1,0,0,0,0,0,0,0,0,0,0,1,0,1,1,0,1,1,1,0,0,0,1,
+                    0,0,1,0,0,0,0,0,0,0,0,0,1,1,0,1,1,0,1,1,1,0,0,0,
+                    0,0,0,1,0,0,0,0,0,0,0,0,1,0,1,0,1,1,0,1,1,1,0,0,
+                    0,0,0,0,1,0,0,0,0,0,0,0,1,0,0,1,0,1,1,0,1,1,1,0,
+                    0,0,0,0,0,1,0,0,0,0,0,0,1,0,0,0,1,0,1,1,0,1,1,1,
+                    0,0,0,0,0,0,1,0,0,0,0,0,1,1,0,0,0,1,0,1,1,0,1,1,
+                    0,0,0,0,0,0,0,1,0,0,0,0,1,1,1,0,0,0,1,0,1,1,0,1,
+                    0,0,0,0,0,0,0,0,1,0,0,0,1,1,1,1,0,0,0,1,0,1,1,0,
+                    0,0,0,0,0,0,0,0,0,1,0,0,1,0,1,1,1,0,0,0,1,0,1,1,
+                    0,0,0,0,0,0,0,0,0,0,1,0,1,1,0,1,1,1,0,0,0,1,0,1,
+                    0,0,0,0,0,0,0,0,0,0,0,1,0,1,1,1,1,1,1,1,1,1,1,1),
+                  byrow=TRUE, nrow=12)
+```
+
+## Decoding options
+
+In order of speed (slow to fast):
+
+- Search for nearest neighbor.
+- Compute coset of received word $r$, then use coset leader.
+- Compute syndrome of received word $r$, then use table.
+
+## Coset Leader Syndrome lookup table 
+
+```{r, eval=FALSE}
+cosetLeaderSyndromeTable <- function(G) {
+  n <- ncol(G)
+  k <- nrow(G)
+  C <- generateCode(G) # TODO (or done)
+  H <- parityCheckMatrix(G) # TODO
+  Z2n <- t(sapply(0:(2^n-1), function(x){as.numeric(intToBits(x)[1:n])}))
+  allsynd <- sapply(1:2^n, function(x) {syndrome(Z2n[x,],H)}) # TODO (syndrome)
+  uniqueReps <- which(!duplicated(allsynd))
+  syndromes <- allsynd[uniqueReps]
+  cosetLeaders <- lapply(uniqueReps, function(x) {cosetLeader(Z2n[x,],C)} ) # TODO (cosetLeader)
+  names(cosetLeaders) <- syndromes
+  return(cosetLeaders)
+}
+```
+
+## Golay lookup table
+
+```{r}
+load("golay24table.RData") # made using cosetLeaderSyndromeTable
+gT$`010100001111`
+gT[["010100001111"]]
+head(gT,10) # first 10 entries
+```
+
+
+## Golay $[24,12]$ decoding shortcut
+
+The Golay code is *self-dual*, meaning its generator matrix can function as a parity check matrix.
+
+Bob receives $r = c+e$. He computes the syndrome $s = rG^T$. (Note: this is a different way of computing the syndrome.)
+
+>1. If $\mbox{wt}(s) \leq 3$, then $e = [s \,\,\, \mathbf{0}]$.
+>2. Let $B$ be such that $G = [I \, B]$. If $\mbox{wt}(sB)\leq 3$, then $e = [\mathbf{0}\,\,\, sB]$
+>3. Let $c_{13}, c_{14}, \ldots, c_{24}$ be the columns of $B$. If $\mbox{wt}(s+c_j^T) \leq 2$ for some $j$, then $e = [s+c_j^T \,\,\, \mathbf{0}] +u_j$, where $u_j$ has a 1 in the $j$th position and 0's elsewhere.
+>4. Let $b_1, b_2, \ldots, b_{12}$ be the columns of $B^T$. If $\mbox{wt}(sB+b_j^T) \leq 2$ for some $j$, then $e = [\mathbf{0} \,\,\, sB+b_j^T] + u_j$. 
+
+## Golay $[24,12]$ decoding shortcut example 
+
+Bob receives $m = c+e$. He computes the "syndrome" $s = rG^T$. 
+
+```{r}
+mess <- c(1,1,1,0,0,0,1,0,1,0,0,0,0,1,0,1,0,0,0,0,1,0,1,1)
+s <- (mess %*% t(golay24) ) %% 2
+s
+```
+
+*1.* If $\mbox{wt}(s) \leq 3$, then $e = [s \,\,\, \mathbf{0}]$.
+
+## Golay $[24,12]$ decoding shortcut example 
+
+*2.* Let $B$ be such that $G = [I \, B]$. If $\mbox{wt}(sB)\leq 3$, then $e = [\mathbf{0}\,\,\, sB]$
+
+```{r}
+B <- golay24[,13:24]
+sB <- (s %*% B) %% 2
+sB
+```
+
+## Golay $[24,12]$ decoding shortcut example {.smaller}
+
+*3.* Let $c_{13}, c_{14}, \ldots, c_{24}$ be the columns of $B$. If $\mbox{wt}(s+c_j^T) \leq 2$, then $e = [s+c_j^T \,\,\, \mathbf{0}] +u_j$, where $u_j$ has a 1 in the $j$th position and 0's elsewhere.
+
+```{r}
+sapply(1:12, function(j) {(s + B[,j]) %% 2})
+```
+
+So $j = 18$, and $e = \scriptsize{\begin{bmatrix} 0 &0 &0 &0 &0 &0 &0 &1 &0 &0 &0 &0 &0 &0 & 0 &0 &0 &1 &0 &0 &0 \end{bmatrix}}$.
