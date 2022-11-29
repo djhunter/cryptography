@@ -14,7 +14,7 @@ knitr::opts_chunk$set(comment = NA)
 
 Upload to Canvas a PDF of your work for the following problems. 
 
-## Assignment: due Monday 11/30, 11:59 pm
+## Assignment: due Wednesday 11/30, 11:59 pm
 
 1. Hamming codes have the following properties:
     - The nonzero syndromes are the columns of the parity check matrix $H$.
@@ -36,7 +36,7 @@ mess <- c(1,1,1,0,0,0,0,0,1,1,0,0,1,0,1,0,1,1,1,0,0,1,0,1,0,0,0,0,0,1,0,1,1,1,0,
 ```
 
 2. Let $C$ be the (unique) $[15, 12]$ code residing in $\mathbb{Z}_2/(x^{15} + 1)$.
-    a. Use [Macaulay2](http://web.macaulay2.com/) to factor $x^{15}+1$.
+    a. Use [Macaulay2](https://www.unimelb-macaulay2.cloud.edu.au/) to factor $x^{15}+1$.
     b. Find the generating polynomial for $C$.
     c. Find a parity check polynomial for $C$.
     d. Determine whether $x^{14} + x^{9} + x^5 + x^4 + x^2 + x + 1$ is a code word. Show how you can tell.
