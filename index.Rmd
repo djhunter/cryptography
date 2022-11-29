@@ -55,10 +55,9 @@ This site provides slides, assignments, and other resources that I use in my Cod
 17. [Introduction to Codes](slides/17codes1.html)
 18. [Codes: Definitions and Theorems](slides/18codes2.html)
 19. [Linear Codes](slides/19codes3.html)
+20. [Cyclic Codes](slides/20codes4.html)
 
 ---
-# 19. [Linear Codes](slides/19codes3.html)
-# 20. [Cyclic Codes](slides/20codes4.html)
 # 21. [Fields and BCH Codes](slides/21codes5.html)
 # 22. [Reed Solomon Codes](slides/22codes6.html)
 # 23. [Codes and Encryption](slides/23codes7.html)
@@ -85,9 +84,9 @@ This site provides slides, assignments, and other resources that I use in my Cod
 17. [Codes: Introductory Examples](assignments/17introcodes.html)
 18. [Codes: Theoretical Limitations](assignments/18codelimits.html)
 19. [Systematic Codes](assignments/19systematic.html)
+20. [Cyclic Codes](assignments/20cyclic.html)
 
 ---
-# 20. [Cyclic Codes](assignments/20cyclic.html)
 # 21. [BCH Codes](assignments/21bch.html)
 # 22. [Reed-Solomon Codes](assignments/22reedsolomon.html)
 # 23. [The McEliece Cryptosystem](assignments/23mceliece.html)

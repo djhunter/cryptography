@@ -69,24 +69,27 @@ Therefore $d > 3$ is impossible, because $M$ would then exceed the Hamming bound
 
 ## Hamming Syndrome Decoding
 
-- The nonzero syndromes are the columns of the parity check matrix $H$. Proof:
-    - Hamming codes can correct 1 error.
-        - If $r$ has one error, then $r = w+\delta_i$, where $w \in C$.
-        - $\delta_i$ is the vector with a 1 in the $i$th position, 0s elsewhere.
-    - Syndrome of $r$ is $rH^T = wH^T + \delta_iH^T = \delta_iH^T$.
-        - This accounts for $n+1 = 2^m$ syndromes (including $\mathbf{0}$).
-        - The cosets have size $M = 2^k$. So this accounts for $2^m\cdot 2^k = 2^n$ possible bit strings (i.e. all of them). So these are *all* the syndromes.
-- For nearest neighbor decoding, the column of the syndrome is the location of the error. Proof:
-    - For any coset, the coset leader must be $\delta_i$.
+>- The nonzero syndromes are the columns of the parity check matrix $H$. Proof:
+>    - Hamming codes can correct 1 error.
+>        - If $r$ has one error, then $r = w+\delta_i$, where $w \in C$.
+>        - $\delta_i$ is the vector with a 1 in the $i$th position, 0s elsewhere.
+>    - Syndrome of $r$ is $rH^T = wH^T + \delta_iH^T = \delta_iH^T$, the $i$th column of $H$.
+>        - This accounts for $n+1 = 2^m$ syndromes (including $\mathbf{0}$).
+>        - The cosets have size $M = 2^k$. So this accounts for $2^m\cdot 2^k = 2^n$ possible bit strings (i.e. all of them). So these are *all* the syndromes.
+>- For nearest neighbor decoding, the column of the syndrome is the location of the error. Proof:
+>    - For any coset, the coset leader must be $\delta_i$.
 
 ## Example: The Hamming (7,4) code
 
 
-```{r}
+```{r include=FALSE}
 m <- 3
 powersOf2 <- 2^(0:(m-1))
 hamH <- sapply(c(setdiff(1:(2^m-1), powersOf2), powersOf2), 
        function(x){as.numeric(intToBits(x)[1:m])})
+```
+
+```{r}
 hamH
 ```
 
@@ -117,7 +120,7 @@ $$
 
 Examples: 8th bit parity check, $k$-fold repetition code
 
-*Group Exercise:* For each given code word, find the smallest cyclic linear code containing the code word.
+*Group Exercise:* For each given code word, find the smallest *cyclic linear* code containing the code word.
 
 1. $\begin{bmatrix} 1 & 0 &  0 & 1 \end{bmatrix}$
 
@@ -136,7 +139,7 @@ Let's start indexing at zero.
 >- Recall that the ring $\mathbb{Z}_2[x]/(x^n+1)$ consists of all polynomials in $x$ under the "mod" relation that $x^n + 1 = 0$, i.e., $x^n = 1$.
 >- The elements of $\mathbb{Z}_2[x]/(x^n+1)$ are the polynomials $c_0 +c_1x + \cdots + c_{n-1}x^{n-1}$, which correspond to the $2^n$ bit strings of length $n$.
 - Notice: 
-$$ \scriptsize
+$$ \small
 \begin{align}
 x(c_0 +c_1x + \cdots + c_{n-1}x^{n-1}) &= c_0x +c_1x^2 + \cdots + c_{n-2}x^{n-1} + c_{n-1}x^{n} \\ &= c_0x +c_1x^2 + \cdots + c_{n-2}x^{n-1} + c_{n-1} \\ &= c_{n-1} + c_0x +c_1x^2 + \cdots + c_{n-2}x^{n-1} 
 \end{align}
@@ -319,9 +322,9 @@ So a divisor $g(x)$ of $x^n+1$ (and therefore a cyclic code $\langle g(x) \rangl
 
 ## Group Exercise
 
-Let $C=\langle g(x)\rangle$ be a cyclic code in $\mathbb{Z}_2[x]/(x^{13}+1) = \mathbb{Z}(\alpha)$, where $\alpha$ is a primitive $13$th root of unity. Suppose that $g(\alpha^4) = g(\alpha^5) = 0$.
+Let $C=\langle g(x)\rangle$ be a cyclic code in $\mathbb{Z}_2[x]/(x^{13}+1)$, and let $\alpha$ be a primitive $13$th root of unity. Suppose that $g(\alpha^4) = g(\alpha^5) = 0$.
 
-1. Let $p(x)$ be the parity check polynomial such that $g(x)p(x) = x^n + 1$. Use the fact that $x^{13}+1$ splits over $\mathbb{Z}_2(\alpha)$ to explain why $p(\alpha^4) \neq 0 \neq p(\alpha^5)$.
+1. Let $p(x)$ be the parity check polynomial such that $g(x)p(x) = x^{13} + 1$. Use the fact that $x^{13}+1$ splits over $\mathbb{Z}_2(\alpha)$ to explain why $p(\alpha^4) \neq 0 \neq p(\alpha^5)$.
 
 2. Suppose that, for some $k$, the polynomial $m(x) = x^k$ is a code word of weight 1. Show that this leads to a contradiction.
 
