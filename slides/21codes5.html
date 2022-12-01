@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="generator" content="pandoc">
   <meta name="dcterms.date" content="2022-12-01" />
-  <title>BCH Codes</title>
+  <title>BCH and Reed-Solomon Codes</title>
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
@@ -1870,7 +1870,7 @@ document.addEventListener('DOMContentLoaded', function(e) {
     <div class="slides">
 
 <section>
-    <h1 class="title">BCH Codes</h1>
+    <h1 class="title">BCH and Reed-Solomon Codes</h1>
     <h3 class="date">December 1, 2022</h3>
 </section>
 
@@ -2185,10 +2185,10 @@ some <span class="math inline">\(l\)</span> and for a primitive <span class="mat
 <ol type="1">
 <li>Compute <span class="math inline">\(s = r(\alpha^l)\)</span>. If
 <span class="math inline">\(s = 0\)</span>, there is no error, or there
-is more than one error. (why?)</li>
+is more than one error.</li>
 <li>If <span class="math inline">\(s\neq 0\)</span>, compute <span class="math inline">\(s^{-1} r(\alpha^{l+1})\)</span>. This will be a
-power of <span class="math inline">\(\alpha\)</span> (why?), and the
-power (plus 1) gives the location of the error.</li>
+power of <span class="math inline">\(\alpha\)</span>, and the power
+(plus 1) gives the location of the error.</li>
 </ol>
 </section>
 <section id="why-it-works" class="slide level2">

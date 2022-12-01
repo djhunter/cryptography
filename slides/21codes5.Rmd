@@ -1,5 +1,5 @@
 ---
-title: "BCH Codes"
+title: "BCH and Reed-Solomon Codes"
 date: "December 1, 2022"
 output: 
   revealjs::revealjs_presentation:
@@ -227,8 +227,8 @@ Let $\langle g(x) \rangle$ be a BCH code in $\mathbb{Z}_2[x]/(x^n+1)$ of designe
 
 Let $r(x) = m(x) + e(x)$, where $m(x)$ is a code word and $e(x)$ is an error vector.
 
-1. Compute $s = r(\alpha^l)$. If $s = 0$, there is no error, or there is more than one error. (why?) 
-2. If $s\neq 0$, compute $s^{-1} r(\alpha^{l+1})$. This will be a power of $\alpha$ (why?), and the power (plus 1) gives the location of the error.
+1. Compute $s = r(\alpha^l)$. If $s = 0$, there is no error, or there is more than one error. 
+2. If $s\neq 0$, compute $s^{-1} r(\alpha^{l+1})$. This will be a power of $\alpha$, and the power (plus 1) gives the location of the error.
 
 ## Why it works
 
