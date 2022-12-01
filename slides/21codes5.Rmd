@@ -1,6 +1,6 @@
 ---
 title: "BCH Codes"
-date: "December 1, 2020"
+date: "December 1, 2022"
 output: 
   revealjs::revealjs_presentation:
     fig_width: 14 
@@ -53,20 +53,20 @@ Over $\mathbb{Z}_2$, $x^7+1 = (x+1)(x^3+x+1)(x^3+x^2+1)$.
 | $(x+1)(x^3 + x + 1)$ or $(x+1)(x^3 + x^2 + 1)$ | $[7,3]$ | Hamming dual |
 | $(x^3 + x + 1)(x^3 + x^2 + 1) = x^6+x^5+x^4+x^3+x^2+x+1$ | $[7,1]$ | repetition |
 
-# BCH Codes
+# Fancier Factoring
 
-## Codes with additional structure
+## Motivating questions
 
-- Cyclic codes have additional structure (they are ideals), which makes them easy to construct and check for errors.
-- BCH codes are cyclic codes over other  *Galois Fields*, whose structure will allow us to construct codes with a specified minimum distance.
+- In high school algebra, can you factor $x^2 + 4x + 3$?
+- In high school algebra, can you factor $x^2 + 4x + 5$?
 
 ## Review: Finite Fields
 
-- If $p(x)$ is an irreducible polynomial of degree $n$ in $\mathbb{Z}_2[x]$, then $\mathbb{Z}_2[x]/(p(x))$ is a field with $2^n$ elements, called $\mbox{GF}(2^n)$.
-- We think of the elements of $\mbox{GF}(2^n)$ as polynomials, under the modulus relation $p(x) = 0$.
-- Equivalently, we can think of $\mbox{GF}(2^n)$ as a field containing $\mathbb{Z}_2$ and an element $\alpha$, such that $p(\alpha) = 0$. We say that $\mbox{GF}(2^n)$ is an *extension field* of $\mathbb{Z}_2$. **Notation:** $\mbox{GF}(2^n) = \mathbb{Z}_2(\alpha)$
-    - Analogy: $\mathbb{C}$ is an extension field of $\mathbb{R}$, containing $i$, a root of $x^2 + 1$.
-    - $\mathbb{C} = \mathbb{R}(i)$
+>- If $p(x)$ is an irreducible polynomial of degree $n$ in $\mathbb{Z}_2[x]$, then $\mathbb{Z}_2[x]/(p(x))$ is a field with $2^n$ elements, called $\mbox{GF}(2^n)$.
+>- We think of the elements of $\mbox{GF}(2^n)$ as polynomials, under the modulus relation $p(x) = 0$.
+>- Equivalently, we can think of $\mbox{GF}(2^n)$ as a field containing $\mathbb{Z}_2$ and an element $\alpha$, such that $p(\alpha) = 0$. We say that $\mbox{GF}(2^n)$ is an *extension field* of $\mathbb{Z}_2$. **Notation:** $\mbox{GF}(2^n) = \mathbb{Z}_2(\alpha)$
+>    - Analogy: $\mathbb{C}$ is an extension field of $\mathbb{R}$, containing $i$, a root of $x^2 + 1$.
+>    - $\mathbb{C} = \mathbb{R}(i)$
 
 ## Roots of polynomials
 
@@ -86,8 +86,6 @@ Example: $\mbox{GF(4)} = \mathbb{Z}_2[x]/(x^2+x+1)$
 1. Over $\mathbb{Z}_2$, let $\alpha$ be a root of $x^3 + x + 1$. Compute all the powers of $\alpha$, simplifying when possible. How many are there?
 
 2. Over $\mathbb{Z}_2$, let $\alpha$ be a root of $x^3 + x^2 + x + 1$. Compute all the powers of $\alpha$, simplifying when possible. How many are there?
-
-Work in pairs on [this Jamboard](https://jamboard.google.com/d/1O4ZggWr4JU6R3d0ZkUl7ZPOWYrubq4VtuiKEugERT2k/edit?usp=sharing).
 
 ## Primitive roots of unity
 
@@ -136,7 +134,7 @@ o2 = (x + 1)(x + a)(x + a )(x + a + 1)(x + a  + a)(x + a  + a + 1)(x + a  + 1)
 o2 : Expression of class Product
 ```
 
-## Which primitive polynomial is [Macaulay2](http://web.macaulay2.com/) using?
+## Which primitive polynomial is [Macaulay2](https://www.unimelb-macaulay2.cloud.edu.au/) using?
 
 ```
 i1 : F = GF(8)
@@ -169,17 +167,19 @@ So a divisor $g(x)$ of $x^n+1$ (and therefore a cyclic code $\langle g(x) \rangl
 - **Jargon:** $x^n+1$ *splits* over $\mathbb{Z}_2(\alpha)$.
 - Analogy: All real polynomials split over $\mathbb{C} = \mathbb{R}(i)$.
 
-## [Jamboard](https://jamboard.google.com/d/10fobOw7AIuHjnBauArd5gg7sh8rkQOUoLT6f3ZtjNfg/edit?usp=sharing) Exercise
+## Group Exercise
 
-Let $C=\langle g(x)\rangle$ be a cyclic code in $\mathbb{Z}_2[x]/(x^{13}+1) = \mathbb{Z}(\alpha)$, where $\alpha$ is a primitive $13$th root of unity. Suppose that $g(\alpha^4) = g(\alpha^5) = 0$.
+Let $C=\langle g(x)\rangle$ be a cyclic code in $\mathbb{Z}_2[x]/(x^{13}+1)$, and let $\alpha$ be a primitive $13$th root of unity. Suppose that $g(\alpha^4) = g(\alpha^5) = 0$.
 
-1. Let $p(x)$ be the parity check polynomial such that $g(x)p(x) = x^n + 1$. Use the fact that $x^{13}+1$ splits over $\mathbb{Z}_2(\alpha)$ to explain why $p(\alpha^4) \neq 0 \neq p(\alpha^5)$.
+1. Let $p(x)$ be the parity check polynomial such that $g(x)p(x) = x^{13} + 1$. Use the fact that $x^{13}+1$ splits over $\mathbb{Z}_2(\alpha)$ to explain why $p(\alpha^4) \neq 0 \neq p(\alpha^5)$.
 
-2. Suppose that, for some $k$, the polynomial $m(x) = x^k$ is a code word of weight 1. Show that this leads to a contradition.
+2. Suppose that, for some $k$, the polynomial $m(x) = x^k$ is a code word of weight 1. Show that this leads to a contradiction.
 
-3. Suppose that, for some $j,k$, the polynomial $m(x) = x^j+ x^k$ is a code word of weight 2. Show that this leads to a contradition.
+3. Suppose that, for some $j,k$, the polynomial $m(x) = x^j+ x^k$ is a code word of weight 2. Show that this leads to a contradiction.
 
 4. Explain why the minimum distance of $C$ is at least 3.
+
+# BCH Codes
 
 ## BCH Bound Theorem over $\mathbb{Z}_2$
 
@@ -209,7 +209,7 @@ x^3+x+1 &= (x+\alpha)(x+\alpha^2)(x+\alpha^4)
 \end{align}
 $$
 
-[Jamboard](https://jamboard.google.com/d/1MgaL6FJttrZNq1ZHGNfC2i6-H8gWYCNtz9RaxlmIdT0/edit?usp=sharing) exercise. In $\mathbb{Z}_2[x]/(x^7+1)$,
+Exercise. In $\mathbb{Z}_2[x]/(x^7+1)$,
 
 1. Find a generator for a code of designed distance 3.
 2. Find a generator for a code of designed distance 4.
@@ -253,3 +253,173 @@ s^{-1}r(\alpha^{l+1}) &= (e(\alpha^l))^{-1}e(\alpha^{l+1}) && \mbox{ by part 1} 
 &= ((\alpha^l)^k)^{-1}(\alpha^{l+1})^k \\
 &= \alpha^k && \mbox{ properties of exponents}
 \end{align}
+
+
+# Reed-Solomon Codes
+
+## {data-background="https://solarsystem.nasa.gov/system/resources/detail_files/2304_mgs_1280.jpg" data-background-size="contain"}
+
+## Reed-Solomon Codes and Mars
+
+The Mars Global Surveyor (MGS) was launched in 1996 and retired in 2007. According to [this journal article](https://onlinelibrary.wiley.com/doi/abs/10.1002/sat.871) by a JPL scientist,
+
+> The MGS downlink to Earth incorporates a 25 W travelling wave tube amplifier and a gimballed, 1:5 m high-gain antenna with a transmit gain of 39:1 dBic. Forward error correction coding options include a $(255, 223)$ Reed-Solomon code concatenated with either a $(7, \frac{1}{2})$ or $(15, \frac{1}{6})$ convolutional code.
+
+## Codes over other fields
+
+- So far, we have been working with codes over $\mathbb{Z}_2$.
+- We can also consider codes over other finite fields.
+- *Hamming distance* between two code words is still the *number of positions where the words differ*.
+- For linear codes, the weight (= number of nonzero entries) of the lightest code word is still the minimum distance of the code.
+
+## BCH Bound Theorem over $\mathbb{Z}_2$
+
+Recall,
+
+**Theorem.** Let $C = \langle g(x) \rangle$ be a cyclic code in $\mathbb{Z}_2[x]/(x^n+1)$, for $n$ odd. Let $\alpha$ be a primitive $n$th root of unity, and suppose that for some integers $l$ and $\delta$, $$g(\alpha^l) = g(\alpha^{l+1}) = \cdots = g(\alpha^{l+\delta})=0.$$  Then the minimum distance of $C$ is at least $\delta + 2$.
+
+## BCH Bound Theorem over any field $F$
+
+The BCH Bound Theorem generalizes to other finite fields.
+
+**Theorem.** Let $C = \langle g(x) \rangle$ be a cyclic code in $F[x]/(x^n-1)$, where $F$ has $q=p^m$ elements. Assume $p \nmid n$. Let $\alpha$ be a primitive $n$th root of unity, and suppose that for some integers $l$ and $\delta$, $$g(\alpha^l) = g(\alpha^{l+1}) = \cdots = g(\alpha^{l+\delta})=0.$$  Then the minimum distance of $C$ is at least $\delta + 2$.
+
+## Reed-Solomon Codes
+
+**Fact:** Suppose $F$ is finite field with $q$ elements. If $n = q-1$, then $F$ contains a primitive $n$th root of unity $\alpha$.
+
+So we can construct a code in $F[x]/(x^n-1)$ using a generating polynomial of the following form.
+
+$$
+g(x) = (x-\alpha)(x-\alpha^2)\cdots(x-\alpha^{d-1})
+$$
+
+and then the theorem tells us the minimum distance of $\langle g(x) \rangle$ is at least $d$.
+
+Such $\langle g(x) \rangle$ is called a *Reed-Solomon code*.
+
+## Reed-Solomon optimality
+
+- A code in $F[x]/(x^n-1)$ with generating polynomial
+$$
+g(x) = (x-\alpha)(x-\alpha^2)\cdots(x-\alpha^{d-1})
+$$
+has minimum distance at least $d$. But $g(x)$ has only $d$ nonzero terms. So the minimum distance *equals* $d$.
+- If $|F|=q$, then there are $q^{n-(d-1)}$ code words, since $g(x)$ has degree $d-1$.
+- But $q^{n-d+1}$ is the Singleton bound. So these codes are *Maximum Distance Separable* (MDS).
+
+## Reed-Solomon Example: $F = \mathbb{Z}_7$
+
+Consider $F = \mathbb{Z}_7$. A Reed-Solomon code is an ideal of $\mathbb{Z}_7[x]/(x^6-1)$.
+
+We need a primitive 6th root of unity in $\mathbb{Z}_7$.
+
+```{r}
+outer(1:6, 1:6, function(x,y) {(x^y) %% 7})
+```
+
+## Reed-Solomon Example: $F = \mathbb{Z}_7$ {.build}
+
+Consider $F = \mathbb{Z}_7$. A Reed-Solomon code is an ideal of $\mathbb{Z}_7[x]/(x^6-1)$.
+
+Let $\alpha = 3$ be our primitive 6th root of unity in $\mathbb{Z}_7$.
+
+A distance 4 code is generated by $g(x) = (x-3)(x-3^2)(x-3^3) = x^3+3x^2+x+6$.
+
+The dimension of this code is $k = n - \deg(g(x)) = 6-3 = 3$. Therefore a generating matrix is:
+
+$$
+G = \begin{bmatrix} 6 & 1 & 3 & 1 & 0 & 0 \\
+0 & 6 & 1 & 3 & 1 & 0  \\
+0 & 0 & 6 & 1 & 3 & 1  
+\end{bmatrix}
+$$
+
+The number of code words is $7^3 = 343$.
+
+## Reed-Solomon Example: $F = \text{GF}(8)$
+
+- Recall that $\alpha$ is a primitive 7th root of unity satisfying $\alpha^3+\alpha+1 = 0$
+- $\text{GF}(8) = \{0, 1, \alpha, \alpha^2, \ldots, \alpha^6\}$ 
+- A Reed-Solomon code is an ideal of $\text{GF}(8)[x]/(x^7+1)$. 
+- A Reed-Solomon code can be generated by $g(x) = (x+\alpha)(x+\alpha^2) \stackrel{?}{=} x^2 + \alpha^4x + \alpha^3$.
+
+## Reed-Solomon Example: $F = \text{GF}(8)$
+
+Exercise. Let $g(x) = x^2 + \alpha^4x + \alpha^3$ be the generator for a Reed-Solomon code in $\text{GF}(8)[x]/(x^7+1)$. 
+
+1. What is the minimum distance of $\langle g(x) \rangle$?
+2. What is the length of this code?
+3. What is the dimension of this code?
+4. Write down a generating matrix for this code.
+5. Find a code word that's not in your generating matrix.
+6. How many code words are there in $\langle g(x) \rangle$?
+
+## Correcting 1 error of a Reed-Solomon code
+
+Let $\langle g(x) \rangle$ be a Reed-Solomon code in $F[x]/(x^n-1)$ of distance $d \geq 3$, so $g(\alpha) = g(\alpha^{2})=0$ for a primitive $n$th root of unity $\alpha$, where $n+1$ is the size of $F$.  
+
+Let $r(x) = m(x) + e(x)$, where $m(x)$ is a code word and $e(x)$ is an error vector.
+
+1. Compute $s = r(\alpha)$. If $s = 0$, there is no error, or there is more than one error.
+2. If $s \neq 0$, compute $s^{-1} r(\alpha^{2})$. This will have the form $\alpha^k$, and error will be in the $x^k$ term.
+3. The error vector is $e(x) = s\alpha^{-k}x^k$ (why?), so the decoded word is $r(x) - e(x)$.
+
+## Example {.smaller}
+
+For the code $\langle x^2 + \alpha^4x + \alpha^3 \rangle$ in $\text{GF}(8)[x]/(x^7+1)$, decode the received word
+$$
+r(x) = x^6 + \alpha^3x^4 + \alpha^2x^3 + \alpha^4x^2 + \alpha^6 x + \alpha^6
+$$
+
+```
+i1 : R = GF(8)[x]
+o1 = R
+o1 : PolynomialRing
+
+i2 : r = x^6 + a^3*x^4 + a^2*x^3 + a^4*x^2 + a^6*x + a^6
+      6           4    2 3     2      2     2          2
+o2 = x  + (a + 1)x  + a x  + (a  + a)x  + (a  + 1)x + a  + 1
+o2 : R
+
+i3 : s = sub(r, x=>a)
+o3 = a
+o3 : GF 8
+```
+
+So $s = \alpha$. Continuing, we get  $s^{-1} r(\alpha^{2}) = \alpha^3$, so the error is in the $x^3$ term. The error vector is $e(x) = s\alpha^{-3}x^3 = \alpha^{-2}x^3 = \alpha^5x^3$. The decoded word is $r(x)+e(x) = x^6 + \alpha^3x^4 + \alpha^3x^3 + \alpha^4x^2 + \alpha^6 x + \alpha^6$.
+
+## $\text{GF}(2^m)$ and bit strings
+
+Recall that the elements of $\text{GF}(2^m)$ can be regarded as bit strings. For example,
+
+```
+i1 : F = GF(8)
+o1 = F
+o1 : GaloisField
+
+
+i3 : apply(1..7, i -> a^i)
+          2          2       2           2
+o3 = (a, a , a + 1, a  + a, a  + a + 1, a  + 1, 1)
+o3 : Sequence
+```
+
+We can identify these with 010, 001, 110, 011, 111, 101, 100, and along with 000 we get all the 3-digit bit strings.
+
+
+## Mars Global Surveyor Code
+
+The MGS used a $(255, 233)$ Reed-Solomon code.
+
+- What is $F$?
+- What is the generator?
+- What is the minimum distance? How many errors can be corrected?
+
+## Good for finding corrupted *Bytes*
+
+- An element of $\text{GF}(2^8)$ is an 8-bit string, i.e., a byte.
+- A Reed-Solomon code over $\text{GF}(256)$ can correct corrupted *bytes*.
+- If errors occur in consecutive bits (e. g.,  a scratch on a CD or a solar flare), this is a good thing.
+- Not so good if errors are randomly distributed.
+
