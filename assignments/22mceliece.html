@@ -1698,7 +1698,7 @@ Alice’s original 12-bit message.</p></li>
 </div>
 <div id="helper-functions" class="section level2">
 <h2>Helper Functions</h2>
-<pre class="r"><code>randInvMatrix &lt;- function(k, numops = 100) {
+<pre class="r"><code>randInvMatrix &lt;- function(k, numops = 500) {
   M &lt;- diag(k) # the k by k identity matrix
   Minv &lt;- diag(k)
   rowOps &lt;- replicate(numops, sample(1:k, 2))
@@ -1708,7 +1708,7 @@ Alice’s original 12-bit message.</p></li>
   }
   return(list(M = M, Minv = Minv))
 }</code></pre>
-<pre class="r"><code>randPermMatrix &lt;- function(n, numswaps = 100) {
+<pre class="r"><code>randPermMatrix &lt;- function(n, numswaps = 500) {
   M &lt;- diag(n)
   rowSwaps &lt;- replicate(numswaps, sample(1:n, 2))
   for(i in 1:numswaps) {

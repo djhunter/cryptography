@@ -45,7 +45,7 @@ gT[["001101011010"]] # example: use a syndrome to look up the coset leader
 ## Helper Functions
 
 ```{r eval=FALSE}
-randInvMatrix <- function(k, numops = 100) {
+randInvMatrix <- function(k, numops = 500) {
   M <- diag(k) # the k by k identity matrix
   Minv <- diag(k)
   rowOps <- replicate(numops, sample(1:k, 2))
@@ -58,7 +58,7 @@ randInvMatrix <- function(k, numops = 100) {
 ```
 
 ```{r eval=FALSE}
-randPermMatrix <- function(n, numswaps = 100) {
+randPermMatrix <- function(n, numswaps = 500) {
   M <- diag(n)
   rowSwaps <- replicate(numswaps, sample(1:n, 2))
   for(i in 1:numswaps) {
